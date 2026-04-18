@@ -50,7 +50,7 @@ export function HeroSection() {
       </div>
 
       <motion.div
-        className="relative z-10 flex h-full w-full flex-col items-center px-4 pb-28 pt-18 text-center sm:px-6 sm:pb-32 sm:pt-20 md:pb-24"
+        className="relative z-10 flex h-full w-full flex-col items-center px-4 pb-12 pt-22 text-center sm:px-6 sm:pb-16 sm:pt-24 md:pb-14"
         initial={{ opacity: 0, y: 24 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         whileInView={{ opacity: 1, y: 0 }}
