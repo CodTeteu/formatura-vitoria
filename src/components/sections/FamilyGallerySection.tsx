@@ -17,7 +17,7 @@ export function FamilyGallerySection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "center", loop: true }, [autoplay]);
 
   return (
-    <section className="invite-section" id="familia">
+    <section className="invite-section !pt-4 sm:!pt-8 !pb-4 sm:!pb-8" id="familia">
       <div className="invite-container">
         <SectionHeading
           align="center"
@@ -35,7 +35,7 @@ export function FamilyGallerySection() {
                     className="min-w-0 flex-[0_0_86%] pl-4 md:flex-[0_0_52%] lg:flex-[0_0_34%]"
                     key={slide.asset}
                   >
-                    <figure className="overflow-hidden rounded-[30px] border border-[#ddccb1] bg-[var(--invite-paper)] shadow-[0_24px_60px_rgba(61,45,29,0.1)]">
+                    <figure className="overflow-hidden rounded-[30px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
                       <div className="aspect-[4/3]">
                         <ResponsiveImage
                           asset={slide.asset}
@@ -72,7 +72,7 @@ export function FamilyGallerySection() {
           </div>
         </Reveal>
 
-        <Reveal className="invite-card mt-10 px-6 py-7 sm:px-8" delay={0.1}>
+        <Reveal className="mt-10" delay={0.1}>
           <div className="space-y-5 text-center text-[var(--invite-brown-soft)] md:text-left">
             {inviteData.familyGallery.paragraphs.map((paragraph) => (
               <p className="font-body text-xl leading-relaxed sm:text-2xl" key={paragraph}>

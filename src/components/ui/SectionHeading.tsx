@@ -26,7 +26,7 @@ export function SectionHeading({
     >
       <p
         className={cn(
-          "font-heading text-[0.72rem] uppercase tracking-[0.32em] text-[var(--invite-gold)]",
+          "font-heading text-[0.72rem] uppercase tracking-[0.32em] text-[var(--invite-sage)]",
           align === "center" && "justify-center",
         )}
       >

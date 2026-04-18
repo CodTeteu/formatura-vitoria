@@ -17,7 +17,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative flex h-[100svh] min-h-[600px] items-center justify-center overflow-hidden bg-[#2b2018] sm:h-screen sm:min-h-screen"
+      className="relative flex h-[100svh] min-h-[600px] items-center justify-center overflow-hidden bg-[#06110c] sm:h-screen sm:min-h-screen"
       id="inicio"
     >
       <motion.div

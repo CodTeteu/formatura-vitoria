@@ -17,15 +17,20 @@ export function ResponsiveImage({
   sizes = "100vw",
   ...props
 }: ResponsiveImageProps) {
-  const basePath = `/images/generated/${asset}`;
+  const isGenerated = !asset.includes(".");
+  const basePath = isGenerated ? `/images/generated/${asset}` : `/images/${asset}`;
 
   return (
     <picture>
-      <source srcSet={`${basePath}.avif`} type="image/avif" sizes={sizes} />
-      <source srcSet={`${basePath}.webp`} type="image/webp" sizes={sizes} />
+      {isGenerated && (
+        <>
+          <source srcSet={`${basePath}.avif`} type="image/avif" sizes={sizes} />
+          <source srcSet={`${basePath}.webp`} type="image/webp" sizes={sizes} />
+        </>
+      )}
       <img
         {...props}
-        src={`${basePath}.jpg`}
+        src={isGenerated ? `${basePath}.jpg` : basePath}
         alt={alt}
         className={cn("h-full w-full object-cover", className)}
         loading={eager ? "eager" : "lazy"}

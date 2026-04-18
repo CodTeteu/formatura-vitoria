@@ -20,13 +20,15 @@
   color-scheme: light;
   --invite-cream: #f9fbf9;
   --invite-paper: #ffffff;
-  --invite-sand: #e6efe9;
-  --invite-brown: #0a1c14; /* Dark green/black for texts */
-  --invite-brown-soft: #1c3628;
+  --invite-sand: #ecf3ec;
+  --invite-brown: #05261a; /* Dark emerald green for texts */
+  --invite-brown-soft: #143d2a;
   --invite-gold: #c39b5b;
   --invite-gold-deep: #a17d45;
-  --invite-line: rgba(195, 155, 91, 0.25);
-  --invite-shadow: 0 20px 60px rgba(10, 28, 20, 0.08);
+  --invite-sage: #8ba889;
+  --invite-sage-soft: #dbe7db;
+  --invite-line: rgba(139, 168, 137, 0.25);
+  --invite-shadow: 0 20px 60px rgba(5, 38, 26, 0.08);
 }
 
 html {
@@ -217,7 +219,7 @@ a {
   }
 
   .invite-button-secondary {
-    @apply inline-flex min-h-12 items-center justify-center rounded-full border px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] transition duration-300 hover:-translate-y-0.5;
+    @apply inline-flex min-h-12 items-center justify-center rounded-full border px-6 py-2.5 sm:px-8 sm:py-3.5 text-sm font-semibold uppercase tracking-[0.18em] transition duration-300 hover:-translate-y-0.5;
     border-color: rgba(195, 155, 91, 0.4);
     color: var(--invite-brown);
     background: rgba(255, 255, 255, 0.75);

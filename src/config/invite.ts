@@ -56,10 +56,6 @@ export const inviteData = {
         asset: "camilla-portrait-soft",
         alt: "Camilla em retrato delicado de formatura",
       },
-      {
-        asset: "camilla-childhood",
-        alt: "Camilla na infância",
-      },
     ],
     paragraphs: [
       "Com imensa gratidão e alegria, compartilho a realização de um dos maiores sonhos da minha vida: a formatura em Medicina. Agradeço primeiramente a Deus e a Nossa Senhora, que guiaram meus passos com amor e luz, mesmo nos momentos mais desafiadores. Foi com fé que encontrei forças para seguir em frente e chegar até aqui.",
@@ -106,6 +102,12 @@ export const inviteData = {
         caption: "Uma vitória construída em família.",
         positionClass: "object-[center_5%]",
       },
+      {
+        asset: "camilla-childhood",
+        alt: "Camilla e Priscilla na infância",
+        caption: "Com minha irmã Priscilla, minha base desde sempre.",
+        positionClass: "object-center",
+      },
     ],
   },
   celebration: {
@@ -116,7 +118,7 @@ export const inviteData = {
       month: "Julho",
       time: "22h",
     },
-    primaryImageAsset: "camilla-portrait-green",
+    primaryImageAsset: "camilla-celebration-new.jpg",
     scheduleNarrative:
       "No dia 18 de julho de 2026, às 22:22, quero celebrar esse momento tão especial ao lado de quem fez parte da minha caminhada. Sua presença vai tornar esta noite ainda mais inesquecível.",
     locationNarrative:

@@ -42,7 +42,7 @@ export function CelebrationSection() {
   }
 
   return (
-    <section className="invite-section" id="celebracao">
+    <section className="invite-section !pt-4 sm:!pt-8" id="celebracao">
       <div className="invite-container">
         <SectionHeading
           align="center"
@@ -59,32 +59,21 @@ export function CelebrationSection() {
                 className="h-full w-full object-cover object-[center_25%]"
                 sizes="(min-width: 768px) 45vw, 100vw"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.2)_36%,rgba(0,0,0,0.78)_100%)]" />
-              <div className="absolute inset-x-0 bottom-0 px-6 pb-7 text-center text-white">
-                <div className="flex items-baseline justify-center gap-3">
-                  <span className="font-heading text-5xl sm:text-6xl">
-                    {inviteData.celebration.dateAccent.day}
-                  </span>
-                  <span className="font-script text-4xl sm:text-5xl">
-                    {inviteData.celebration.dateAccent.month}
-                  </span>
-                </div>
-                <p className="mt-2 text-sm uppercase tracking-[0.32em] text-white/82 sm:text-base">
-                  {inviteData.event.timeText}
+              <div className="absolute inset-x-0 top-0 px-6 pt-8 text-center">
+                <p className="font-heading text-lg uppercase tracking-[0.4em] text-[var(--invite-emerald)]">
+                  Data e hora
                 </p>
               </div>
+
             </div>
 
             <div className="space-y-5 px-6 py-6 sm:px-7">
-              <div className="space-y-2 text-center sm:text-left">
-                <p className="text-[0.68rem] uppercase tracking-[0.28em] text-[#9e7e57]">
-                  Data e horário
-                </p>
-                <h3 className="font-heading text-3xl text-[var(--invite-brown)]">
-                  {inviteData.event.dateLong}
-                </h3>
+              <div className="space-y-1 text-center sm:text-left">
                 <p className="font-body text-xl text-[var(--invite-brown-soft)] sm:text-2xl">
-                  às {inviteData.event.timeText}
+                  Data: 18 de julho de 2026
+                </p>
+                <p className="font-body text-xl text-[var(--invite-brown-soft)] sm:text-2xl">
+                  Horário: 22:00
                 </p>
               </div>
 
@@ -105,7 +94,7 @@ export function CelebrationSection() {
           <Reveal className="invite-card-strong px-6 py-6 sm:px-7" delay={0.08}>
             <div className="space-y-5 text-center sm:text-left">
               <div className="space-y-2">
-                <p className="text-[0.68rem] uppercase tracking-[0.28em] text-[#9e7e57]">
+                <p className="text-[0.68rem] uppercase tracking-[0.28em] text-[var(--invite-sage)]">
                   Local
                 </p>
                 <h3 className="font-heading text-3xl text-[var(--invite-brown)]">
@@ -113,8 +102,8 @@ export function CelebrationSection() {
                 </h3>
               </div>
 
-              <div className="rounded-[24px] border border-[#d8c7ad] bg-[#f4ebde] px-5 py-5">
-                <p className="font-body text-xl leading-relaxed text-[#5f4c3f] sm:text-2xl">
+              <div className="rounded-[24px] border border-[var(--invite-line)] bg-[var(--invite-sage-soft)]/40 px-5 py-5">
+                <p className="font-body text-xl leading-relaxed text-[var(--invite-brown-soft)] sm:text-2xl">
                   {inviteData.event.venue}
                 </p>
               </div>
@@ -153,14 +142,14 @@ export function CelebrationSection() {
                 key={item.label}
               >
                 <div className="flex items-center justify-center gap-3 md:justify-start">
-                  <div className="flex size-10 items-center justify-center rounded-full bg-[#eadcc8] text-[#8a6840]">
+                  <div className="flex size-10 items-center justify-center rounded-full bg-[var(--invite-sage-soft)] text-[var(--invite-brown)]">
                     <Icon className="size-5" strokeWidth={1.8} />
                   </div>
-                  <p className="text-[0.72rem] uppercase tracking-[0.24em] text-[#8a6840]">
+                  <p className="text-[0.72rem] uppercase tracking-[0.24em] text-[var(--invite-sage)]">
                     {item.label}
                   </p>
                 </div>
-                <p className="mt-4 font-body text-xl text-[#5f4c3f] sm:text-2xl">
+                <p className="mt-4 font-body text-xl text-[var(--invite-brown-soft)] sm:text-2xl">
                   {item.value}
                 </p>
               </Reveal>

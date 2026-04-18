@@ -16,20 +16,27 @@ export function StorySection() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "center" }, [autoplay]);
 
   return (
-    <section className="invite-section" id="jornada">
+    <section className="invite-section !pb-0" id="jornada">
       <div className="invite-container">
         <div className="text-center lg:hidden">
-          <p className="font-heading text-[0.72rem] uppercase tracking-[0.32em] text-[var(--invite-gold)]">
+          <p className="font-heading text-[0.72rem] uppercase tracking-[0.32em] text-[var(--invite-sage)]">
             {inviteData.journey.label}
           </p>
           <h2 className="mt-4 font-script text-5xl text-[var(--invite-brown)] sm:text-6xl">
             {inviteData.journey.title}
           </h2>
+          <div className="mt-6 text-center italic text-[var(--invite-brown)]/90">
+            <p className="font-script text-2xl leading-[1.3] sm:text-3xl">
+              “A medicina, para mim, é um <br />
+              compromisso com a vida, com a <br />
+              escuta atenta, com o olhar cuidadoso.”
+            </p>
+          </div>
         </div>
 
         <div className="mt-10 grid items-center gap-14 lg:mt-0 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
           <Reveal className="relative">
-            <div className="relative overflow-hidden rounded-[34px] border border-[#dbc9ad] bg-[var(--invite-paper)] shadow-[0_28px_70px_rgba(63,46,29,0.12)]">
+            <div className="relative overflow-hidden rounded-[34px] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
               <div className="overflow-hidden" ref={emblaRef}>
                 <div className="flex">
                   {inviteData.journey.images.map((image) => (
@@ -65,15 +72,22 @@ export function StorySection() {
 
           <Reveal className="space-y-7 text-center lg:text-left" delay={0.1}>
             <div className="hidden lg:block">
-              <p className="font-heading text-[0.72rem] uppercase tracking-[0.32em] text-[var(--invite-gold)]">
+              <p className="font-heading text-[0.72rem] uppercase tracking-[0.32em] text-[var(--invite-sage)]">
                 {inviteData.journey.label}
               </p>
               <h2 className="mt-4 font-script text-6xl text-[var(--invite-brown)]">
                 {inviteData.journey.title}
               </h2>
+              <div className="mt-6 text-center italic text-[var(--invite-brown)]/90 lg:text-left">
+                <p className="font-script text-2xl leading-[1.3] sm:text-3xl">
+                  “A medicina, para mim, é um <br />
+                  compromisso com a vida, com a <br />
+                  escuta atenta, com o olhar cuidadoso.”
+                </p>
+              </div>
             </div>
 
-            <div className="invite-card px-6 py-7 sm:px-10 sm:py-10 text-center lg:text-left shadow-[0_20px_60px_rgba(10,28,20,0.06)] bg-white/60 backdrop-blur-sm border-white/20">
+            <div className="text-center lg:text-left">
               <div className="space-y-6 text-[var(--invite-brown-soft)]">
                 {inviteData.journey.paragraphs.map((paragraph) => (
                   <p className="font-body text-xl leading-relaxed sm:text-[1.38rem] lg:leading-loose" key={paragraph}>
@@ -83,14 +97,6 @@ export function StorySection() {
               </div>
             </div>
 
-            <div className="border-l-2 border-[var(--invite-line)]/45 pl-6 text-left italic text-[var(--invite-brown)]">
-              <p className="font-heading text-2xl leading-relaxed sm:text-3xl">
-                “{inviteData.journey.quote}”
-              </p>
-              <span className="mt-3 block font-sans text-[0.7rem] uppercase tracking-[0.24em] text-[var(--invite-gold)]">
-                {inviteData.journey.quoteAuthor}
-              </span>
-            </div>
           </Reveal>
         </div>
       </div>

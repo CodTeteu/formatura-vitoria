@@ -14,7 +14,7 @@ export function QuickActionsSection() {
         >
           <button
             onClick={() => document.getElementById("jornada")?.scrollIntoView({ behavior: "smooth" })}
-            className="invite-card group flex flex-col items-center gap-3 p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(10,28,20,0.12)] sm:p-7"
+            className="group flex flex-col items-center gap-3 p-4 transition-all duration-300 hover:-translate-y-1 sm:p-6"
           >
             <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[var(--invite-brown)] text-[var(--invite-cream)] transition-transform duration-300 group-hover:scale-110">
               <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -31,7 +31,7 @@ export function QuickActionsSection() {
 
           <button
             onClick={() => document.getElementById("familia")?.scrollIntoView({ behavior: "smooth" })}
-            className="invite-card group flex flex-col items-center gap-3 p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(10,28,20,0.12)] sm:p-7"
+            className="group flex flex-col items-center gap-3 p-4 transition-all duration-300 hover:-translate-y-1 sm:p-6"
           >
             <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[var(--invite-brown)] text-[var(--invite-cream)] transition-transform duration-300 group-hover:scale-110">
               <Users className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -48,7 +48,7 @@ export function QuickActionsSection() {
 
           <button
             onClick={() => document.getElementById("celebracao")?.scrollIntoView({ behavior: "smooth" })}
-            className="invite-card group flex flex-col items-center gap-3 p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(10,28,20,0.12)] sm:p-7"
+            className="group flex flex-col items-center gap-3 p-4 transition-all duration-300 hover:-translate-y-1 sm:p-6"
           >
             <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[var(--invite-brown)] text-[var(--invite-cream)] transition-transform duration-300 group-hover:scale-110">
               <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -57,15 +57,16 @@ export function QuickActionsSection() {
               <h3 className="font-heading text-lg sm:text-xl text-[var(--invite-brown)]">
                 Evento
               </h3>
-              <p className="mt-1 text-[0.65rem] sm:text-xs uppercase tracking-[0.12em] text-[var(--invite-brown-soft)]">
-                Localização
+              <p className="mt-1 text-[0.65rem] sm:text-xs uppercase tracking-[0.12em] text-[var(--invite-brown-soft)] flex flex-col items-center">
+                <span>Localização</span>
+                <span>Data e Hora</span>
               </p>
             </div>
           </button>
 
           <button
             onClick={() => document.getElementById("rsvp")?.scrollIntoView({ behavior: "smooth" })}
-            className="invite-card group flex flex-col items-center gap-3 p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(10,28,20,0.12)] sm:p-7"
+            className="group flex flex-col items-center gap-3 p-4 transition-all duration-300 hover:-translate-y-1 sm:p-6"
           >
             <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[var(--invite-brown)] text-[var(--invite-cream)] transition-transform duration-300 group-hover:scale-110">
               <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" />

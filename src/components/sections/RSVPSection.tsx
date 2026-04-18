@@ -130,8 +130,8 @@ export function RSVPSection() {
         </div>
 
         <Reveal className="invite-card mx-auto mt-12 max-w-4xl px-5 py-6 sm:px-8 sm:py-9" delay={0.08}>
-          <div className="rounded-[26px] border border-[#dcc9ae] bg-[#f5ead9] px-5 py-5">
-            <p className="font-heading text-[0.72rem] uppercase tracking-[0.3em] text-[var(--invite-gold)]">
+          <div className="rounded-[26px] border border-[var(--invite-line)] bg-[var(--invite-sage-soft)]/30 px-5 py-5">
+            <p className="font-heading text-[0.72rem] uppercase tracking-[0.3em] text-[var(--invite-sage)]">
               Informações importantes
             </p>
             <ul className="mt-4 space-y-2 text-[var(--invite-brown-soft)]">
@@ -191,7 +191,7 @@ export function RSVPSection() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="cursor-pointer">
                   <input className="peer sr-only" type="radio" value="attending" {...register("attendance_status")} />
-                  <span className="block rounded-[24px] border border-[#d8c5aa] bg-[var(--invite-paper)] px-5 py-5 transition peer-checked:border-[var(--invite-line)] peer-checked:bg-[#f4eadb]">
+                  <span className="block rounded-[24px] border border-[var(--invite-line)] bg-[var(--invite-paper)] px-5 py-5 transition peer-checked:border-[var(--invite-line)] peer-checked:bg-[var(--invite-sage-soft)]/40">
                     <span className="font-heading text-xl text-[var(--invite-brown)]">Sim</span>
                     <span className="mt-2 block font-body text-xl leading-relaxed text-[var(--invite-brown-soft)]">
                       Quero celebrar esse momento com você.
@@ -200,7 +200,7 @@ export function RSVPSection() {
                 </label>
                 <label className="cursor-pointer">
                   <input className="peer sr-only" type="radio" value="not-attending" {...register("attendance_status")} />
-                  <span className="block rounded-[24px] border border-[#d8c5aa] bg-[var(--invite-paper)] px-5 py-5 transition peer-checked:border-[var(--invite-line)] peer-checked:bg-[#f4eadb]">
+                  <span className="block rounded-[24px] border border-[var(--invite-line)] bg-[var(--invite-paper)] px-5 py-5 transition peer-checked:border-[var(--invite-line)] peer-checked:bg-[var(--invite-sage-soft)]/40">
                     <span className="font-heading text-xl text-[var(--invite-brown)]">Não</span>
                     <span className="mt-2 block font-body text-xl leading-relaxed text-[var(--invite-brown-soft)]">
                       Ainda assim deixarei meu carinho registrado.
