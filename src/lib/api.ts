@@ -85,3 +85,10 @@ export function updateAdminRsvp(id: string, payload: AdminUpdateInput) {
     body: JSON.stringify({ id, ...payload }),
   });
 }
+
+export function deleteAdminRsvp(id: string) {
+  return request<{ ok: true }>("/api/admin/rsvps", {
+    method: "DELETE",
+    body: JSON.stringify({ id }),
+  });
+}

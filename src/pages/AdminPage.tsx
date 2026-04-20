@@ -1,35 +1,34 @@
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
   Calendar,
+  CheckCircle2,
+  Clock,
   Download,
   GraduationCap,
   Loader2,
   LogOut,
+  MessageSquare,
+  Phone,
   RefreshCw,
   Search,
   ShieldCheck,
+  Trash2,
+  UserPlus,
   Users,
+  XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { AdminRsvpItem, AdminRsvpsResponse } from "@shared/schemas";
 import { attendanceLabels, type AttendanceStatus } from "@shared/constants";
-import { ApiError, adminLogin, adminLogout, fetchAdminRsvps, updateAdminRsvp } from "@/lib/api";
+import { ApiError, adminLogin, adminLogout, deleteAdminRsvp, fetchAdminRsvps } from "@/lib/api";
 import { formatDisplayDateTime } from "@/lib/format";
 
 // ===========================================
-// TYPES & CONSTANTS
+// CONSTANTS
 // ===========================================
-
-type DraftMap = Record<
-  string,
-  {
-    attendance_status: AttendanceStatus;
-    admin_notes: string;
-  }
->;
 
 const statusOptions: AttendanceStatus[] = ["pending", "attending", "not-attending"];
 
@@ -39,27 +38,17 @@ const badgeClassMap: Record<AttendanceStatus, string> = {
   pending: "admin-badge admin-badge-pending",
 };
 
-function buildDrafts(items: AdminRsvpItem[] | undefined): DraftMap {
-  return Object.fromEntries(
-    (items ?? []).map((item) => [
-      item.id,
-      {
-        attendance_status: item.attendance_status,
-        admin_notes: item.admin_notes,
-      },
-    ]),
-  );
-}
+const statusIconMap: Record<AttendanceStatus, React.ReactNode> = {
+  attending: <CheckCircle2 className="size-3.5" />,
+  "not-attending": <XCircle className="size-3.5" />,
+  pending: <Clock className="size-3.5" />,
+};
 
 // ===========================================
-// LOGIN FORM COMPONENT
+// LOGIN SCREEN
 // ===========================================
 
-function LoginScreen({
-  onLogin,
-}: {
-  onLogin: (password: string) => Promise<void>;
-}) {
+function LoginScreen({ onLogin }: { onLogin: (password: string) => Promise<void> }) {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -76,21 +65,16 @@ function LoginScreen({
 
   return (
     <div className="relative flex min-h-screen items-center justify-center px-5 py-16">
-      {/* Decorative background */}
       <div className="admin-login-bg" />
-
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="invite-card-strong relative z-10 w-full max-w-md px-6 py-10 sm:px-10"
       >
-        {/* Icon */}
         <div className="mx-auto flex size-16 items-center justify-center rounded-full bg-[var(--invite-sage-soft)] text-[var(--invite-brown)]">
           <ShieldCheck className="size-7" />
         </div>
-
-        {/* Title */}
         <p className="mt-6 text-center font-heading text-[0.72rem] uppercase tracking-[0.32em] text-[var(--invite-sage)]">
           Área administrativa
         </p>
@@ -100,8 +84,6 @@ function LoginScreen({
         <p className="mt-4 text-center font-body text-lg leading-relaxed text-[var(--invite-brown-soft)]">
           Digite a senha administrativa para gerenciar as confirmações de presença.
         </p>
-
-        {/* Form */}
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div>
             <label className="mb-2 block text-sm font-medium text-[var(--invite-brown-soft)]">
@@ -119,12 +101,7 @@ function LoginScreen({
               <ShieldCheck className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[var(--invite-brown-soft)]/40" />
             </div>
           </div>
-
-          <button
-            className="invite-button-primary flex w-full"
-            disabled={submitting}
-            type="submit"
-          >
+          <button className="invite-button-primary flex w-full" disabled={submitting} type="submit">
             {submitting ? (
               <>
                 <Loader2 className="mr-2 size-4 animate-spin" />
@@ -135,8 +112,6 @@ function LoginScreen({
             )}
           </button>
         </form>
-
-        {/* Back link */}
         <div className="mt-8 flex justify-center">
           <Link
             to="/"
@@ -152,18 +127,22 @@ function LoginScreen({
 }
 
 // ===========================================
-// STATS CARD COMPONENT
+// STATS CARD
 // ===========================================
 
-interface StatsCardProps {
+function StatsCard({
+  title,
+  value,
+  caption,
+  icon,
+  delay = 0,
+}: {
   title: string;
   value: number;
   caption: string;
   icon: React.ReactNode;
   delay?: number;
-}
-
-function StatsCard({ title, value, caption, icon, delay = 0 }: StatsCardProps) {
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -171,38 +150,182 @@ function StatsCard({ title, value, caption, icon, delay = 0 }: StatsCardProps) {
       transition={{ delay, duration: 0.4 }}
     >
       <div className="admin-stat-card group">
-        {/* Background icon */}
         <div className="absolute -right-2 -top-2 text-[var(--invite-sage-soft)] opacity-20 transition-opacity group-hover:opacity-30">
           {icon}
         </div>
-
         <p className="relative z-10 text-[0.68rem] uppercase tracking-[0.28em] text-[var(--invite-sage)]">
           {title}
         </p>
         <p className="relative z-10 mt-3 font-heading text-4xl text-[var(--invite-brown)]">
           {value}
         </p>
-        <p className="relative z-10 mt-2 text-sm text-[var(--invite-brown-soft)]">
-          {caption}
-        </p>
+        <p className="relative z-10 mt-2 text-sm text-[var(--invite-brown-soft)]">{caption}</p>
       </div>
     </motion.div>
   );
 }
 
 // ===========================================
-// SUBMISSIONS TABLE (DESKTOP)
+// DELETE CONFIRMATION DIALOG
 // ===========================================
 
-interface TableProps {
-  items: AdminRsvpItem[];
-  drafts: DraftMap;
-  setDrafts: React.Dispatch<React.SetStateAction<DraftMap>>;
-  savingId: string | null;
-  onSave: (item: AdminRsvpItem) => void;
+function DeleteConfirmDialog({
+  guestName,
+  onConfirm,
+  onCancel,
+  deleting,
+}: {
+  guestName: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+  deleting: boolean;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-sm px-4"
+      onClick={onCancel}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="invite-card-strong w-full max-w-sm px-6 py-8 text-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-red-50">
+          <Trash2 className="size-6 text-red-500" />
+        </div>
+        <h3 className="mt-5 font-heading text-xl text-[var(--invite-brown)]">
+          Excluir confirmação?
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-[var(--invite-brown-soft)]">
+          A resposta de <strong className="text-[var(--invite-brown)]">{guestName}</strong> será
+          removida permanentemente do banco de dados.
+        </p>
+        <div className="mt-6 flex gap-3">
+          <button
+            className="invite-button-secondary flex-1 min-h-10 px-4 py-2 text-xs"
+            onClick={onCancel}
+            disabled={deleting}
+            type="button"
+          >
+            Cancelar
+          </button>
+          <button
+            className="flex-1 inline-flex min-h-10 items-center justify-center rounded-full bg-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-red-700 disabled:opacity-50"
+            onClick={onConfirm}
+            disabled={deleting}
+            type="button"
+          >
+            {deleting ? (
+              <>
+                <Loader2 className="mr-1.5 size-3.5 animate-spin" />
+                Excluindo...
+              </>
+            ) : (
+              "Excluir"
+            )}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
 }
 
-function DesktopTable({ items, drafts, setDrafts, savingId, onSave }: TableProps) {
+// ===========================================
+// READ-ONLY SUBMISSION CARD (MOBILE)
+// ===========================================
+
+function SubmissionCard({
+  item,
+  onDelete,
+}: {
+  item: AdminRsvpItem;
+  onDelete: (item: AdminRsvpItem) => void;
+}) {
+  return (
+    <motion.article
+      layout
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, x: -20 }}
+      className="invite-card-strong px-5 py-5"
+    >
+      {/* Header: name + badge */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="admin-avatar flex-shrink-0">
+            {item.guest_name.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <p className="font-heading text-lg text-[var(--invite-brown)]">{item.guest_name}</p>
+            <div className="mt-0.5 flex items-center gap-1.5 text-sm text-[var(--invite-brown-soft)]">
+              <Phone className="size-3" />
+              {item.phone}
+            </div>
+          </div>
+        </div>
+        <span className={`${badgeClassMap[item.attendance_status]} flex items-center gap-1.5`}>
+          {statusIconMap[item.attendance_status]}
+          {attendanceLabels[item.attendance_status]}
+        </span>
+      </div>
+
+      {/* Info rows */}
+      <div className="mt-4 space-y-2.5">
+        {/* Companions */}
+        <div className="flex items-start gap-2.5 text-sm">
+          <UserPlus className="mt-0.5 size-3.5 flex-shrink-0 text-[var(--invite-sage)]" />
+          <span className="text-[var(--invite-brown-soft)]">
+            {item.companions_count > 0
+              ? `${item.companions_count} acompanhante${item.companions_count > 1 ? "s" : ""}: ${item.companions_names.join(", ")}`
+              : "Sem acompanhantes"}
+          </span>
+        </div>
+
+        {/* Notes */}
+        {item.notes && (
+          <div className="flex items-start gap-2.5 text-sm">
+            <MessageSquare className="mt-0.5 size-3.5 flex-shrink-0 text-[var(--invite-sage)]" />
+            <span className="italic leading-relaxed text-[var(--invite-brown-soft)]">
+              "{item.notes}"
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Footer: date + delete */}
+      <div className="mt-4 flex items-center justify-between border-t border-[var(--invite-line)] pt-3">
+        <p className="text-xs uppercase tracking-[0.16em] text-[var(--invite-sage)]">
+          {formatDisplayDateTime(item.created_at)}
+        </p>
+        <button
+          className="inline-flex items-center gap-1.5 rounded-full border border-transparent px-3 py-1.5 text-xs font-medium text-[var(--invite-brown-soft)] transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+          onClick={() => onDelete(item)}
+          type="button"
+        >
+          <Trash2 className="size-3.5" />
+          Excluir
+        </button>
+      </div>
+    </motion.article>
+  );
+}
+
+// ===========================================
+// READ-ONLY TABLE (DESKTOP)
+// ===========================================
+
+function SubmissionsTable({
+  items,
+  onDelete,
+}: {
+  items: AdminRsvpItem[];
+  onDelete: (item: AdminRsvpItem) => void;
+}) {
   return (
     <div className="invite-card mt-8 hidden overflow-hidden lg:block">
       <div className="overflow-x-auto">
@@ -210,264 +333,107 @@ function DesktopTable({ items, drafts, setDrafts, savingId, onSave }: TableProps
           <thead>
             <tr className="admin-table-header">
               <th className="px-5 py-4 font-medium">Convidado</th>
-              <th className="px-5 py-4 font-medium">Presença</th>
+              <th className="px-5 py-4 font-medium">Status</th>
               <th className="px-5 py-4 font-medium text-center">Pessoas</th>
+              <th className="px-5 py-4 font-medium">Acompanhantes</th>
               <th className="px-5 py-4 font-medium">Observações</th>
-              <th className="px-5 py-4 font-medium">Admin</th>
               <th className="px-5 py-4 font-medium">Envio</th>
-              <th className="px-5 py-4 font-medium">Ação</th>
+              <th className="px-5 py-4 font-medium w-[80px]"></th>
             </tr>
           </thead>
           <tbody>
-            {items.map((item, index) => (
-              <motion.tr
-                key={item.id}
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.03 }}
-                className="admin-table-row align-top"
-              >
-                {/* Guest name + phone */}
-                <td className="px-5 py-5">
-                  <div className="flex items-center gap-3">
-                    <div className="admin-avatar flex-shrink-0">
-                      {item.guest_name.charAt(0).toUpperCase()}
+            <AnimatePresence>
+              {items.map((item, index) => (
+                <motion.tr
+                  key={item.id}
+                  layout
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ delay: index * 0.02 }}
+                  className="admin-table-row align-middle"
+                >
+                  {/* Guest name + phone */}
+                  <td className="px-5 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="admin-avatar flex-shrink-0">
+                        {item.guest_name.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="font-heading text-base font-semibold text-[var(--invite-brown)]">
+                          {item.guest_name}
+                        </p>
+                        <p className="mt-0.5 flex items-center gap-1 text-xs text-[var(--invite-brown-soft)]">
+                          <Phone className="size-3" />
+                          {item.phone}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-heading text-base font-semibold text-[var(--invite-brown)]">
-                        {item.guest_name}
-                      </p>
-                      <p className="mt-0.5 text-xs text-[var(--invite-brown-soft)]">
-                        {item.phone}
-                      </p>
-                    </div>
-                  </div>
-                </td>
+                  </td>
 
-                {/* Attendance status select */}
-                <td className="px-5 py-5">
-                  <select
-                    className="w-full rounded-[14px] border border-[var(--invite-line)] bg-transparent px-3 py-2.5 text-sm text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)]"
-                    onChange={(e) =>
-                      setDrafts((cur) => ({
-                        ...cur,
-                        [item.id]: {
-                          ...cur[item.id],
-                          attendance_status: e.target.value as AttendanceStatus,
-                        },
-                      }))
-                    }
-                    value={drafts[item.id]?.attendance_status ?? item.attendance_status}
-                  >
-                    {statusOptions.map((s) => (
-                      <option key={s} value={s}>
-                        {attendanceLabels[s]}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="mt-2">
-                    <span className={badgeClassMap[drafts[item.id]?.attendance_status ?? item.attendance_status]}>
-                      {attendanceLabels[drafts[item.id]?.attendance_status ?? item.attendance_status]}
+                  {/* Status badge */}
+                  <td className="px-5 py-4">
+                    <span className={`${badgeClassMap[item.attendance_status]} flex w-fit items-center gap-1.5`}>
+                      {statusIconMap[item.attendance_status]}
+                      {attendanceLabels[item.attendance_status]}
                     </span>
-                  </div>
-                </td>
+                  </td>
 
-                {/* Companions */}
-                <td className="px-5 py-5 text-center">
-                  <span className="inline-flex items-center rounded-full border border-[var(--invite-line)] bg-[var(--invite-sage-soft)]/30 px-3 py-1 text-sm font-medium text-[var(--invite-brown)]">
-                    {item.companions_count + 1}
-                  </span>
-                  {item.companions_count > 0 && (
-                    <p className="mt-2 max-w-[180px] text-xs leading-relaxed text-[var(--invite-brown-soft)]">
-                      {item.companions_names.join(", ")}
-                    </p>
-                  )}
-                </td>
+                  {/* Total people */}
+                  <td className="px-5 py-4 text-center">
+                    <span className="inline-flex size-8 items-center justify-center rounded-full bg-[var(--invite-sage-soft)]/40 text-sm font-semibold text-[var(--invite-brown)]">
+                      {item.companions_count + 1}
+                    </span>
+                  </td>
 
-                {/* Guest notes */}
-                <td className="px-5 py-5">
-                  {item.notes ? (
-                    <div className="admin-message-box max-w-[260px] whitespace-pre-wrap break-words">
-                      "{item.notes}"
-                    </div>
-                  ) : (
-                    <span className="text-xs text-[var(--invite-sage)]">—</span>
-                  )}
-                </td>
+                  {/* Companion names */}
+                  <td className="max-w-[200px] px-5 py-4 text-sm text-[var(--invite-brown-soft)]">
+                    {item.companions_count > 0
+                      ? item.companions_names.join(", ")
+                      : <span className="text-[var(--invite-sage)]">—</span>}
+                  </td>
 
-                {/* Admin notes textarea */}
-                <td className="px-5 py-5">
-                  <textarea
-                    className="min-h-[80px] w-full rounded-[14px] border border-[var(--invite-line)] bg-transparent px-3 py-2.5 text-sm text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)]"
-                    onChange={(e) =>
-                      setDrafts((cur) => ({
-                        ...cur,
-                        [item.id]: {
-                          ...cur[item.id],
-                          admin_notes: e.target.value,
-                        },
-                      }))
-                    }
-                    placeholder="Notas do admin"
-                    value={drafts[item.id]?.admin_notes ?? ""}
-                  />
-                </td>
-
-                {/* Date */}
-                <td className="px-5 py-5 text-sm text-[var(--invite-brown-soft)]">
-                  <span className="whitespace-nowrap">
-                    {new Date(item.created_at).toLocaleDateString("pt-BR")}
-                  </span>
-                  <span className="mt-0.5 block text-xs text-[var(--invite-sage)]">
-                    {new Date(item.created_at).toLocaleTimeString("pt-BR", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-                </td>
-
-                {/* Save action */}
-                <td className="px-5 py-5">
-                  <button
-                    className="invite-button-primary min-h-10 px-4 py-2 text-[0.68rem]"
-                    onClick={() => onSave(item)}
-                    type="button"
-                  >
-                    {savingId === item.id ? (
-                      <>
-                        <Loader2 className="mr-2 size-3.5 animate-spin" />
-                        Salvando
-                      </>
+                  {/* Notes */}
+                  <td className="max-w-[260px] px-5 py-4">
+                    {item.notes ? (
+                      <div className="admin-message-box whitespace-pre-wrap break-words">
+                        "{item.notes}"
+                      </div>
                     ) : (
-                      "Salvar"
+                      <span className="text-xs text-[var(--invite-sage)]">—</span>
                     )}
-                  </button>
-                </td>
-              </motion.tr>
-            ))}
+                  </td>
+
+                  {/* Date */}
+                  <td className="px-5 py-4 text-sm text-[var(--invite-brown-soft)]">
+                    <span className="whitespace-nowrap">
+                      {new Date(item.created_at).toLocaleDateString("pt-BR")}
+                    </span>
+                    <span className="mt-0.5 block text-xs text-[var(--invite-sage)]">
+                      {new Date(item.created_at).toLocaleTimeString("pt-BR", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </td>
+
+                  {/* Delete */}
+                  <td className="px-5 py-4">
+                    <button
+                      className="flex size-9 items-center justify-center rounded-full text-[var(--invite-brown-soft)] transition hover:bg-red-50 hover:text-red-600"
+                      onClick={() => onDelete(item)}
+                      title="Excluir resposta"
+                      type="button"
+                    >
+                      <Trash2 className="size-4" />
+                    </button>
+                  </td>
+                </motion.tr>
+              ))}
+            </AnimatePresence>
           </tbody>
         </table>
       </div>
-    </div>
-  );
-}
-
-// ===========================================
-// SUBMISSIONS CARDS (MOBILE)
-// ===========================================
-
-function MobileCards({ items, drafts, setDrafts, savingId, onSave }: TableProps) {
-  return (
-    <div className="mt-8 space-y-4 lg:hidden">
-      {items.map((item, index) => (
-        <motion.article
-          key={item.id}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.04 }}
-          className="invite-card-strong px-5 py-6"
-        >
-          {/* Header: name + badge */}
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="admin-avatar flex-shrink-0">
-                {item.guest_name.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <p className="font-heading text-lg text-[var(--invite-brown)]">
-                  {item.guest_name}
-                </p>
-                <p className="mt-0.5 text-sm text-[var(--invite-brown-soft)]">{item.phone}</p>
-              </div>
-            </div>
-            <span className={badgeClassMap[item.attendance_status]}>
-              {attendanceLabels[item.attendance_status]}
-            </span>
-          </div>
-
-          {/* Info boxes */}
-          <div className="mt-5 grid gap-3">
-            <div className="rounded-[18px] border border-[var(--invite-line)] bg-[var(--invite-sage-soft)]/20 px-4 py-3">
-              <p className="text-[0.65rem] uppercase tracking-[0.22em] text-[var(--invite-sage)]">
-                Acompanhantes ({item.companions_count})
-              </p>
-              <p className="mt-1.5 text-sm text-[var(--invite-brown-soft)]">
-                {item.companions_count > 0
-                  ? item.companions_names.join(", ")
-                  : "Sem acompanhantes"}
-              </p>
-            </div>
-
-            {item.notes && (
-              <div className="rounded-[18px] border border-[var(--invite-line)] bg-[var(--invite-sage-soft)]/20 px-4 py-3">
-                <p className="text-[0.65rem] uppercase tracking-[0.22em] text-[var(--invite-sage)]">
-                  Observações do convidado
-                </p>
-                <p className="mt-1.5 text-sm italic leading-relaxed text-[var(--invite-brown-soft)]">
-                  "{item.notes}"
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Edit controls */}
-          <div className="mt-5 grid gap-3">
-            <select
-              className="w-full rounded-[14px] border border-[var(--invite-line)] bg-transparent px-4 py-3 text-sm text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)]"
-              onChange={(e) =>
-                setDrafts((cur) => ({
-                  ...cur,
-                  [item.id]: {
-                    ...cur[item.id],
-                    attendance_status: e.target.value as AttendanceStatus,
-                  },
-                }))
-              }
-              value={drafts[item.id]?.attendance_status ?? item.attendance_status}
-            >
-              {statusOptions.map((s) => (
-                <option key={s} value={s}>
-                  {attendanceLabels[s]}
-                </option>
-              ))}
-            </select>
-
-            <textarea
-              className="min-h-24 w-full rounded-[14px] border border-[var(--invite-line)] bg-transparent px-4 py-3 text-sm text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)]"
-              onChange={(e) =>
-                setDrafts((cur) => ({
-                  ...cur,
-                  [item.id]: {
-                    ...cur[item.id],
-                    admin_notes: e.target.value,
-                  },
-                }))
-              }
-              placeholder="Notas do admin"
-              value={drafts[item.id]?.admin_notes ?? ""}
-            />
-
-            <button
-              className="invite-button-primary flex w-full"
-              onClick={() => onSave(item)}
-              type="button"
-            >
-              {savingId === item.id ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  Salvando
-                </>
-              ) : (
-                "Salvar alterações"
-              )}
-            </button>
-          </div>
-
-          <p className="mt-4 text-xs uppercase tracking-[0.18em] text-[var(--invite-sage)]">
-            Enviado em {formatDisplayDateTime(item.created_at)}
-          </p>
-        </motion.article>
-      ))}
     </div>
   );
 }
@@ -480,11 +446,13 @@ export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<AdminRsvpsResponse | null>(null);
-  const [drafts, setDrafts] = useState<DraftMap>({});
   const [searchTerm, setSearchTerm] = useState("");
   const deferredSearch = useDeferredValue(searchTerm);
   const [statusFilter, setStatusFilter] = useState<AttendanceStatus | "all">("all");
-  const [savingId, setSavingId] = useState<string | null>(null);
+
+  // Delete state
+  const [deleteTarget, setDeleteTarget] = useState<AdminRsvpItem | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   async function loadData(showToast = false) {
     try {
@@ -492,19 +460,14 @@ export default function AdminPage() {
       const response = await fetchAdminRsvps();
       setAuthenticated(true);
       setData(response);
-      setDrafts(buildDrafts(response.items));
-      if (showToast) {
-        toast.success("Painel atualizado.");
-      }
+      if (showToast) toast.success("Painel atualizado.");
     } catch (error) {
       if (error instanceof ApiError && (error.status === 401 || error.status === 503)) {
         setAuthenticated(false);
         setData(null);
       } else {
         toast.error(
-          error instanceof Error
-            ? error.message
-            : "Não foi possível carregar as confirmações.",
+          error instanceof Error ? error.message : "Não foi possível carregar as confirmações.",
         );
       }
     } finally {
@@ -513,18 +476,13 @@ export default function AdminPage() {
   }
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => {
-      void loadData();
-    }, 0);
-
+    const timeout = window.setTimeout(() => void loadData(), 0);
     return () => window.clearTimeout(timeout);
   }, []);
 
   const filteredItems = useMemo(() => {
     if (!data) return [];
-
     const term = deferredSearch.trim().toLowerCase();
-
     return (data.items ?? []).filter((item) => {
       const matchesStatus =
         statusFilter === "all" ? true : item.attendance_status === statusFilter;
@@ -532,7 +490,6 @@ export default function AdminPage() {
         term.length === 0
           ? true
           : item.guest_name.toLowerCase().includes(term) || item.phone.includes(term);
-
       return matchesStatus && matchesSearch;
     });
   }, [data, deferredSearch, statusFilter]);
@@ -558,25 +515,24 @@ export default function AdminPage() {
     }
   }
 
-  async function handleSave(item: AdminRsvpItem) {
-    const draft = drafts[item.id];
-    if (!draft) return;
-
+  async function handleDelete() {
+    if (!deleteTarget) return;
     try {
-      setSavingId(item.id);
-      await updateAdminRsvp(item.id, draft);
-      toast.success("Registro atualizado.");
+      setDeleting(true);
+      await deleteAdminRsvp(deleteTarget.id);
+      toast.success(`Resposta de "${deleteTarget.guest_name}" excluída.`);
+      setDeleteTarget(null);
       await loadData();
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Não foi possível salvar as alterações.",
+        error instanceof Error ? error.message : "Não foi possível excluir o registro.",
       );
     } finally {
-      setSavingId(null);
+      setDeleting(false);
     }
   }
 
-  // --- Loading state ---
+  // --- Loading ---
   if (loading && !data && authenticated === false) {
     return (
       <div className="invite-page flex min-h-screen items-center justify-center">
@@ -585,17 +541,29 @@ export default function AdminPage() {
     );
   }
 
-  // --- Login screen ---
+  // --- Login ---
   if (!authenticated) {
     return <LoginScreen onLogin={handleLogin} />;
   }
 
-  // --- Authenticated: Admin Dashboard ---
+  // --- Dashboard ---
   const summary = data?.summary;
 
   return (
     <div className="invite-page min-h-screen">
-      {/* ===== STICKY HEADER ===== */}
+      {/* Delete confirmation dialog */}
+      <AnimatePresence>
+        {deleteTarget && (
+          <DeleteConfirmDialog
+            guestName={deleteTarget.guest_name}
+            onConfirm={() => void handleDelete()}
+            onCancel={() => setDeleteTarget(null)}
+            deleting={deleting}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Header */}
       <header className="admin-header">
         <div className="invite-container flex items-center justify-between py-3.5">
           <div className="flex items-center gap-4">
@@ -650,25 +618,25 @@ export default function AdminPage() {
         </div>
       </header>
 
-      {/* ===== MAIN CONTENT ===== */}
+      {/* Main */}
       <main className="invite-container py-8 sm:py-10">
         {/* Welcome */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
           className="mb-8"
         >
           <h2 className="font-script text-4xl text-[var(--invite-brown)] sm:text-5xl">
-            Bem-vinda, Admin
+            Confirmações recebidas
           </h2>
           <p className="mt-3 max-w-2xl font-body text-xl leading-relaxed text-[var(--invite-brown-soft)]">
-            Acompanhe as confirmações de presença, atualize status, registre observações e exporte a lista completa.
+            Todas as respostas dos convidados aparecem automaticamente aqui. Nenhuma ação manual é
+            necessária para confirmar o que foi enviado.
           </p>
         </motion.div>
 
-        {/* Stats cards */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Stats */}
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           <StatsCard
             title="Respostas"
             value={summary?.total ?? 0}
@@ -699,11 +667,11 @@ export default function AdminPage() {
           />
         </div>
 
-        {/* Search & Filter bar */}
+        {/* Search & Filter */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45, duration: 0.4 }}
+          transition={{ delay: 0.45 }}
           className="invite-card mt-8 px-5 py-5"
         >
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
@@ -716,7 +684,6 @@ export default function AdminPage() {
                 value={searchTerm}
               />
             </div>
-
             <div className="flex flex-wrap gap-2">
               {(["all", ...statusOptions] as const).map((status) => (
                 <button
@@ -734,7 +701,7 @@ export default function AdminPage() {
           </div>
         </motion.div>
 
-        {/* Mobile refresh/export buttons */}
+        {/* Mobile buttons */}
         <div className="mt-4 flex gap-2 sm:hidden">
           <button
             className="invite-button-secondary flex-1 min-h-10 px-3 py-2 text-xs"
@@ -755,33 +722,27 @@ export default function AdminPage() {
           </a>
         </div>
 
-        {/* Data loading state */}
+        {/* Loading */}
         {loading && data && (
           <div className="mt-8 flex items-center justify-center py-12">
             <Loader2 className="size-6 animate-spin text-[var(--invite-gold)]" />
           </div>
         )}
 
-        {/* Desktop Table */}
-        {!loading && (
-          <DesktopTable
-            items={filteredItems}
-            drafts={drafts}
-            setDrafts={setDrafts}
-            savingId={savingId}
-            onSave={(item) => void handleSave(item)}
-          />
+        {/* Desktop Table (read-only) */}
+        {!loading && filteredItems.length > 0 && (
+          <SubmissionsTable items={filteredItems} onDelete={setDeleteTarget} />
         )}
 
-        {/* Mobile Cards */}
-        {!loading && (
-          <MobileCards
-            items={filteredItems}
-            drafts={drafts}
-            setDrafts={setDrafts}
-            savingId={savingId}
-            onSave={(item) => void handleSave(item)}
-          />
+        {/* Mobile Cards (read-only) */}
+        {!loading && filteredItems.length > 0 && (
+          <div className="mt-8 space-y-4 lg:hidden">
+            <AnimatePresence>
+              {filteredItems.map((item) => (
+                <SubmissionCard key={item.id} item={item} onDelete={setDeleteTarget} />
+              ))}
+            </AnimatePresence>
+          </div>
         )}
 
         {/* Empty state */}
@@ -799,7 +760,8 @@ export default function AdminPage() {
               Nenhuma confirmação encontrada
             </h3>
             <p className="max-w-sm font-body text-lg leading-relaxed text-[var(--invite-brown-soft)]">
-              As confirmações de presença aparecerão aqui assim que forem enviadas pelos convidados. Ajuste os filtros ou atualize o painel.
+              As confirmações de presença aparecerão automaticamente aqui assim que forem enviadas
+              pelos convidados.
             </p>
           </motion.div>
         )}

@@ -7,8 +7,8 @@ import { computeSummary } from "../_lib/rsvps.js";
 import { getSupabaseClient } from "../_lib/supabase.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== "GET" && req.method !== "PATCH") {
-    res.setHeader("Allow", "GET, PATCH");
+  if (req.method !== "GET" && req.method !== "PATCH" && req.method !== "DELETE") {
+    res.setHeader("Allow", "GET, PATCH, DELETE");
     return sendJson(res, 405, { error: "Método não permitido." });
   }
 
@@ -17,6 +17,39 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const supabase = getSupabaseClient();
+
+  if (req.method === "DELETE") {
+    let body: unknown;
+    try {
+      body = parseBody(req.body);
+    } catch {
+      return sendJson(res, 400, { error: "JSON inválido." });
+    }
+
+    const schema = z.object({
+      id: z.string().uuid("Registro inválido."),
+    });
+
+    const idParsed = schema.safeParse(body);
+    if (!idParsed.success) {
+      return sendJson(res, 400, {
+        error: idParsed.error.issues[0]?.message ?? "Registro inválido.",
+      });
+    }
+
+    const { error } = await supabase
+      .from("rsvp_confirmations")
+      .delete()
+      .eq("id", idParsed.data.id);
+
+    if (error) {
+      return sendJson(res, 500, {
+        error: "Não foi possível excluir o registro.",
+      });
+    }
+
+    return sendJson(res, 200, { ok: true });
+  }
 
   if (req.method === "PATCH") {
     let body: unknown;
