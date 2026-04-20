@@ -22,13 +22,13 @@ export function HeroSection() {
     >
       <motion.div
         animate={{ scale: [1, 1.03, 1] }}
-        className="absolute inset-0 z-0 hidden sm:block"
+        className="absolute inset-0 z-0 hidden overflow-hidden sm:block"
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       >
         <ResponsiveImage
           asset={inviteData.hero.imageAsset}
           alt="Camilla Santana Conegundes em retrato principal de formatura"
-          className="h-full w-full object-cover object-[center_20%]"
+          className="absolute left-1/2 top-1/2 min-h-full w-full -translate-x-1/2 -translate-y-[46%] object-cover lg:min-h-0 lg:h-auto lg:min-w-full lg:w-auto lg:-translate-y-[42%]"
           eager
           sizes="100vw"
         />
