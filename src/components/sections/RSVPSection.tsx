@@ -90,6 +90,8 @@ export function RSVPSection() {
       });
       await submitRsvp(payload);
 
+      // Build the WhatsApp message from the JUST-SUBMITTED payload data
+      // (never from localStorage or stale state)
       const message = buildWhatsAppMessage({
         name: payload.guest_name,
         attendance: payload.attendance_status,
@@ -97,14 +99,15 @@ export function RSVPSection() {
       });
 
       const whatsappUrl = `https://wa.me/${inviteData.rsvp.whatsappIntl}?text=${encodeURIComponent(message)}`;
-      
-      // Delay slightly to ensure toast is visible or database save is initiated
-      setTimeout(() => {
-        window.open(whatsappUrl, "_blank");
-      }, 800);
 
-      toast.success("Redirecionando para o WhatsApp...");
+      toast.success("Confirmação registrada! Redirecionando para o WhatsApp...");
       reset(defaultValues);
+
+      // Use window.location.href instead of window.open()
+      // window.open() inside async/setTimeout is BLOCKED by mobile popup blockers
+      // on devices without prior popup permission (new phones, incognito, etc.)
+      // window.location.href is a navigation, not a popup — it ALWAYS works.
+      window.location.href = whatsappUrl;
     } catch (error) {
       toast.error(
         error instanceof Error
