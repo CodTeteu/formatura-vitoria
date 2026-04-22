@@ -14,6 +14,8 @@ const countdownItems = [
 
 export function HeroSection() {
   const countdown = useCountdown(inviteData.event.startsAt);
+  const [heroFirstName, ...heroLastNameParts] = inviteData.hero.name.split(" ");
+  const heroLastName = heroLastNameParts.join(" ");
 
   return (
     <section
@@ -61,8 +63,15 @@ export function HeroSection() {
           </div>
 
           <div className="mt-2 flex flex-col items-center">
-            <h1 className="font-script text-[4rem] leading-none text-[#fff8e7] drop-shadow-lg sm:text-[4.8rem] md:text-[7.5rem]">
-              {inviteData.hero.name}
+            <h1 className="flex max-w-[18rem] flex-col items-center text-[#fff8e7] drop-shadow-lg sm:max-w-[32rem] md:max-w-[42rem]">
+              <span className="font-heading text-[3.5rem] font-semibold leading-none sm:text-[5rem] md:text-[7rem]">
+                {heroFirstName}
+              </span>
+              {heroLastName ? (
+                <span className="mt-2 text-balance font-heading text-[1.45rem] font-medium leading-tight sm:text-[2rem] md:text-[2.7rem]">
+                  {heroLastName}
+                </span>
+              ) : null}
             </h1>
             <p className="mt-3 text-[0.9rem] uppercase tracking-[0.28em] text-white/80 sm:mt-4 sm:text-lg">
               {inviteData.hero.courseLine}

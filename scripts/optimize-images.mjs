@@ -120,6 +120,13 @@ const manifest = [
     position: "centre",
   },
   {
+    input: "WhatsApp Image 2026-04-22 at 19.07.29.jpeg",
+    output: "camilla-family-childhood-window",
+    width: 1600,
+    height: 1200,
+    position: "north",
+  },
+  {
     input: "WhatsApp Image 2026-04-17 at 19.39.59 (2).jpeg",
     output: "camilla-portrait-diploma",
     width: 1200,

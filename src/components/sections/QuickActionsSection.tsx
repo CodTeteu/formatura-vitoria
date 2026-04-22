@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { MapPin, CheckCircle, BookOpen, Users } from "lucide-react";
+import { inviteData } from "@/config/invite";
 
 export function QuickActionsSection() {
+  const confirmationDeadlineShort = inviteData.event.confirmationDeadline.slice(0, 5);
+
   return (
     <section className="relative z-20 px-4 pb-8 pt-16 sm:px-6 md:pb-12 md:pt-24" id="acoes-rapidas">
       <div className="mx-auto max-w-6xl">
@@ -76,7 +79,7 @@ export function QuickActionsSection() {
                 Presença
               </h3>
               <p className="mt-1 text-[0.65rem] sm:text-xs uppercase tracking-[0.12em] text-[var(--invite-brown-soft)]">
-                Até 17/07
+                Até {confirmationDeadlineShort}
               </p>
             </div>
           </button>
