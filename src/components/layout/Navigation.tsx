@@ -12,6 +12,32 @@ function scrollToHash(hash: string) {
   }
 }
 
+type BrandLogoVariant = "onDark" | "onLight";
+
+function BrandLogo({
+  className,
+  variant,
+}: {
+  className?: string;
+  variant: BrandLogoVariant;
+}) {
+  return (
+    <div
+      className={cn(
+        "transition-all duration-500",
+        variant === "onDark" ? "brightness-0 invert" : "brightness-0",
+        className,
+      )}
+    >
+      <img
+        src="/logo-camilla.png"
+        alt="Logo Camilla"
+        className="h-full w-auto object-contain"
+      />
+    </div>
+  );
+}
+
 export function Navigation() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -46,18 +72,10 @@ export function Navigation() {
             onClick={() => scrollToHash("#inicio")}
             type="button"
           >
-            <div
-              className={cn(
-                "transition-all duration-500",
-                scrolled ? "h-11 brightness-100 invert-0" : "h-14 brightness-0 invert lg:h-16",
-              )}
-            >
-              <img
-                src="/logo-camilla.png"
-                alt="Logo Camilla"
-                className="h-full w-auto object-contain"
-              />
-            </div>
+            <BrandLogo
+              variant={scrolled ? "onLight" : "onDark"}
+              className={scrolled ? "h-11" : "h-14 lg:h-16"}
+            />
           </button>
 
           <nav className="hidden items-center gap-8 md:flex">
@@ -133,11 +151,7 @@ export function Navigation() {
               </button>
 
               <div className="border-b border-white/10 px-8 pb-6 pt-10 text-center flex flex-col items-center">
-                <img
-                  src="/logo-camilla.png"
-                  alt="Logo Camilla"
-                  className="h-14 w-auto object-contain brightness-0 invert"
-                />
+                <BrandLogo variant="onDark" className="h-14" />
                 <div className="mt-4 flex items-center justify-center gap-3 text-white/40">
                   <span className="h-px w-6 bg-[var(--invite-gold)]/30" />
                   <span className="text-[0.65rem] uppercase tracking-[0.3em] text-[var(--invite-gold)]/80">
