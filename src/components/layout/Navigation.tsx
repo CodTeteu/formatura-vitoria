@@ -30,7 +30,7 @@ function BrandLogo({
       )}
     >
       <img
-        src="/logo-camilla.png"
+        src={`${import.meta.env.BASE_URL || "/"}logo-camilla.png`}
         alt="Logo Camilla"
         className="h-full w-auto object-contain"
       />

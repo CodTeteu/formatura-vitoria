@@ -23,7 +23,7 @@ import {
 import { toast } from "sonner";
 import type { AdminRsvpItem, AdminRsvpsResponse } from "@shared/schemas";
 import { attendanceLabels, type AttendanceStatus } from "@shared/constants";
-import { ApiError, adminLogin, adminLogout, deleteAdminRsvp, fetchAdminRsvps } from "@/lib/api";
+import { ApiError, adminLogin, adminLogout, deleteAdminRsvp, fetchAdminRsvps, withBasePath } from "@/lib/api";
 import { formatDisplayDateTime } from "@/lib/format";
 
 // ===========================================
@@ -599,7 +599,7 @@ export default function AdminPage() {
             </button>
             <a
               className="invite-button-secondary hidden min-h-9 px-4 py-2 text-xs sm:inline-flex"
-              href="/api/admin/export/csv"
+              href={withBasePath("/api/admin/export/csv")}
               target="_blank"
               rel="noreferrer"
             >
@@ -713,7 +713,7 @@ export default function AdminPage() {
           </button>
           <a
             className="invite-button-secondary flex-1 min-h-10 px-3 py-2 text-xs"
-            href="/api/admin/export/csv"
+            href={withBasePath("/api/admin/export/csv")}
             target="_blank"
             rel="noreferrer"
           >

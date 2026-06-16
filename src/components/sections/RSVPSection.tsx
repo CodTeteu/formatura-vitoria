@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { rsvpSchema, type RSVPInput } from "@shared/schemas";
 import { inviteData, buildWhatsAppMessage, defaultSource, eventSlug } from "@/config/invite";
 import { submitRsvp } from "@/lib/api";
+import { queueFailedSubmission } from "@/lib/pending-rsvp";
 import { formatPhone } from "@/lib/format";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -107,12 +108,18 @@ export function RSVPSection() {
       // window.open() inside async/setTimeout is BLOCKED by mobile popup blockers
       // on devices without prior popup permission (new phones, incognito, etc.)
       // window.location.href is a navigation, not a popup — it ALWAYS works.
-      window.location.href = whatsappUrl;
-    } catch (error) {
+      window.location.assign(whatsappUrl);
+    } catch {
+      const payload = rsvpSchema.parse({
+        ...getValues(),
+        source: defaultSource,
+        event_slug: eventSlug,
+      });
+      queueFailedSubmission(payload);
+
       toast.error(
-        error instanceof Error
-          ? error.message
-          : "Não foi possível registrar sua confirmação.",
+        "Servidor indisponível no momento. Sua confirmação foi salva e será enviada automaticamente quando o serviço retornar.",
+        { duration: 8000 },
       );
     }
   }

@@ -18,7 +18,8 @@ export function ResponsiveImage({
   ...props
 }: ResponsiveImageProps) {
   const isGenerated = !asset.includes(".");
-  const basePath = isGenerated ? `/images/generated/${asset}` : `/images/${asset}`;
+  const base = import.meta.env.BASE_URL || "/";
+  const basePath = isGenerated ? `${base}images/generated/${asset}` : `${base}images/${asset}`;
 
   return (
     <picture>

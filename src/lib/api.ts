@@ -54,40 +54,44 @@ async function request<T>(input: string, init?: RequestInit): Promise<T> {
   return (await response.json()) as T;
 }
 
+export function withBasePath(path: string) {
+  return `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+}
+
 export function submitRsvp(payload: RSVPSubmission) {
-  return request<{ id: string; submitted_at: string }>("/api/rsvp", {
+  return request<{ id: string; submitted_at: string }>(withBasePath("/api/rsvp"), {
     method: "POST",
     body: JSON.stringify(payload),
   });
 }
 
 export function adminLogin(password: string) {
-  return request<{ ok: true }>("/api/admin/login", {
+  return request<{ ok: true }>(withBasePath("/api/admin/login"), {
     method: "POST",
     body: JSON.stringify({ password }),
   });
 }
 
 export function adminLogout() {
-  return request<{ ok: true }>("/api/admin/logout", {
+  return request<{ ok: true }>(withBasePath("/api/admin/logout"), {
     method: "POST",
     body: JSON.stringify({}),
   });
 }
 
 export function fetchAdminRsvps() {
-  return request<AdminRsvpsResponse>("/api/admin/rsvps");
+  return request<AdminRsvpsResponse>(withBasePath("/api/admin/rsvps"));
 }
 
 export function updateAdminRsvp(id: string, payload: AdminUpdateInput) {
-  return request<{ ok: true }>("/api/admin/rsvps", {
+  return request<{ ok: true }>(withBasePath("/api/admin/rsvps"), {
     method: "PATCH",
     body: JSON.stringify({ id, ...payload }),
   });
 }
 
 export function deleteAdminRsvp(id: string) {
-  return request<{ ok: true }>("/api/admin/rsvps", {
+  return request<{ ok: true }>(withBasePath("/api/admin/rsvps"), {
     method: "DELETE",
     body: JSON.stringify({ id }),
   });
