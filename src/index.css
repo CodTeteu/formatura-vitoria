@@ -2,33 +2,59 @@
 
 @theme {
   --font-script: "Great Vibes", cursive;
-  --font-display: "Playfair Display", serif;
-  --font-heading: "Playfair Display", serif;
-  --font-body: "Cormorant Garamond", serif;
+  --font-display: "Cormorant Garamond", serif;
+  --font-heading: "Cormorant Garamond", serif;
+  --font-body: "Manrope", sans-serif;
   --font-sans: "Manrope", sans-serif;
-  --color-background: #07100e;
-  --color-background-soft: #10211c;
-  --color-paper: #f8f1e2;
-  --color-paper-soft: #d7ccb4;
-  --color-gold: #c3a46b;
-  --color-gold-soft: #ecd8ac;
-  --color-emerald: #173129;
-  --color-emerald-soft: #27463c;
+  --color-background: #fdfbfb;
+  --color-foreground: #2c050b;
+  --color-card: #ffffff;
+  --color-card-foreground: #2c050b;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #2c050b;
+  --color-primary: #5c0b16;
+  --color-primary-foreground: #fdfbfb;
+  --color-secondary: #9b7a42;
+  --color-secondary-foreground: #ffffff;
+  --color-muted: #f5ede4;
+  --color-muted-foreground: #5e4740;
+  --color-accent: #fcebed;
+  --color-accent-foreground: #2c050b;
+  --color-border: #ebdcd5;
+  --color-input: #ebdcd5;
+  --color-ring: #5c0b16;
 }
 
 :root {
   color-scheme: light;
-  --invite-cream: #f9fbf9;
+  --background: 350 25% 98%;
+  --foreground: 350 40% 12%;
+  --primary: 350 55% 25%;
+  --primary-foreground: 350 25% 98%;
+  --secondary: 38 48% 46%;
+  --secondary-foreground: 0 0% 100%;
+  --accent: 350 35% 92%;
+  --accent-foreground: 350 40% 12%;
+  --muted: 38 15% 93%;
+  --muted-foreground: 38 10% 45%;
+  --card: 0 0% 100%;
+  --card-foreground: 350 40% 12%;
+  --border: 38 15% 88%;
+  --input: 38 15% 88%;
+  --ring: 350 55% 25%;
+  --radius: 0.75rem;
+
+  --invite-cream: #fffdfb;
   --invite-paper: #ffffff;
-  --invite-sand: #ecf3ec;
-  --invite-brown: #05261a; /* Dark emerald green for texts */
-  --invite-brown-soft: #143d2a;
-  --invite-gold: #c39b5b;
-  --invite-gold-deep: #a17d45;
-  --invite-sage: #8ba889;
-  --invite-sage-soft: #dbe7db;
-  --invite-line: rgba(139, 168, 137, 0.25);
-  --invite-shadow: 0 20px 60px rgba(5, 38, 26, 0.08);
+  --invite-sand: #fdf6f2;
+  --invite-brown: #2c050b; /* Burgundy text color */
+  --invite-brown-soft: #5e101a;
+  --invite-gold: #9b7a42;
+  --invite-gold-deep: #785a2b;
+  --invite-sage: #b52636;
+  --invite-sage-soft: #ffe6e9;
+  --invite-line: rgba(155, 122, 66, 0.22);
+  --invite-shadow: 0 20px 60px rgba(44, 5, 11, 0.05);
 }
 
 html {
@@ -39,11 +65,8 @@ html {
 body {
   min-width: 320px;
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at top, rgba(194, 155, 88, 0.08), transparent 28%),
-    radial-gradient(circle at 80% 10%, rgba(39, 70, 60, 0.25), transparent 22%),
-    linear-gradient(180deg, #08120f 0%, #07100e 38%, #0c1714 100%);
-  color: var(--color-paper);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
   font-family: var(--font-sans);
 }
 
@@ -52,10 +75,10 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.14;
+  opacity: 0.25;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(155, 122, 66, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155, 122, 66, 0.04) 1px, transparent 1px);
   background-size: 120px 120px;
   mask-image: radial-gradient(circle at center, black, transparent 80%);
 }
@@ -170,7 +193,7 @@ a {
 
   .invite-page {
     @apply relative min-h-screen overflow-x-hidden text-[color:var(--invite-brown)];
-    background-color: #f9fbf9;
+    background-color: #fff8f8;
   }
 
   .invite-page::before {
@@ -178,7 +201,7 @@ a {
     position: fixed;
     inset: 0;
     z-index: -1;
-    background-image: url("./light-bg.png");
+    background-image: url("/light-bg.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -195,7 +218,7 @@ a {
 
   .invite-texture-surface {
     /* Transparent enough to see the fixed background, with a subtle light gradient */
-    background-image: linear-gradient(180deg, rgba(249, 251, 249, 0.4), rgba(255, 255, 255, 0.7));
+    background-image: linear-gradient(180deg, rgba(255, 248, 248, 0.4), rgba(255, 255, 255, 0.7));
   }
 
   .invite-card {
@@ -205,17 +228,17 @@ a {
   }
 
   .invite-card-strong {
-    @apply rounded-[30px] border shadow-[0_24px_70px_rgba(10,28,20,0.12)];
+    @apply rounded-[30px] border shadow-[0_24px_70px_rgba(59,6,13,0.12)];
     border-color: rgba(195, 155, 91, 0.3);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(249, 251, 249, 0.98));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 248, 0.98));
     backdrop-filter: blur(12px);
   }
 
   .invite-button-primary {
     @apply inline-flex min-h-12 items-center justify-center rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] transition duration-300 hover:-translate-y-0.5;
-    background: linear-gradient(135deg, var(--invite-brown), #06110c);
+    background: linear-gradient(135deg, var(--invite-brown), #180205);
     color: #ffffff;
-    box-shadow: 0 18px 40px rgba(10, 28, 20, 0.2);
+    box-shadow: 0 18px 40px rgba(59, 6, 13, 0.2);
   }
 
   .invite-button-secondary {
@@ -269,21 +292,21 @@ a {
   .admin-stat-card {
     @apply relative overflow-hidden rounded-[24px] border px-5 py-6 transition-all duration-300;
     border-color: rgba(195, 155, 91, 0.22);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(249, 251, 249, 0.99));
-    box-shadow: 0 10px 40px rgba(10, 28, 20, 0.06);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(255, 248, 248, 0.99));
+    box-shadow: 0 10px 40px rgba(59, 6, 13, 0.06);
   }
 
   .admin-stat-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 16px 50px rgba(10, 28, 20, 0.1);
+    box-shadow: 0 16px 50px rgba(59, 6, 13, 0.1);
   }
 
   .admin-avatar {
     @apply flex items-center justify-center rounded-full text-xs font-bold text-white;
     width: 34px;
     height: 34px;
-    background: linear-gradient(135deg, var(--invite-brown), #143d2a);
-    box-shadow: 0 2px 8px rgba(10, 28, 20, 0.15);
+    background: linear-gradient(135deg, var(--invite-brown), #5e101a);
+    box-shadow: 0 2px 8px rgba(59, 6, 13, 0.15);
   }
 
   .admin-badge {
@@ -314,9 +337,9 @@ a {
 
   .admin-filter-active {
     border-color: var(--invite-gold);
-    background: linear-gradient(135deg, var(--invite-brown), #06110c);
+    background: linear-gradient(135deg, var(--invite-brown), #180205);
     color: #ffffff;
-    box-shadow: 0 4px 14px rgba(10, 28, 20, 0.18);
+    box-shadow: 0 4px 14px rgba(59, 6, 13, 0.18);
   }
 
   .admin-filter-inactive {
@@ -334,7 +357,7 @@ a {
   .admin-table-header {
     @apply text-left text-[0.68rem] font-semibold uppercase tracking-[0.22em];
     color: var(--invite-sage);
-    background: rgba(219, 231, 219, 0.25);
+    background: rgba(255, 230, 233, 0.25);
   }
 
   .admin-table-row {
@@ -343,13 +366,13 @@ a {
   }
 
   .admin-table-row:hover {
-    background: rgba(219, 231, 219, 0.1);
+    background: rgba(255, 230, 233, 0.1);
   }
 
   .admin-message-box {
     @apply rounded-xl border px-3 py-2 text-xs italic leading-relaxed;
-    border-color: rgba(139, 168, 137, 0.2);
-    background: rgba(219, 231, 219, 0.2);
+    border-color: rgba(181, 38, 54, 0.2);
+    background: rgba(255, 230, 233, 0.2);
     color: var(--invite-brown-soft);
   }
 
@@ -357,8 +380,38 @@ a {
     @apply fixed inset-0;
     background:
       radial-gradient(circle at 30% 20%, rgba(195, 155, 91, 0.06), transparent 50%),
-      radial-gradient(circle at 70% 80%, rgba(139, 168, 137, 0.08), transparent 50%),
-      #f9fbf9;
+      radial-gradient(circle at 70% 80%, rgba(181, 38, 54, 0.08), transparent 50%),
+      #fff8f8;
+  }
+}
+
+@layer utilities {
+  .font-script {
+    font-family: var(--font-script);
+  }
+
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl;
+  }
+
+  .gold-text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[var(--invite-brown)] via-[var(--invite-brown-soft)] to-[var(--invite-brown)];
+  }
+
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
 }
 

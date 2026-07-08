@@ -4,6 +4,7 @@ import { GraduationCap, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { inviteData } from "@/config/invite";
 import { cn } from "@/lib/cn";
+import { AudioPlayer } from "./AudioPlayer";
 
 function scrollToHash(hash: string) {
   const element = document.querySelector(hash);
@@ -24,16 +25,14 @@ function BrandLogo({
   return (
     <div
       className={cn(
-        "transition-all duration-500",
-        variant === "onDark" ? "brightness-0 invert" : "brightness-0",
+        "flex items-center justify-center rounded-full border font-heading text-xl tracking-[0.2em] transition-all duration-500",
+        variant === "onDark"
+          ? "border-white/40 text-white"
+          : "border-[var(--invite-line)] text-[var(--invite-brown)]",
         className,
       )}
     >
-      <img
-        src={`${import.meta.env.BASE_URL || "/"}logo-camilla.png`}
-        alt="Logo Camilla"
-        className="h-full w-auto object-contain"
-      />
+      {inviteData.people.monogram}
     </div>
   );
 }
@@ -74,52 +73,56 @@ export function Navigation() {
           >
             <BrandLogo
               variant={scrolled ? "onLight" : "onDark"}
-              className={scrolled ? "h-11" : "h-14 lg:h-16"}
+              className={scrolled ? "size-11" : "size-14 lg:size-16"}
             />
           </button>
 
-          <nav className="hidden items-center gap-8 md:flex">
-            {inviteData.navigation.map((item) => (
+          <div className="flex items-center gap-4 sm:gap-6 z-[60]">
+            <nav className="hidden items-center gap-8 md:flex">
+              {inviteData.navigation.map((item) => (
+                <button
+                  key={item.href}
+                  className={cn(
+                    "text-[0.68rem] font-medium uppercase tracking-[0.25em] transition-all duration-300",
+                    scrolled
+                      ? "text-[var(--invite-brown)] hover:text-[var(--invite-gold)]"
+                      : "text-white/85 hover:text-white drop-shadow-sm",
+                  )}
+                  onClick={() => scrollToHash(item.href)}
+                  type="button"
+                >
+                  {item.label}
+                </button>
+              ))}
               <button
-                key={item.href}
                 className={cn(
-                  "text-[0.68rem] font-medium uppercase tracking-[0.25em] transition-all duration-300",
+                  "rounded-full border px-6 py-2.5 text-[0.68rem] font-bold uppercase tracking-[0.2em] transition-all duration-300",
                   scrolled
-                    ? "text-[var(--invite-brown)] hover:text-[var(--invite-gold)] "
-                    : "text-white/80 hover:text-white drop-shadow-sm",
+                    ? "border-[var(--invite-brown)] bg-[var(--invite-brown)] text-white hover:bg-[var(--invite-brown-soft)] hover:border-[var(--invite-brown-soft)]"
+                    : "border-white/30 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20",
                 )}
-                onClick={() => scrollToHash(item.href)}
+                onClick={() => scrollToHash("#rsvp")}
                 type="button"
               >
-                {item.label}
+                Confirmar
               </button>
-            ))}
-            <button
-              className={cn(
-                "rounded-full border px-6 py-2.5 text-[0.68rem] font-bold uppercase tracking-[0.2em] transition-all duration-300",
-                scrolled
-                  ? "border-[var(--invite-gold)] bg-[var(--invite-gold)]/5 text-[var(--invite-brown)] hover:bg-[var(--invite-gold)] hover:text-white"
-                  : "border-white/30 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20",
-              )}
-              onClick={() => scrollToHash("#rsvp")}
-              type="button"
-            >
-              Confirmar
-            </button>
-          </nav>
+            </nav>
 
-          <div className="flex items-center md:hidden">
-            <button
-              className={cn(
-                "relative z-[60] p-2 transition-colors",
-                open ? "text-white" : scrolled ? "text-[var(--invite-brown)]" : "text-white drop-shadow-sm"
-              )}
-              onClick={() => setOpen((value) => !value)}
-              type="button"
-              aria-label="Abrir menu"
-            >
-              {open ? <X className="size-8" /> : <Menu className="size-8" />}
-            </button>
+            <AudioPlayer isScrolled={scrolled} />
+
+            <div className="flex items-center md:hidden">
+              <button
+                className={cn(
+                  "relative p-2 transition-colors",
+                  open ? "text-white" : scrolled ? "text-[var(--invite-brown)]" : "text-white drop-shadow-sm"
+                )}
+                onClick={() => setOpen((value) => !value)}
+                type="button"
+                aria-label="Abrir menu"
+              >
+                {open ? <X className="size-8" /> : <Menu className="size-8" />}
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -135,7 +138,7 @@ export function Navigation() {
               onClick={() => setOpen(false)}
             />
             <motion.aside
-              className="fixed inset-y-0 right-0 z-50 flex w-[85vw] max-w-[320px] flex-col overflow-y-auto bg-gradient-to-b from-[#0a1c14] to-[#040907] shadow-2xl md:hidden"
+              className="fixed inset-y-0 right-0 z-50 flex w-[85vw] max-w-[320px] flex-col overflow-y-auto bg-gradient-to-b from-[#3b060d] to-[#230307] shadow-2xl md:hidden"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -151,7 +154,7 @@ export function Navigation() {
               </button>
 
               <div className="border-b border-white/10 px-8 pb-6 pt-10 text-center flex flex-col items-center">
-                <BrandLogo variant="onDark" className="h-14" />
+                <BrandLogo variant="onDark" className="size-14" />
                 <div className="mt-4 flex items-center justify-center gap-3 text-white/40">
                   <span className="h-px w-6 bg-[var(--invite-gold)]/30" />
                   <span className="text-[0.65rem] uppercase tracking-[0.3em] text-[var(--invite-gold)]/80">
@@ -187,7 +190,7 @@ export function Navigation() {
               {/* Mobile Footer Actions */}
               <div className="border-t border-white/10 px-8 pb-6 pt-5">
                 <button
-                  className="w-full rounded-full bg-[var(--invite-gold)] py-3.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#040907] shadow-[0_0_20px_rgba(195,161,110,0.2)] transition-transform hover:scale-[1.02]"
+                  className="w-full rounded-full bg-[var(--invite-gold)] py-3.5 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#230307] shadow-[0_0_20px_rgba(195,161,110,0.2)] transition-transform hover:scale-[1.02]"
                   onClick={() => {
                     scrollToHash("#rsvp");
                     setOpen(false);
@@ -197,7 +200,7 @@ export function Navigation() {
                   Confirmar Presença
                 </button>
                 <Link
-                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border border-[var(--invite-gold)]/30 py-3 text-[0.65rem] uppercase tracking-[0.2em] text-[var(--invite-gold)] transition hover:bg-[var(--invite-gold)]/10"
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-full border border-white/10 py-3 text-[0.65rem] uppercase tracking-[0.2em] text-white/60 transition hover:bg-white/5 hover:text-white"
                   onClick={() => setOpen(false)}
                   to="/admin"
                 >

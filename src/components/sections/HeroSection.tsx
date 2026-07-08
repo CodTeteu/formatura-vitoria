@@ -1,9 +1,9 @@
+import { useRef } from "react";
 import { ChevronDown } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { inviteData } from "@/config/invite";
 import { useCountdown } from "@/hooks/useCountdown";
 import { ResponsiveImage } from "@/components/ui/ResponsiveImage";
-import { cn } from "@/lib/cn";
 
 const countdownItems = [
   { key: "days", label: "Dias" },
@@ -13,123 +13,188 @@ const countdownItems = [
 ] as const;
 
 export function HeroSection() {
+  const containerRef = useRef(null);
   const countdown = useCountdown(inviteData.event.startsAt);
-  const [heroFirstName, ...heroLastNameParts] = inviteData.hero.name.split(" ");
-  const heroLastName = heroLastNameParts.join(" ");
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  const timerComponents = countdownItems.map((item) => (
+    <div
+      key={item.key}
+      className="flex flex-col items-center mx-1 md:mx-4 p-2 md:p-4 bg-black/20 backdrop-blur-md border border-white/10 rounded-lg min-w-[60px] md:min-w-[90px]"
+    >
+      <span className="text-2xl md:text-4xl font-bold text-white font-heading tabular-nums leading-none">
+        {String(countdown[item.key]).padStart(2, "0")}
+      </span>
+      <span className="text-[10px] md:text-xs text-white/70 uppercase tracking-wider mt-1.5 font-body">
+        {item.label}
+      </span>
+    </div>
+  ));
 
   return (
     <section
-      className="relative flex h-[100svh] min-h-[600px] items-center justify-center overflow-hidden bg-[#06110c] sm:h-screen sm:min-h-screen"
       id="inicio"
+      ref={containerRef}
+      className="relative h-screen min-h-[600px] md:min-h-[850px] flex items-center justify-center overflow-hidden w-full bg-[#150306]"
     >
+      {/* Background with Parallax */}
       <motion.div
-        animate={{ scale: [1, 1.03, 1] }}
-        className="absolute inset-0 z-0 hidden overflow-hidden sm:block"
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute inset-0 z-0"
+        style={{ y: backgroundY }}
       >
-        <ResponsiveImage
-          asset={inviteData.hero.imageAsset}
-          alt="Camilla Santana Conegundes em retrato principal de formatura"
-          className="absolute left-1/2 top-1/2 min-h-full w-full -translate-x-1/2 -translate-y-[46%] object-cover lg:min-h-0 lg:h-auto lg:min-w-full lg:w-auto lg:-translate-y-[42%]"
-          eager
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-black/42 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.4),rgba(0,0,0,0.08)_38%,rgba(0,0,0,0.72)_100%)]" />
+        {/* Mobile Hero */}
+        <div className="block md:hidden w-full h-full">
+          <ResponsiveImage
+            asset={inviteData.hero.imageAsset}
+            alt={inviteData.hero.name}
+            className="w-full h-full object-cover object-[center_22%]"
+            eager
+            sizes="100vw"
+          />
+        </div>
+        {/* PC Hero */}
+        <div className="hidden md:block w-full h-full">
+          <ResponsiveImage
+            asset={inviteData.hero.imageAsset}
+            alt={inviteData.hero.name}
+            className="w-full h-full object-cover object-[center_40%]"
+            eager
+            sizes="100vw"
+          />
+        </div>
+        <div className="absolute inset-0 bg-black/38 mix-blend-multiply" />
+        <div className="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-[var(--color-background)] from-10% to-transparent z-0 pointer-events-none" />
       </motion.div>
 
-      {/* Mobile Fixed Background (No-scale to prevent zoom bugs) */}
-      <div className="absolute inset-0 z-0 sm:hidden">
-        <ResponsiveImage
-          asset={inviteData.hero.imageAsset}
-          alt="Camilla Santana Conegundes"
-          className="h-full w-full object-cover object-[center_22%]"
-          eager
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-black/45 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/10 to-black/80" />
-      </div>
-
+      {/* Mobile content: stacked flow to avoid overlap */}
       <motion.div
-        className="relative z-10 flex h-full w-full flex-col items-center px-4 pb-12 pt-22 text-center sm:px-6 sm:pb-16 sm:pt-24 md:pb-14"
-        initial={{ opacity: 0, y: 24 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        whileInView={{ opacity: 1, y: 0 }}
+        className="absolute top-[38%] left-1/2 -translate-x-1/2 z-10 flex w-full max-w-[420px] flex-col items-center px-5 text-center md:hidden"
+        style={{ opacity }}
       >
-        <div className="flex flex-col items-center gap-4 sm:gap-5">
-          <div className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/5 px-6 py-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.4em] text-white/90 shadow-lg backdrop-blur-sm sm:px-7 sm:text-[0.68rem]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.4 }}
+          className="w-full"
+        >
+          <div className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.4em] text-white/95 backdrop-blur-sm mb-4">
             {inviteData.hero.eyebrow}
           </div>
 
-          <div className="mt-2 flex flex-col items-center">
-            <h1 className="flex max-w-[21rem] flex-col items-center text-white drop-shadow-lg sm:max-w-[36rem] md:max-w-[48rem]">
-              <span className="font-body text-[4.8rem] font-semibold italic leading-[0.82] sm:text-[6.8rem] md:text-[9rem]">
-                {heroFirstName}
-              </span>
-              {heroLastName ? (
-                <span className="mt-2 text-balance font-body text-[2.1rem] font-medium italic leading-[0.95] sm:mt-3 sm:text-[3rem] md:text-[4rem]">
-                  {heroLastName}
-                </span>
-              ) : null}
-            </h1>
-            <p className="mt-5 text-[0.9rem] uppercase tracking-[0.28em] text-white/80 sm:mt-6 sm:text-lg">
-              {inviteData.hero.courseLine}
-            </p>
-          </div>
-        </div>
+          <h1 className="w-full font-script text-[3.2rem] text-white drop-shadow-xl leading-none">
+            {inviteData.hero.name}
+          </h1>
 
-        <div className="mt-auto flex flex-col items-center gap-5 pb-0 sm:gap-6">
-          <div className="grid grid-cols-4 gap-2 text-white sm:gap-3">
-            {countdownItems.map((item, index) => (
-              <motion.div
-                key={item.key}
-                className={cn(
-                  "flex min-w-[62px] flex-col items-center rounded-[18px] border border-white/18 bg-black/45 px-2.5 py-3.5 backdrop-blur-sm shadow-lg",
-                  "transition duration-300 sm:min-w-[78px] sm:px-4 sm:py-4.5",
-                )}
-                initial={{ opacity: 0, y: 24 }}
-                transition={{ delay: 0.12 + index * 0.06, duration: 0.55 }}
-                whileInView={{ opacity: 1, y: 0 }}
-              >
-                <span className="font-heading text-2xl leading-none text-white sm:text-3xl">
-                  {String(countdown[item.key]).padStart(2, "0")}
-                </span>
-                <span className="mt-2 text-[0.55rem] uppercase tracking-[0.16em] text-white/60 sm:text-[0.6rem] sm:tracking-[0.14em]">
-                  {item.label}
-                </span>
-              </motion.div>
-            ))}
-          </div>
+          <p className="mt-3 text-white/95 text-sm font-heading tracking-[0.26em] uppercase">
+            {inviteData.hero.courseLine}
+          </p>
+        </motion.div>
 
-          <button
-            className="group inline-flex min-h-11 items-center justify-center gap-2.5 rounded-full border border-white/25 bg-white/8 px-7 py-2 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/15 sm:px-9"
-            onClick={() =>
-              document.getElementById("rsvp")?.scrollIntoView({ behavior: "smooth" })
-            }
-            type="button"
-          >
-            <span className="text-[0.65rem] font-semibold uppercase tracking-[0.22em] sm:text-[0.7rem] sm:tracking-[0.28em]">
-              {inviteData.hero.primaryCta}
-            </span>
-            <span className="text-base transition-transform group-hover:translate-x-1">
-              →
-            </span>
-          </button>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+          className="mt-6 flex flex-nowrap justify-center gap-0.5"
+        >
+          {timerComponents}
+        </motion.div>
+
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.0 }}
+          onClick={() => document.getElementById("rsvp")?.scrollIntoView({ behavior: "smooth" })}
+          className="group relative mt-7 w-full max-w-[310px] px-8 py-3.5 min-h-[48px] bg-white/10 backdrop-blur-md overflow-hidden rounded-full transition-all hover:bg-white/20 border border-white/30 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+        >
+          <span className="text-white font-medium tracking-widest uppercase text-xs">
+            {inviteData.hero.primaryCta}
+          </span>
+          <span className="text-white text-sm transition-transform group-hover:translate-x-1">
+            →
+          </span>
+        </motion.button>
       </motion.div>
 
-      <motion.button
-        animate={{ y: [0, 10, 0] }}
-        className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-white/72"
-        onClick={() =>
-          document.getElementById("jornada")?.scrollIntoView({ behavior: "smooth" })
-        }
-        transition={{ repeat: Infinity, duration: 2 }}
-        type="button"
+      {/* Desktop name and course (Top aligned) */}
+      <motion.div
+        className="hidden md:block absolute top-[20%] left-1/2 -translate-x-1/2 z-10 text-center px-4 w-full max-w-4xl"
+        style={{ opacity }}
       >
-        <ChevronDown className="size-8" />
-      </motion.button>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-1.5 text-xs font-semibold uppercase tracking-[0.4em] text-white/95 backdrop-blur-sm mb-5"
+        >
+          {inviteData.hero.eyebrow}
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="font-script text-7xl lg:text-8xl text-white mb-4 drop-shadow-xl leading-none"
+        >
+          {inviteData.hero.name}
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+          className="text-white/90 text-lg lg:text-xl font-heading tracking-[0.3em] uppercase"
+        >
+          {inviteData.hero.courseLine}
+        </motion.p>
+      </motion.div>
+
+      {/* Desktop countdown and button (Bottom aligned) */}
+      <motion.div
+        className="hidden md:flex absolute bottom-[18%] left-1/2 -translate-x-1/2 z-10 text-center px-4 flex-col items-center w-full max-w-4xl"
+        style={{ opacity }}
+      >
+        {/* Countdown */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.9 }}
+          className="flex flex-wrap justify-center gap-1 md:gap-2 mb-8"
+        >
+          {timerComponents}
+        </motion.div>
+
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.1 }}
+          onClick={() => document.getElementById("rsvp")?.scrollIntoView({ behavior: "smooth" })}
+          className="group relative px-9 py-4 min-h-[48px] bg-white/10 backdrop-blur-md overflow-hidden rounded-full transition-all hover:bg-white/20 border border-white/30 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+        >
+          <span className="text-white font-medium tracking-widest uppercase text-xs">
+            {inviteData.hero.primaryCta}
+          </span>
+          <span className="text-white text-sm transition-transform group-hover:translate-x-1">
+            →
+          </span>
+        </motion.button>
+      </motion.div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white/70 z-10 cursor-pointer"
+        animate={{ y: [0, 8, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        onClick={() => document.getElementById("graduate")?.scrollIntoView({ behavior: "smooth" })}
+      >
+        <ChevronDown className="w-8 h-8" />
+      </motion.div>
     </section>
   );
 }

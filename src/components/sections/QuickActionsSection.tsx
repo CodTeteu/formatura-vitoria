@@ -1,22 +1,25 @@
 import { motion } from "framer-motion";
-import { MapPin, CheckCircle, BookOpen, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { MapPin, CheckCircle, BookOpen, Gift, Users } from "lucide-react";
 import { inviteData } from "@/config/invite";
 
 export function QuickActionsSection() {
+  const navigate = useNavigate();
   const confirmationDeadlineShort = inviteData.event.confirmationDeadline.slice(0, 5);
+  const giftsEnabled = inviteData.features.giftList && inviteData.giftList.enabled;
 
   return (
     <section className="relative z-20 px-4 pb-8 pt-16 sm:px-6 md:pb-12 md:pt-24" id="acoes-rapidas">
       <div className="mx-auto max-w-6xl">
         <motion.div
-          className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4"
+          className={`grid grid-cols-2 gap-3 sm:gap-6 ${giftsEnabled ? "lg:grid-cols-5" : "lg:grid-cols-4"}`}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true, margin: "-50px" }}
         >
           <button
-            onClick={() => document.getElementById("jornada")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => document.getElementById("graduate")?.scrollIntoView({ behavior: "smooth" })}
             className="group flex flex-col items-center gap-3 p-4 transition-all duration-300 hover:-translate-y-1 sm:p-6"
           >
             <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[var(--invite-brown)] text-[var(--invite-cream)] transition-transform duration-300 group-hover:scale-110">
@@ -33,7 +36,7 @@ export function QuickActionsSection() {
           </button>
 
           <button
-            onClick={() => document.getElementById("familia")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => document.getElementById("galeria")?.scrollIntoView({ behavior: "smooth" })}
             className="group flex flex-col items-center gap-3 p-4 transition-all duration-300 hover:-translate-y-1 sm:p-6"
           >
             <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[var(--invite-brown)] text-[var(--invite-cream)] transition-transform duration-300 group-hover:scale-110">
@@ -83,6 +86,25 @@ export function QuickActionsSection() {
               </p>
             </div>
           </button>
+
+          {giftsEnabled ? (
+            <button
+              onClick={() => navigate("/presentes")}
+              className="group flex flex-col items-center gap-3 p-4 transition-all duration-300 hover:-translate-y-1 sm:p-6"
+            >
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[var(--invite-brown)] text-[var(--invite-cream)] transition-transform duration-300 group-hover:scale-110">
+                <Gift className="h-4 w-4 sm:h-5 sm:w-5" />
+              </div>
+              <div className="text-center">
+                <h3 className="font-heading text-lg sm:text-xl text-[var(--invite-brown)]">
+                  Presentes
+                </h3>
+                <p className="mt-1 text-[0.65rem] sm:text-xs uppercase tracking-[0.12em] text-[var(--invite-brown-soft)]">
+                  Lista opcional
+                </p>
+              </div>
+            </button>
+          ) : null}
         </motion.div>
       </div>
     </section>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, Check, Clock3, Copy, MapPin, Navigation, Shirt, Users } from "lucide-react";
+import { Calendar, Check, Copy, MapPin, Navigation, Shirt, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { inviteData } from "@/config/invite";
 import { buildGoogleCalendarUrl } from "@/lib/calendar";
@@ -8,174 +8,169 @@ import { ResponsiveImage } from "@/components/ui/ResponsiveImage";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
-const essentials = [
-  {
-    icon: Clock3,
-    label: "Chegue no horário",
-    value: "Início às 22:00.",
-  },
-  {
-    icon: Shirt,
-    label: "Traje",
-    value: inviteData.event.dressCode,
-  },
-  {
-    icon: Users,
-    label: "Confirmação",
-    value: `Até ${inviteData.event.confirmationDeadline}.`,
-  },
-] as const;
-
 export function CelebrationSection() {
-  const [copying, setCopying] = useState(false);
+  const [copyingText, setCopyingText] = useState<string | null>(null);
 
-  async function handleCopyAddress() {
+  async function handleCopyAddress(address: string) {
     try {
-      setCopying(true);
-      await copyToClipboard(inviteData.event.venue);
+      setCopyingText(address);
+      await copyToClipboard(address);
       toast.success("Endereço copiado com sucesso.");
     } catch {
       toast.error("Não foi possível copiar o endereço.");
     } finally {
-      setCopying(false);
+      setTimeout(() => setCopyingText(null), 2000);
     }
   }
 
   return (
-    <section className="invite-section !pb-8 !pt-4 sm:!pb-12 sm:!pt-8" id="celebracao">
-      <div className="invite-container">
+    <section className="invite-section relative overflow-hidden !pb-12 !pt-6 sm:!pb-16 sm:!pt-10" id="celebracao">
+      {/* Background blobs for depth */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-[var(--invite-gold)] rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[var(--invite-brown)] rounded-full blur-3xl" />
+      </div>
+
+      <div className="invite-container relative z-10">
         <SectionHeading
           align="center"
           label={inviteData.celebration.label}
           title={inviteData.celebration.title}
         />
 
-        <div className="mt-14 grid gap-6 md:grid-cols-[0.95fr_1.05fr]">
-          <Reveal className="invite-card-strong overflow-hidden">
-            <div className="relative h-[240px] overflow-hidden sm:h-[280px]">
-              <ResponsiveImage
-                asset={inviteData.celebration.primaryImageAsset}
-                alt="Camilla em retrato de celebração"
-                className="h-full w-full object-cover object-[center_25%]"
-                sizes="(min-width: 768px) 45vw, 100vw"
-              />
-              <div className="absolute inset-x-0 top-0 px-6 pt-8 text-center">
-                <p className="font-heading text-lg uppercase tracking-[0.4em] text-[var(--invite-emerald)]">
-                  Data e hora
-                </p>
-              </div>
+        {/* 3 Events Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mt-12 sm:mt-16">
+          {inviteData.events.map((event, index) => (
+            <Reveal
+              className="bg-white rounded-[32px] shadow-xl border border-[var(--invite-line)]/40 flex flex-col justify-between w-full p-4 md:p-5 relative group overflow-hidden"
+              delay={index * 0.1}
+              key={event.id}
+            >
+              {/* Inner Gold Frame decoration */}
+              <div className="absolute inset-2 border border-[var(--invite-gold)]/10 rounded-[24px] pointer-events-none" />
 
-            </div>
+              <div className="relative z-10 flex-1 flex flex-col">
+                {/* Framed Image */}
+                <div className="aspect-[16/10] overflow-hidden rounded-2xl shadow-sm border border-[var(--invite-line)]/20 relative">
+                  <ResponsiveImage
+                    asset={event.imageAsset}
+                    alt={event.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    sizes="(min-width: 768px) 30vw, 100vw"
+                  />
+                </div>
 
-            <div className="space-y-5 px-6 py-6 sm:px-7">
-              <div className="space-y-1 text-center sm:text-left">
-                <p className="font-body text-xl text-[var(--invite-brown-soft)] sm:text-2xl">
-                  Data: 18 de julho de 2026
-                </p>
-                <p className="font-body text-xl text-[var(--invite-brown-soft)] sm:text-2xl">
-                  Horário: 22:00
-                </p>
-              </div>
-
-              <div className="flex justify-center sm:justify-start">
-                <a
-                  className="invite-button-secondary"
-                  href={buildGoogleCalendarUrl()}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <Calendar className="mr-2 size-4" />
-                  Salvar na agenda
-                </a>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal className="invite-card-strong overflow-hidden" delay={0.08}>
-            <div className="bg-white px-6 pt-8 pb-4 text-center">
-              <p className="font-heading text-lg uppercase tracking-[0.4em] text-[var(--invite-emerald)]">
-                LOCAL
-              </p>
-            </div>
-            <div className="relative h-[160px] overflow-hidden sm:h-[200px]">
-              <ResponsiveImage
-                asset={inviteData.event.venueImageAsset}
-                alt="Foto do local do evento"
-                className="h-full w-full object-cover"
-                sizes="(min-width: 768px) 45vw, 100vw"
-              />
-            </div>
-
-            <div className="space-y-5 px-6 py-6 sm:px-7">
-              <div className="space-y-2 text-center sm:text-left">
-                <h3 className="font-heading text-2xl text-[var(--invite-brown)] sm:text-3xl">
-                  {inviteData.event.venueName}
-                </h3>
-              </div>
-
-              <div className="group relative rounded-[24px] border border-[var(--invite-line)] bg-[var(--invite-sage-soft)]/40 px-5 py-5 transition-colors hover:bg-[var(--invite-sage-soft)]/60">
-                <p className="pr-8 font-body text-lg leading-relaxed text-[var(--invite-brown-soft)] sm:text-xl">
-                  {inviteData.event.venue}
-                </p>
-                <button
-                  onClick={() => void handleCopyAddress()}
-                  className="absolute right-5 top-5 text-[var(--invite-brown-soft)] transition-colors hover:text-[var(--invite-emerald)]"
-                  title="Copiar endereço"
-                >
-                  {copying ? <Check className="size-5 text-[var(--invite-emerald)]" /> : <Copy className="size-5" />}
-                </button>
-              </div>
-
-              <div className="mt-4 flex flex-wrap justify-center gap-3 sm:justify-start">
-                <a
-                  className="invite-button-secondary"
-                  href={inviteData.event.mapsUrl}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <MapPin className="mr-2 size-4" />
-                  Abrir no Maps
-                </a>
-                <a
-                  className="invite-button-secondary"
-                  href={inviteData.event.wazeUrl}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <Navigation className="mr-2 size-4" />
-                  Abrir no Waze
-                </a>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        <div className="mx-auto mt-8 flex w-fit flex-col gap-6 sm:mt-12 sm:w-full sm:flex-row sm:gap-8">
-          {essentials.map((item, index) => {
-            const Icon = item.icon;
-
-            return (
-              <Reveal
-                className="text-left sm:flex-1"
-                delay={0.08 + index * 0.05}
-                key={item.label}
-              >
-                <div className="flex items-center justify-start gap-4">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[var(--invite-sage-soft)] text-[var(--invite-brown)]">
-                    <Icon className="size-5" strokeWidth={1.8} />
+                {/* Event Info Header */}
+                <div className="pt-5 pb-3 px-1 text-center">
+                  <div className="inline-flex items-center gap-1.5 justify-center mb-2.5 px-3 py-1 bg-[var(--invite-sage-soft)] text-[var(--invite-brown)] rounded-full border border-[var(--invite-line)]/30">
+                    <Clock className="w-3.5 h-3.5 text-[var(--invite-sage)]" />
+                    <span className="font-heading text-[9px] uppercase tracking-[0.2em] font-bold">{event.name}</span>
                   </div>
-                  <p className="text-[0.72rem] uppercase tracking-[0.24em] text-[var(--invite-sage)]">
-                    {item.label}
+                  <p className="font-heading text-lg font-semibold text-[var(--invite-brown)] tracking-wide">
+                    {event.dateLong}
+                  </p>
+                  <p className="font-script italic text-2xl text-[var(--invite-gold-deep)] mt-0.5">
+                    às {event.timeText}
                   </p>
                 </div>
-                <p className="mt-2 pl-14 font-body text-xl text-[var(--invite-brown-soft)] sm:text-2xl">
-                  {item.value}
-                </p>
-              </Reveal>
-            );
-          })}
+
+                {/* Details box */}
+                <div className="px-1 pb-4 flex-1 flex flex-col justify-between">
+                  <div className="text-center mb-4">
+                    <p className="font-heading text-[9px] uppercase tracking-[0.25em] text-[var(--invite-gold-deep)] mb-1">Local</p>
+                    <p className="font-sans text-xs text-[var(--invite-brown)] font-bold">{event.venueName}</p>
+                  </div>
+
+                  {/* Address box with copy action */}
+                  <div className="group/copy relative rounded-xl border border-[var(--invite-gold)]/15 bg-[var(--invite-cream)] px-4 py-3.5 transition-all duration-300 hover:bg-[#fffbfb] mb-4">
+                    <p className="pr-6 font-sans text-[11px] leading-relaxed text-[var(--invite-brown-soft)] text-center">
+                      {event.venue}
+                    </p>
+                    <button
+                      onClick={() => void handleCopyAddress(event.venue)}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--invite-brown-soft)]/40 transition-colors hover:text-[var(--invite-brown)]"
+                      title="Copiar endereço"
+                    >
+                      {copyingText === event.venue ? (
+                        <Check className="size-3.5 text-[var(--invite-sage)]" />
+                      ) : (
+                        <Copy className="size-3.5" />
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Traje row */}
+                  <div className="flex items-start gap-2.5 px-3 py-3 rounded-xl bg-[var(--invite-sage-soft)]/20 border border-[var(--invite-line)]/10">
+                    <Shirt className="w-4 h-4 text-[var(--invite-sage)] shrink-0 mt-0.5" />
+                    <div className="text-[11px] leading-relaxed text-[var(--invite-brown-soft)]">
+                      <span className="font-semibold text-[var(--invite-brown)] uppercase tracking-wider text-[9px]">Traje: </span>
+                      {event.dressCode}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="relative z-10 pt-2 flex flex-col gap-2 px-1 pb-1">
+                <a
+                  className="w-full inline-flex items-center justify-center gap-2 bg-[var(--invite-brown)] hover:bg-[var(--invite-brown-soft)] text-white px-4 py-3 rounded-full font-heading tracking-widest text-xs transition-colors duration-300 shadow-sm"
+                  href={buildGoogleCalendarUrl({
+                    title: `${event.name} — Vitória Cézar`,
+                    details: `Comemoração da formatura em Direito de Vitória Cézar. Evento: ${event.name}.`,
+                    location: `${event.venueName}, ${event.venue}`,
+                    startsAt: event.startsAt,
+                  })}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <Calendar className="w-3.5 h-3.5" />
+                  Salvar na Agenda
+                </a>
+                <div className="grid grid-cols-2 gap-2">
+                  <a
+                    className="inline-flex items-center justify-center gap-1.5 bg-[var(--invite-cream)] hover:bg-[var(--invite-sage-soft)]/30 text-[var(--invite-brown)] border border-[var(--invite-line)]/50 px-3 py-2.5 rounded-full font-sans text-[10px] font-semibold transition-all duration-300"
+                    href={event.mapsUrl}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <MapPin className="w-3 h-3 text-[var(--invite-gold)]" />
+                    Google Maps
+                  </a>
+                  <a
+                    className="inline-flex items-center justify-center gap-1.5 bg-[var(--invite-cream)] hover:bg-[var(--invite-sage-soft)]/30 text-[var(--invite-brown)] border border-[var(--invite-line)]/50 px-3 py-2.5 rounded-full font-sans text-[10px] font-semibold transition-all duration-300"
+                    href={event.wazeUrl}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    <Navigation className="w-3 h-3 text-[var(--invite-gold)]" />
+                    Waze
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
 
+        {/* Quick notes manual */}
+        {inviteData.celebration.quickNotes.length > 0 && (
+          <div className="mt-14 p-6 sm:p-8 rounded-[30px] border border-[var(--invite-line)]/40 bg-white/70 backdrop-blur-md shadow-sm">
+            <h4 className="font-heading text-lg text-[var(--invite-brown)] mb-4 text-center sm:text-left tracking-wide">
+              Informações Importantes
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {inviteData.celebration.quickNotes.map((note, index) => (
+                <div key={index} className="space-y-1.5">
+                  <h5 className="font-heading text-sm text-[var(--invite-gold-deep)] font-semibold uppercase tracking-wider">
+                    {note.title}
+                  </h5>
+                  <p className="font-sans text-xs text-[var(--invite-brown-soft)] leading-relaxed">
+                    {note.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
