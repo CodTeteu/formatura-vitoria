@@ -223,7 +223,7 @@ export const inviteConfig: InviteConfig = {
     label: "Minha jornada",
     title: "Minha História",
     images: [
-      { asset: "vitoria-portrait-2", alt: "Vitória Cézar" }
+      { asset: "vitoria-portrait-1", alt: "Vitória Cézar" }
     ],
     paragraphs: [
       "Após anos de dedicação, desafios superados e constante aprendizado, tenho a imensa alegria de celebrar minha graduação em Direito pela PUC Goiás. Esta conquista é o fruto de muito esforço, fé inabalável e o apoio inestimável daqueles que estiveram ao meu lado.",
