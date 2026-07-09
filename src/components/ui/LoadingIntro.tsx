@@ -40,11 +40,12 @@ export function LoadingIntro() {
             transition={{ duration: 1, ease: "easeOut" }}
           >
             {/* Elegant Monogram Frame */}
-            <div className="relative w-28 h-28 md:w-32 md:h-32 flex items-center justify-center border border-[var(--invite-gold)]/30 rounded-full bg-white/5 shadow-inner">
-              <span className="font-heading text-4xl text-[var(--invite-gold)] font-bold tracking-[0.1em] select-none">
-                {inviteData.graduate.monogram || "VC"}
-              </span>
-              <div className="absolute inset-1.5 border border-[var(--invite-gold)]/10 rounded-full pointer-events-none" />
+            <div className="relative w-28 h-28 md:w-32 md:h-32 flex items-center justify-center border border-[var(--invite-gold)]/30 rounded-full bg-white shadow-lg overflow-hidden">
+              <img
+                src={`${import.meta.env.BASE_URL}vitoria-monogram.png`}
+                alt="VC Monogram"
+                className="w-[85%] h-[85%] object-contain rounded-full"
+              />
             </div>
 
             {/* Subtext */}

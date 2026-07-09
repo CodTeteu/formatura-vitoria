@@ -24,14 +24,18 @@ function BrandLogo({
   return (
     <div
       className={cn(
-        "flex items-center justify-center rounded-full border font-heading text-xl tracking-[0.2em] transition-all duration-500",
+        "flex items-center justify-center rounded-full border bg-white overflow-hidden shadow-sm transition-all duration-500",
         variant === "onDark"
-          ? "border-white/40 text-white"
-          : "border-[var(--invite-line)] text-[var(--invite-brown)]",
+          ? "border-white/40"
+          : "border-[var(--invite-line)]",
         className,
       )}
     >
-      {inviteData.people.monogram}
+      <img
+        src={`${import.meta.env.BASE_URL}vitoria-monogram.png`}
+        alt="Vitória Cézar"
+        className="w-[85%] h-[85%] object-contain rounded-full"
+      />
     </div>
   );
 }
