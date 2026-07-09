@@ -71,7 +71,7 @@ export function Navigation() {
           >
             <BrandLogo
               variant={scrolled ? "onLight" : "onDark"}
-              className={scrolled ? "size-16" : "size-20 lg:size-24"}
+              className={scrolled ? "size-10" : "size-13 lg:size-15"}
             />
           </button>
 
@@ -150,7 +150,7 @@ export function Navigation() {
               </button>
 
               <div className="border-b border-white/10 px-8 pb-6 pt-10 text-center flex flex-col items-center">
-                <BrandLogo variant="onDark" className="size-24" />
+                <BrandLogo variant="onDark" className="size-14" />
                 <div className="mt-4 flex items-center justify-center gap-3 text-white/40">
                   <span className="h-px w-6 bg-[var(--invite-gold)]/30" />
                   <span className="text-[0.65rem] uppercase tracking-[0.3em] text-[var(--invite-gold)]/80">
