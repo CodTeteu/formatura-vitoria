@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Check, Copy, MapPin, Navigation, Shirt, Clock, ChevronDown, Users, Camera } from "lucide-react";
+import { Calendar, Check, Copy, MapPin, Navigation, Shirt, Clock, ChevronDown, Users, Camera, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { inviteData } from "@/config/invite";
 import { buildGoogleCalendarUrl } from "@/lib/calendar";
@@ -30,10 +30,14 @@ export function CelebrationSection() {
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
   }, [emblaApi]);
 
   useEffect(() => {
@@ -41,6 +45,9 @@ export function CelebrationSection() {
     setScrollSnaps(emblaApi.scrollSnapList());
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", onSelect);
+    // Initial check
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
   }, [emblaApi, onSelect]);
 
   const scrollTo = useCallback((index: number) => {
@@ -75,12 +82,32 @@ export function CelebrationSection() {
         />
 
         <div className="relative max-w-7xl mx-auto mt-12 sm:mt-16 -mx-4 sm:mx-0 md:px-0">
+          {/* Previous Button */}
+          <button
+            onClick={() => emblaApi && emblaApi.scrollPrev()}
+            disabled={!canScrollPrev}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex size-9 items-center justify-center rounded-full bg-white/90 border border-[var(--invite-line)] shadow-md backdrop-blur-sm text-[var(--invite-brown)] transition-all duration-300 hover:bg-white active:scale-95 disabled:opacity-0 disabled:pointer-events-none sm:left-4"
+            aria-label="Evento anterior"
+          >
+            <ChevronLeft className="size-5" />
+          </button>
+
+          {/* Next Button */}
+          <button
+            onClick={() => emblaApi && emblaApi.scrollNext()}
+            disabled={!canScrollNext}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex size-9 items-center justify-center rounded-full bg-white/90 border border-[var(--invite-line)] shadow-md backdrop-blur-sm text-[var(--invite-brown)] transition-all duration-300 hover:bg-white active:scale-95 disabled:opacity-0 disabled:pointer-events-none sm:right-4"
+            aria-label="Próximo evento"
+          >
+            <ChevronRight className="size-5" />
+          </button>
+
           <div className="overflow-hidden px-4 py-4" ref={emblaRef}>
             <div className="flex -ml-4 md:-ml-6 lg:-ml-8">
               {inviteData.events.map((event) => (
                 <div
                   key={event.id}
-                  className="min-w-0 pl-4 md:pl-6 lg:pl-8 flex-[0_0_84%] sm:flex-[0_0_55%] md:flex-[0_0_33.333%] flex"
+                  className="min-w-0 pl-4 md:pl-6 lg:pl-8 flex-[0_0_100%] sm:flex-[0_0_55%] md:flex-[0_0_33.333%] flex"
                 >
                   <div
                     className="invite-card flex flex-col justify-between w-full p-3.5 relative group overflow-hidden h-full"
