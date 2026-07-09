@@ -52,12 +52,12 @@ export function CelebrationSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mt-12 sm:mt-16">
           {inviteData.events.map((event, index) => (
             <Reveal
-              className="invite-card flex flex-col justify-between w-full p-4 md:p-5 relative group overflow-hidden"
+              className="invite-card flex flex-col justify-between w-full p-3.5 relative group overflow-hidden"
               delay={index * 0.1}
               key={event.id}
             >
               {/* Inner Gold Frame decoration */}
-              <div className="absolute inset-2 border border-[var(--invite-gold)]/10 rounded-[24px] pointer-events-none" />
+              <div className="absolute inset-1.5 border border-[var(--invite-gold)]/10 rounded-[24px] pointer-events-none" />
 
               <div className="relative z-10 flex-1 flex flex-col">
                 {/* Framed Image */}
@@ -72,29 +72,29 @@ export function CelebrationSection() {
                 </div>
 
                 {/* Event Info Header */}
-                <div className="pt-5 pb-3 px-1 text-center">
-                  <div className="inline-flex items-center gap-1.5 justify-center mb-3 px-3.5 py-1.5 bg-[var(--invite-cream)]/80 text-[var(--invite-gold-deep)] rounded-full border border-[var(--invite-gold)]/25 shadow-[0_1px_4px_rgba(155,122,66,0.05)]">
-                    <Clock className="w-3.5 h-3.5 text-[var(--invite-gold)]" strokeWidth={2.2} />
-                    <span className="font-sans text-[9px] font-bold uppercase tracking-[0.2em]">{event.name}</span>
+                <div className="pt-3.5 pb-2 px-1 text-center">
+                  <div className="inline-flex items-center gap-1.5 justify-center mb-2 px-3 py-1 bg-[var(--invite-cream)]/80 text-[var(--invite-gold-deep)] rounded-full border border-[var(--invite-gold)]/25 shadow-[0_1px_4px_rgba(155,122,66,0.05)]">
+                    <Clock className="w-3 h-3 text-[var(--invite-gold)]" strokeWidth={2.2} />
+                    <span className="font-sans text-[8.5px] font-bold uppercase tracking-[0.2em]">{event.name}</span>
                   </div>
-                  <p className="font-serif text-lg font-medium text-[var(--invite-brown)] tracking-wide">
+                  <p className="font-serif text-base font-medium text-[var(--invite-brown)] tracking-wide">
                     {event.dateLong}
                   </p>
-                  <p className="font-script text-3xl text-[var(--invite-gold)] mt-1">
+                  <p className="font-script text-2xl text-[var(--invite-gold)] mt-0.5">
                     às {event.timeText}
                   </p>
                 </div>
 
                 {/* Details box */}
-                <div className="px-1 pb-4 flex-1 flex flex-col justify-between">
-                  <div className="text-center mb-4">
-                    <p className="font-sans text-[9px] uppercase tracking-[0.25em] text-[var(--invite-gold-deep)] mb-1 font-bold">Local</p>
+                <div className="px-1 pb-2.5 flex-1 flex flex-col justify-between">
+                  <div className="text-center mb-2.5">
+                    <p className="font-sans text-[8.5px] uppercase tracking-[0.25em] text-[var(--invite-gold-deep)] mb-0.5 font-bold">Local</p>
                     <p className="font-serif text-sm text-[var(--invite-brown)] font-semibold tracking-wide leading-snug">{event.venueName}</p>
                   </div>
 
                   {/* Address box with copy action */}
-                  <div className="group/copy flex items-center justify-between gap-3 rounded-2xl border border-[var(--invite-line)] bg-white/40 hover:bg-white/80 px-4 py-3 transition-all duration-300 mb-4 shadow-[0_2px_8px_rgba(44,5,11,0.01)] hover:shadow-sm">
-                    <p className="flex-1 font-sans text-[10.5px] leading-relaxed text-[var(--invite-brown-soft)]/90 text-center pl-3">
+                  <div className="group/copy flex items-center justify-between gap-3 rounded-2xl border border-[var(--invite-line)] bg-white/40 hover:bg-white/80 px-3.5 py-2.5 transition-all duration-300 mb-2.5 shadow-[0_2px_8px_rgba(44,5,11,0.01)] hover:shadow-sm">
+                    <p className="flex-1 font-sans text-[10px] leading-relaxed text-[var(--invite-brown-soft)]/90 text-center pl-3">
                       {event.venue}
                     </p>
                     <button
@@ -113,9 +113,9 @@ export function CelebrationSection() {
               </div>
 
               {/* Action Buttons */}
-              <div className="relative z-10 pt-2 flex flex-col gap-2 px-1 pb-1">
+              <div className="relative z-10 pt-1 flex flex-col gap-1.5 px-1 pb-1">
                 <a
-                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--invite-brown)] to-[var(--invite-brown-soft)] text-white px-4 py-3 rounded-full font-sans tracking-[0.12em] text-xs font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[var(--invite-brown)]/20 active:scale-[0.98] border border-[var(--invite-gold)]/30 hover:border-[var(--invite-gold)]/60"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--invite-brown)] to-[var(--invite-brown-soft)] text-white px-4 py-2.5 rounded-full font-sans tracking-[0.12em] text-xs font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[var(--invite-brown)]/20 active:scale-[0.98] border border-[var(--invite-gold)]/30 hover:border-[var(--invite-gold)]/60"
                   href={buildGoogleCalendarUrl({
                     title: `${event.name} — Vitória Cézar`,
                     details: `Comemoração da formatura em Direito de Vitória Cézar. Evento: ${event.name}.`,
@@ -128,23 +128,23 @@ export function CelebrationSection() {
                   <Calendar className="w-3.5 h-3.5 text-[var(--invite-gold)]" strokeWidth={2.5} />
                   SALVAR NA AGENDA
                 </a>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-1.5">
                   <a
-                    className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[var(--invite-brown)] to-[var(--invite-brown-soft)] text-white border border-[var(--invite-gold)]/30 hover:border-[var(--invite-gold)]/60 px-3 py-2.5 rounded-full font-sans text-[9px] font-bold uppercase tracking-[0.12em] transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[var(--invite-brown)]/20 active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[var(--invite-brown)] to-[var(--invite-brown-soft)] text-white border border-[var(--invite-gold)]/30 hover:border-[var(--invite-gold)]/60 px-3 py-2 rounded-full font-sans text-[9px] font-bold uppercase tracking-[0.12em] transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[var(--invite-brown)]/20 active:scale-[0.98]"
                     href={event.mapsUrl}
                     rel="noreferrer"
                     target="_blank"
                   >
-                    <MapPin className="w-3.5 h-3.5 text-[var(--invite-gold)]" strokeWidth={2} />
+                    <MapPin className="w-3 h-3 text-[var(--invite-gold)]" strokeWidth={2} />
                     Google Maps
                   </a>
                   <a
-                    className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[var(--invite-brown)] to-[var(--invite-brown-soft)] text-white border border-[var(--invite-gold)]/30 hover:border-[var(--invite-gold)]/60 px-3 py-2.5 rounded-full font-sans text-[9px] font-bold uppercase tracking-[0.12em] transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[var(--invite-brown)]/20 active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[var(--invite-brown)] to-[var(--invite-brown-soft)] text-white border border-[var(--invite-gold)]/30 hover:border-[var(--invite-gold)]/60 px-3 py-2 rounded-full font-sans text-[9px] font-bold uppercase tracking-[0.12em] transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[var(--invite-brown)]/20 active:scale-[0.98]"
                     href={event.wazeUrl}
                     rel="noreferrer"
                     target="_blank"
                   >
-                    <Navigation className="w-3.5 h-3.5 text-[var(--invite-gold)]" strokeWidth={2} />
+                    <Navigation className="w-3 h-3 text-[var(--invite-gold)]" strokeWidth={2} />
                     Waze
                   </a>
                 </div>

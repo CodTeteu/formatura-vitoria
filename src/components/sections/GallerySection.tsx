@@ -100,7 +100,7 @@ export function GallerySection() {
                       transition={{ duration: 0.4 }}
                       onClick={() => openLightbox(index)}
                     >
-                      <div className={cn("overflow-hidden", isLandscape ? "aspect-[3/2]" : "aspect-[3/4]")}>
+                      <div className={cn("overflow-hidden", isLandscape ? "aspect-[4/3]" : "aspect-[3/4]")}>
                         <ResponsiveImage
                           asset={photo.asset}
                           alt={photo.alt}
