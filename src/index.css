@@ -430,6 +430,19 @@ a {
   .text-shadow-lg {
     text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   }
+
+  .animate-horizontal-bounce {
+    animation: horizontal-bounce 1.2s infinite ease-in-out;
+  }
+}
+
+@keyframes horizontal-bounce {
+  0%, 100% {
+    transform: translateX(-3px);
+  }
+  50% {
+    transform: translateX(3px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
