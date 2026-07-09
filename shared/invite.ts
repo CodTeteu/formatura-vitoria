@@ -242,7 +242,7 @@ export const inviteConfig: InviteConfig = {
       "Agradeço a Deus por me sustentar em cada passo, e à minha família e amigos que foram meu apoio e base incondicional ao longo de toda essa caminhada."
     ],
     slides: [
-      { asset: "vitoria-hero", alt: "Vitória Cézar", caption: "A comemoração de uma grande vitória.", aspect: "landscape" },
+      { asset: "vitoria-hero", alt: "Vitória Cézar", caption: "A comemoração de uma grande vitória.", aspect: "portrait" },
       { asset: "vitoria-portrait-1", alt: "Vitória Cézar", caption: "A conquista de um sonho.", aspect: "portrait" },
       { asset: "vitoria-portrait-2", alt: "Vitória Cézar", caption: "A realização de um grande sonho.", aspect: "portrait" },
       { asset: "vitoria-family-1", alt: "Vitória com família", caption: "Minha família, minha base.", aspect: "landscape" }

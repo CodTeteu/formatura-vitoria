@@ -130,7 +130,7 @@ export function CelebrationSection() {
                 </a>
                 <div className="grid grid-cols-2 gap-2">
                   <a
-                    className="inline-flex items-center justify-center gap-1.5 bg-white/40 hover:bg-white/95 text-[var(--invite-brown)] border border-[var(--invite-gold)]/20 px-3 py-2.5 rounded-full font-sans text-[9px] font-bold uppercase tracking-[0.12em] transition-all duration-300 shadow-[0_2px_8px_rgba(44,5,11,0.02)] hover:shadow-md hover:border-[var(--invite-gold)]/50 active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[var(--invite-brown)] to-[var(--invite-brown-soft)] text-white border border-[var(--invite-gold)]/30 hover:border-[var(--invite-gold)]/60 px-3 py-2.5 rounded-full font-sans text-[9px] font-bold uppercase tracking-[0.12em] transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[var(--invite-brown)]/20 active:scale-[0.98]"
                     href={event.mapsUrl}
                     rel="noreferrer"
                     target="_blank"
@@ -139,7 +139,7 @@ export function CelebrationSection() {
                     Google Maps
                   </a>
                   <a
-                    className="inline-flex items-center justify-center gap-1.5 bg-white/40 hover:bg-white/95 text-[var(--invite-brown)] border border-[var(--invite-gold)]/20 px-3 py-2.5 rounded-full font-sans text-[9px] font-bold uppercase tracking-[0.12em] transition-all duration-300 shadow-[0_2px_8px_rgba(44,5,11,0.02)] hover:shadow-md hover:border-[var(--invite-gold)]/50 active:scale-[0.98]"
+                    className="inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-[var(--invite-brown)] to-[var(--invite-brown-soft)] text-white border border-[var(--invite-gold)]/30 hover:border-[var(--invite-gold)]/60 px-3 py-2.5 rounded-full font-sans text-[9px] font-bold uppercase tracking-[0.12em] transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[var(--invite-brown)]/20 active:scale-[0.98]"
                     href={event.wazeUrl}
                     rel="noreferrer"
                     target="_blank"
