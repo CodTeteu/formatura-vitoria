@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Calendar, Check, Copy, MapPin, Navigation, Shirt, Clock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Calendar, Check, Copy, MapPin, Navigation, Shirt, Clock, ChevronDown, Users, Camera } from "lucide-react";
 import { toast } from "sonner";
 import { inviteData } from "@/config/invite";
 import { buildGoogleCalendarUrl } from "@/lib/calendar";
@@ -8,8 +9,17 @@ import { ResponsiveImage } from "@/components/ui/ResponsiveImage";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
+const ROMAN_NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"];
+
+const quickNoteIcons: Record<string, any> = {
+  "Traje": Shirt,
+  "Confirmação": Users,
+  "Fotos": Camera,
+};
+
 export function CelebrationSection() {
   const [copyingText, setCopyingText] = useState<string | null>(null);
+  const [expandedItem, setExpandedItem] = useState<string | null>(null);
 
   async function handleCopyAddress(address: string) {
     try {
@@ -42,7 +52,7 @@ export function CelebrationSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mt-12 sm:mt-16">
           {inviteData.events.map((event, index) => (
             <Reveal
-              className="bg-white rounded-[32px] shadow-xl border border-[var(--invite-line)]/40 flex flex-col justify-between w-full p-4 md:p-5 relative group overflow-hidden"
+              className="invite-card flex flex-col justify-between w-full p-4 md:p-5 relative group overflow-hidden"
               delay={index * 0.1}
               key={event.id}
             >
@@ -57,19 +67,20 @@ export function CelebrationSection() {
                     alt={event.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     sizes="(min-width: 768px) 30vw, 100vw"
+                    style={{ objectPosition: event.id === "festa" ? "center top" : "center center" }}
                   />
                 </div>
 
                 {/* Event Info Header */}
                 <div className="pt-5 pb-3 px-1 text-center">
-                  <div className="inline-flex items-center gap-1.5 justify-center mb-2.5 px-3 py-1 bg-[var(--invite-sage-soft)] text-[var(--invite-brown)] rounded-full border border-[var(--invite-line)]/30">
-                    <Clock className="w-3.5 h-3.5 text-[var(--invite-sage)]" />
-                    <span className="font-heading text-[9px] uppercase tracking-[0.2em] font-bold">{event.name}</span>
+                  <div className="inline-flex items-center gap-1.5 justify-center mb-3 px-3.5 py-1.5 bg-[var(--invite-cream)]/80 text-[var(--invite-gold-deep)] rounded-full border border-[var(--invite-gold)]/25 shadow-[0_1px_4px_rgba(155,122,66,0.05)]">
+                    <Clock className="w-3.5 h-3.5 text-[var(--invite-gold)]" strokeWidth={2.2} />
+                    <span className="font-sans text-[9px] font-bold uppercase tracking-[0.2em]">{event.name}</span>
                   </div>
-                  <p className="font-heading text-lg font-semibold text-[var(--invite-brown)] tracking-wide">
+                  <p className="font-serif text-lg font-medium text-[var(--invite-brown)] tracking-wide">
                     {event.dateLong}
                   </p>
-                  <p className="font-script italic text-2xl text-[var(--invite-gold-deep)] mt-0.5">
+                  <p className="font-script text-3xl text-[var(--invite-gold)] mt-1">
                     às {event.timeText}
                   </p>
                 </div>
@@ -77,35 +88,26 @@ export function CelebrationSection() {
                 {/* Details box */}
                 <div className="px-1 pb-4 flex-1 flex flex-col justify-between">
                   <div className="text-center mb-4">
-                    <p className="font-heading text-[9px] uppercase tracking-[0.25em] text-[var(--invite-gold-deep)] mb-1">Local</p>
-                    <p className="font-sans text-xs text-[var(--invite-brown)] font-bold">{event.venueName}</p>
+                    <p className="font-sans text-[9px] uppercase tracking-[0.25em] text-[var(--invite-gold-deep)] mb-1 font-bold">Local</p>
+                    <p className="font-serif text-sm text-[var(--invite-brown)] font-semibold tracking-wide leading-snug">{event.venueName}</p>
                   </div>
 
                   {/* Address box with copy action */}
-                  <div className="group/copy relative rounded-xl border border-[var(--invite-gold)]/15 bg-[var(--invite-cream)] px-4 py-3.5 transition-all duration-300 hover:bg-[#fffbfb] mb-4">
-                    <p className="pr-6 font-sans text-[11px] leading-relaxed text-[var(--invite-brown-soft)] text-center">
+                  <div className="group/copy flex items-center justify-between gap-3 rounded-2xl border border-[var(--invite-line)] bg-white/40 hover:bg-white/80 px-4 py-3 transition-all duration-300 mb-4 shadow-[0_2px_8px_rgba(44,5,11,0.01)] hover:shadow-sm">
+                    <p className="flex-1 font-sans text-[10.5px] leading-relaxed text-[var(--invite-brown-soft)]/90 text-center pl-3">
                       {event.venue}
                     </p>
                     <button
                       onClick={() => void handleCopyAddress(event.venue)}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--invite-brown-soft)]/40 transition-colors hover:text-[var(--invite-brown)]"
+                      className="text-[var(--invite-brown-soft)]/40 transition-colors hover:text-[var(--invite-gold-deep)] p-1 shrink-0"
                       title="Copiar endereço"
                     >
                       {copyingText === event.venue ? (
-                        <Check className="size-3.5 text-[var(--invite-sage)]" />
+                        <Check className="size-4 text-[var(--invite-sage)]" strokeWidth={2.5} />
                       ) : (
-                        <Copy className="size-3.5" />
+                        <Copy className="size-4" strokeWidth={2} />
                       )}
                     </button>
-                  </div>
-
-                  {/* Traje row */}
-                  <div className="flex items-start gap-2.5 px-3 py-3 rounded-xl bg-[var(--invite-sage-soft)]/20 border border-[var(--invite-line)]/10">
-                    <Shirt className="w-4 h-4 text-[var(--invite-sage)] shrink-0 mt-0.5" />
-                    <div className="text-[11px] leading-relaxed text-[var(--invite-brown-soft)]">
-                      <span className="font-semibold text-[var(--invite-brown)] uppercase tracking-wider text-[9px]">Traje: </span>
-                      {event.dressCode}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -113,7 +115,7 @@ export function CelebrationSection() {
               {/* Action Buttons */}
               <div className="relative z-10 pt-2 flex flex-col gap-2 px-1 pb-1">
                 <a
-                  className="w-full inline-flex items-center justify-center gap-2 bg-[var(--invite-brown)] hover:bg-[var(--invite-brown-soft)] text-white px-4 py-3 rounded-full font-heading tracking-widest text-xs transition-colors duration-300 shadow-sm"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--invite-brown)] to-[var(--invite-brown-soft)] text-white px-4 py-3 rounded-full font-sans tracking-[0.12em] text-xs font-bold transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[var(--invite-brown)]/20 active:scale-[0.98] border border-[var(--invite-gold)]/30 hover:border-[var(--invite-gold)]/60"
                   href={buildGoogleCalendarUrl({
                     title: `${event.name} — Vitória Cézar`,
                     details: `Comemoração da formatura em Direito de Vitória Cézar. Evento: ${event.name}.`,
@@ -123,26 +125,26 @@ export function CelebrationSection() {
                   rel="noreferrer"
                   target="_blank"
                 >
-                  <Calendar className="w-3.5 h-3.5" />
-                  Salvar na Agenda
+                  <Calendar className="w-3.5 h-3.5 text-[var(--invite-gold)]" strokeWidth={2.5} />
+                  SALVAR NA AGENDA
                 </a>
                 <div className="grid grid-cols-2 gap-2">
                   <a
-                    className="inline-flex items-center justify-center gap-1.5 bg-[var(--invite-cream)] hover:bg-[var(--invite-sage-soft)]/30 text-[var(--invite-brown)] border border-[var(--invite-line)]/50 px-3 py-2.5 rounded-full font-sans text-[10px] font-semibold transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-1.5 bg-white/40 hover:bg-white/95 text-[var(--invite-brown)] border border-[var(--invite-gold)]/20 px-3 py-2.5 rounded-full font-sans text-[9px] font-bold uppercase tracking-[0.12em] transition-all duration-300 shadow-[0_2px_8px_rgba(44,5,11,0.02)] hover:shadow-md hover:border-[var(--invite-gold)]/50 active:scale-[0.98]"
                     href={event.mapsUrl}
                     rel="noreferrer"
                     target="_blank"
                   >
-                    <MapPin className="w-3 h-3 text-[var(--invite-gold)]" />
+                    <MapPin className="w-3.5 h-3.5 text-[var(--invite-gold)]" strokeWidth={2} />
                     Google Maps
                   </a>
                   <a
-                    className="inline-flex items-center justify-center gap-1.5 bg-[var(--invite-cream)] hover:bg-[var(--invite-sage-soft)]/30 text-[var(--invite-brown)] border border-[var(--invite-line)]/50 px-3 py-2.5 rounded-full font-sans text-[10px] font-semibold transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-1.5 bg-white/40 hover:bg-white/95 text-[var(--invite-brown)] border border-[var(--invite-gold)]/20 px-3 py-2.5 rounded-full font-sans text-[9px] font-bold uppercase tracking-[0.12em] transition-all duration-300 shadow-[0_2px_8px_rgba(44,5,11,0.02)] hover:shadow-md hover:border-[var(--invite-gold)]/50 active:scale-[0.98]"
                     href={event.wazeUrl}
                     rel="noreferrer"
                     target="_blank"
                   >
-                    <Navigation className="w-3 h-3 text-[var(--invite-gold)]" />
+                    <Navigation className="w-3.5 h-3.5 text-[var(--invite-gold)]" strokeWidth={2} />
                     Waze
                   </a>
                 </div>
@@ -151,25 +153,78 @@ export function CelebrationSection() {
           ))}
         </div>
 
-        {/* Quick notes manual */}
+        {/* Manual do Convidado — Desktop Grid */}
         {inviteData.celebration.quickNotes.length > 0 && (
-          <div className="mt-14 p-6 sm:p-8 rounded-[30px] border border-[var(--invite-line)]/40 bg-white/70 backdrop-blur-md shadow-sm">
-            <h4 className="font-heading text-lg text-[var(--invite-brown)] mb-4 text-center sm:text-left tracking-wide">
-              Informações Importantes
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {inviteData.celebration.quickNotes.map((note, index) => (
-                <div key={index} className="space-y-1.5">
-                  <h5 className="font-heading text-sm text-[var(--invite-gold-deep)] font-semibold uppercase tracking-wider">
-                    {note.title}
-                  </h5>
-                  <p className="font-sans text-xs text-[var(--invite-brown-soft)] leading-relaxed">
-                    {note.description}
-                  </p>
-                </div>
-              ))}
+          <>
+            <div className="hidden md:grid md:grid-cols-3 gap-y-16 gap-x-8 mt-20">
+              {inviteData.celebration.quickNotes.map((note, index) => {
+                const Icon = quickNoteIcons[note.title] ?? Clock;
+                return (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center text-center group"
+                  >
+                    <div className="w-14 h-14 bg-[var(--invite-brown)]/10 rounded-full flex items-center justify-center mb-5 text-[var(--invite-brown)] group-hover:scale-110 transition-transform duration-500">
+                      <Icon className="w-5 h-5" strokeWidth={1.8} />
+                    </div>
+                    <h4 className="font-heading text-base text-[var(--invite-brown)] mb-2 tracking-wide font-semibold">{note.title}</h4>
+                    <p className="font-sans text-sm text-[var(--invite-brown-soft)]/75 leading-relaxed px-2 mb-4">
+                      {note.description}
+                    </p>
+                    <div className="w-10 h-[2px] bg-[var(--invite-line)] opacity-50 group-hover:bg-[var(--invite-gold)]/30 transition-colors duration-500" />
+                  </div>
+                );
+              })}
             </div>
-          </div>
+
+            {/* Manual do Convidado — Mobile Accordion */}
+            <div className="block md:hidden mt-12 divide-y divide-[var(--invite-brown)]/10 border-t border-b border-[var(--invite-brown)]/10">
+              {inviteData.celebration.quickNotes.map((note, index) => {
+                const isExpanded = expandedItem === note.title;
+                return (
+                  <div key={index} className="overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setExpandedItem(isExpanded ? null : note.title)}
+                      className="w-full flex items-center justify-between py-5 text-left transition-colors duration-300"
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="font-heading text-xs text-[var(--invite-brown)]/60 tracking-[0.2em] font-light">
+                          {ROMAN_NUMERALS[index] || index + 1}
+                        </span>
+                        <span className="text-[var(--invite-brown)]/20 font-light">|</span>
+                        <h4 className="font-heading text-base text-[var(--invite-brown)] tracking-wide font-normal">
+                          {note.title}
+                        </h4>
+                      </div>
+                      <motion.div
+                        animate={{ rotate: isExpanded ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="text-[var(--invite-brown)]/60"
+                      >
+                        <ChevronDown className="w-4 h-4 stroke-[1.2]" />
+                      </motion.div>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                        >
+                          <div className="pb-5 pl-10 pr-2 font-sans text-sm text-[var(--invite-brown-soft)]/80 leading-relaxed">
+                            {note.description}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
     </section>

@@ -70,12 +70,12 @@ export function HeroSection() {
           />
         </div>
         <div className="absolute inset-0 bg-black/38 mix-blend-multiply" />
-        <div className="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-[var(--color-background)] from-10% to-transparent z-0 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-transparent from-10% to-transparent z-0 pointer-events-none" />
       </motion.div>
 
       {/* Mobile content: stacked flow to avoid overlap */}
       <motion.div
-        className="absolute top-[38%] left-1/2 -translate-x-1/2 z-10 flex w-full max-w-[420px] flex-col items-center px-5 text-center md:hidden"
+        className="absolute top-[13%] left-1/2 -translate-x-1/2 z-10 flex w-full max-w-[420px] flex-col items-center px-5 text-center md:hidden"
         style={{ opacity }}
       >
         <motion.div
@@ -84,10 +84,6 @@ export function HeroSection() {
           transition={{ duration: 1, delay: 0.4 }}
           className="w-full"
         >
-          <div className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.4em] text-white/95 backdrop-blur-sm mb-4">
-            {inviteData.hero.eyebrow}
-          </div>
-
           <h1 className="w-full font-script text-[3.2rem] text-white drop-shadow-xl leading-none">
             {inviteData.hero.name}
           </h1>
@@ -96,12 +92,18 @@ export function HeroSection() {
             {inviteData.hero.courseLine}
           </p>
         </motion.div>
+      </motion.div>
 
+      {/* Mobile timer + CTA — pinned to bottom */}
+      <motion.div
+        className="absolute bottom-[8%] left-1/2 -translate-x-1/2 z-10 flex w-full max-w-[420px] flex-col items-center px-5 text-center md:hidden"
+        style={{ opacity }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-6 flex flex-nowrap justify-center gap-0.5"
+          className="flex flex-nowrap justify-center gap-0.5"
         >
           {timerComponents}
         </motion.div>
@@ -111,7 +113,7 @@ export function HeroSection() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.0 }}
           onClick={() => document.getElementById("rsvp")?.scrollIntoView({ behavior: "smooth" })}
-          className="group relative mt-7 w-full max-w-[310px] px-8 py-3.5 min-h-[48px] bg-white/10 backdrop-blur-md overflow-hidden rounded-full transition-all hover:bg-white/20 border border-white/30 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+          className="group relative mt-5 w-full max-w-[310px] px-8 py-3.5 min-h-[48px] bg-white/10 backdrop-blur-md overflow-hidden rounded-full transition-all hover:bg-white/20 border border-white/30 active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
         >
           <span className="text-white font-medium tracking-widest uppercase text-xs">
             {inviteData.hero.primaryCta}

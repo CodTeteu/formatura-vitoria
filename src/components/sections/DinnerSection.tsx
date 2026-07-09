@@ -28,7 +28,8 @@ export function DinnerSection() {
             <div
               className="relative p-6 md:p-12 shadow-2xl transition-transform duration-500 will-change-transform rounded-2xl"
               style={{
-                background: "linear-gradient(135deg, #fdfcf7 0%, #faf8f0 100%)",
+                background: "linear-gradient(135deg, rgba(253, 252, 247, 0.55) 0%, rgba(250, 248, 240, 0.6) 100%)",
+                backdropFilter: "blur(12px)",
                 boxShadow: "0 25px 50px -12px rgba(44, 5, 11, 0.12)"
               }}
             >

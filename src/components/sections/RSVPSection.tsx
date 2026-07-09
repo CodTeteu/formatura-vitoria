@@ -19,7 +19,7 @@ import { queueFailedSubmission } from "@/lib/pending-rsvp";
 import { formatPhone } from "@/lib/format";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { cn } from "@/lib/cn";
+
 
 const defaultValues: RSVPInput = {
   guest_name: "",
@@ -33,21 +33,13 @@ const defaultValues: RSVPInput = {
   event_slug: eventSlug,
 };
 
-const availableEvents = [
-  { id: "Missa de Formatura", label: "Missa de Formatura", date: "10/08/2026 - 19:00" },
-  { id: "Colação de Grau", label: "Colação de Grau", date: "11/08/2026 - 19:30" },
-  { id: "Festa de Formatura", label: "Festa de Formatura", date: "22/08/2026 - 12:00" },
-];
+
 
 export function RSVPSection() {
   const [step, setStep] = useState<"form" | "success">("form");
   const [loading, setLoading] = useState(false);
   const [submittedData, setSubmittedData] = useState<RSVPInput | null>(null);
-  const [selectedEvents, setSelectedEvents] = useState<string[]>([
-    "Missa de Formatura",
-    "Colação de Grau",
-    "Festa de Formatura",
-  ]);
+  const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
 
   const {
     control,
@@ -105,13 +97,40 @@ export function RSVPSection() {
     }
   }, [attendanceStatus, companionsCount, getValues, maxCompanions, setValue]);
 
-  const toggleEvent = (eventId: string) => {
-    if (selectedEvents.includes(eventId)) {
-      setSelectedEvents(selectedEvents.filter((id) => id !== eventId));
-    } else {
-      setSelectedEvents([...selectedEvents, eventId]);
+  const [selectedOption, setSelectedOption] = useState<string>("");
+
+  const handleDropdownChange = (val: string) => {
+    setSelectedOption(val);
+    switch (val) {
+      case "missa":
+        setSelectedEvents(["Missa de Formatura"]);
+        break;
+      case "colacao":
+        setSelectedEvents(["Colação de Grau"]);
+        break;
+      case "festa":
+        setSelectedEvents(["Festa de Formatura"]);
+        break;
+      case "missa_colacao":
+        setSelectedEvents(["Missa de Formatura", "Colação de Grau"]);
+        break;
+      case "missa_festa":
+        setSelectedEvents(["Missa de Formatura", "Festa de Formatura"]);
+        break;
+      case "colacao_festa":
+        setSelectedEvents(["Colação de Grau", "Festa de Formatura"]);
+        break;
+      case "all":
+        setSelectedEvents(["Missa de Formatura", "Colação de Grau", "Festa de Formatura"]);
+        break;
+      case "":
+      default:
+        setSelectedEvents([]);
+        break;
     }
   };
+
+
 
   async function onSubmit(values: RSVPInput) {
     if (attendanceStatus === "attending" && selectedEvents.length === 0) {
@@ -303,36 +322,24 @@ export function RSVPSection() {
                       </div>
                       
                       <p className="mb-4 font-body text-xs text-[var(--invite-brown-soft)] italic">
-                        Marque apenas os eventos que você e seus acompanhantes comparecerão.
+                        Selecione os eventos que você e seus acompanhantes comparecerão.
                       </p>
 
-                      <div className="grid gap-4 sm:grid-cols-3">
-                        {availableEvents.map((evt) => {
-                          const isSelected = selectedEvents.includes(evt.id);
-                          return (
-                            <div
-                              key={evt.id}
-                              onClick={() => toggleEvent(evt.id)}
-                              className={cn(
-                                "cursor-pointer rounded-2xl border p-4 text-center transition-all duration-300 flex flex-col justify-between",
-                                isSelected
-                                  ? "border-[var(--invite-gold)] bg-[var(--invite-sage-soft)]/15 shadow-sm scale-[0.98]"
-                                  : "border-[var(--invite-line)] bg-white/40 hover:bg-white/80"
-                              )}
-                            >
-                              <div>
-                                <p className="font-heading text-base font-bold text-[var(--invite-brown)]">{evt.label}</p>
-                                <p className="mt-1 font-body text-xs text-slate-500">{evt.date}</p>
-                              </div>
-                              <div className={cn(
-                                "mx-auto mt-4 flex h-6 w-6 items-center justify-center rounded-full border text-white transition-all",
-                                isSelected ? "border-[var(--invite-gold)] bg-[var(--invite-brown)]" : "border-slate-300 bg-white"
-                              )}>
-                                {isSelected && <span className="text-[10px] font-bold">✓</span>}
-                              </div>
-                            </div>
-                          );
-                        })}
+                      <div>
+                        <select
+                          value={selectedOption}
+                          onChange={(e) => handleDropdownChange(e.target.value)}
+                          className="w-full rounded-2xl border border-[var(--invite-line)] bg-[var(--invite-cream)]/50 px-5 py-3.5 font-sans text-base text-[var(--invite-brown)] outline-none transition-all duration-300 focus:border-[var(--invite-gold)] focus:bg-white focus:ring-2 focus:ring-[var(--invite-gold)]/20"
+                        >
+                          <option value="">Selecione uma opção...</option>
+                          <option value="all">Todos os Eventos (Missa, Colação e Festa)</option>
+                          <option value="missa">Apenas Missa de Formatura (10/08)</option>
+                          <option value="colacao">Apenas Colação de Grau (11/08)</option>
+                          <option value="festa">Apenas Festa de Formatura (22/08)</option>
+                          <option value="missa_colacao">Missa de Formatura e Colação de Grau</option>
+                          <option value="missa_festa">Missa de Formatura e Festa de Formatura</option>
+                          <option value="colacao_festa">Colação de Grau e Festa de Formatura</option>
+                        </select>
                       </div>
                     </motion.div>
                   )}

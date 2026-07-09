@@ -13,6 +13,7 @@ export const inviteData = {
     fullName: inviteConfig.people.primaryFullName,
     course: inviteConfig.people.courseOrSubtitle,
     signatureQuote: inviteConfig.people.signatureQuote,
+    monogram: inviteConfig.people.monogram,
   },
   journey: inviteConfig.story,
   familyGallery: inviteConfig.gallery,

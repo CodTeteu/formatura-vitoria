@@ -3,7 +3,7 @@ import { useScroll, useSpring, motion } from "framer-motion";
 import { Navigation } from "@/components/layout/Navigation";
 import { CelebrationSection } from "@/components/sections/CelebrationSection";
 import { GallerySection } from "@/components/sections/GallerySection";
-import { GraduateSection } from "@/components/sections/GraduateSection";
+import { StorySection } from "@/components/sections/StorySection";
 import { DinnerSection } from "@/components/sections/DinnerSection";
 import { FooterSection } from "@/components/sections/FooterSection";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -47,12 +47,12 @@ export default function HomePage() {
       />
 
       <Navigation />
-      <main>
+      <main className="relative z-[1]">
         <HeroSection />
         <div className="invite-texture-surface">
           <QuickActionsSection />
           
-          <GraduateSection />
+          <StorySection />
           
           <GallerySection />
           

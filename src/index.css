@@ -2,9 +2,10 @@
 
 @theme {
   --font-script: "Great Vibes", cursive;
-  --font-display: "Cormorant Garamond", serif;
-  --font-heading: "Cormorant Garamond", serif;
-  --font-body: "Manrope", sans-serif;
+  --font-display: "Playfair Display", serif;
+  --font-heading: "Playfair Display", serif;
+  --font-serif: "Cormorant Garamond", serif;
+  --font-body: "Cormorant Garamond", serif;
   --font-sans: "Manrope", sans-serif;
   --color-background: #fdfbfb;
   --color-foreground: #2c050b;
@@ -108,7 +109,11 @@ a {
   h2,
   h3,
   h4 {
-    font-family: var(--font-display);
+    font-family: var(--font-heading);
+  }
+
+  .font-serif {
+    font-family: var(--font-serif);
   }
 }
 
@@ -193,19 +198,27 @@ a {
 
   .invite-page {
     @apply relative min-h-screen overflow-x-hidden text-[color:var(--invite-brown)];
-    background-color: #fff8f8;
+    background-color: transparent;
   }
 
   .invite-page::before {
     content: "";
     position: fixed;
     inset: 0;
-    z-index: -1;
+    z-index: 0;
     background-image: url("/light-bg.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    /* This fixed positioning avoids the iOS zoom bug better than background-attachment: fixed */
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  @media (max-width: 640px) {
+    .invite-page::before {
+      background-image: url("/light-bg-mobile.png");
+      opacity: 0.5;
+    }
   }
 
   .invite-container {
@@ -217,20 +230,20 @@ a {
   }
 
   .invite-texture-surface {
-    /* Transparent enough to see the fixed background, with a subtle light gradient */
-    background-image: linear-gradient(180deg, rgba(255, 248, 248, 0.4), rgba(255, 255, 255, 0.7));
+    /* Highly transparent to allow the textured background details to stand out clearly */
+    background-image: linear-gradient(180deg, rgba(255, 248, 248, 0.08), rgba(255, 255, 255, 0.12));
   }
 
   .invite-card {
     @apply rounded-[30px] border shadow-[var(--invite-shadow)] backdrop-blur-md;
     border-color: var(--invite-line);
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.55);
   }
 
   .invite-card-strong {
     @apply rounded-[30px] border shadow-[0_24px_70px_rgba(59,6,13,0.12)];
     border-color: rgba(195, 155, 91, 0.3);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 248, 0.98));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(255, 248, 248, 0.80));
     backdrop-filter: blur(12px);
   }
 
@@ -396,6 +409,10 @@ a {
 
   .font-body {
     font-family: var(--font-body);
+  }
+
+  .font-serif {
+    font-family: var(--font-serif);
   }
 
   .glass-card {

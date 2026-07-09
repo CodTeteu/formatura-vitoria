@@ -4,6 +4,8 @@ import { Loader2 } from "lucide-react";
 import { Toaster } from "sonner";
 import HomePage from "@/pages/HomePage";
 import NotFoundPage from "@/pages/NotFoundPage";
+import { LoadingIntro } from "@/components/ui/LoadingIntro";
+import { assetPath } from "@/config/assets";
 
 const AdminPage = lazy(() => import("@/pages/AdminPage"));
 const GiftListPage = lazy(() => import("@/pages/GiftListPage"));
@@ -22,8 +24,22 @@ function LoadingScreen() {
 }
 
 export default function App() {
+  const bgUrl = assetPath("light-bg.png");
+  const bgMobileUrl = assetPath("light-bg-mobile.png");
+
   return (
     <>
+      <LoadingIntro />
+      <style>{`
+        .invite-page::before {
+          background-image: url("${bgUrl}") !important;
+        }
+        @media (max-width: 640px) {
+          .invite-page::before {
+            background-image: url("${bgMobileUrl}") !important;
+          }
+        }
+      `}</style>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route

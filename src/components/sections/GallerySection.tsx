@@ -2,10 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { inviteData } from "@/config/invite";
 import { ResponsiveImage } from "@/components/ui/ResponsiveImage";
 import { Reveal } from "@/components/ui/Reveal";
+import { cn } from "@/lib/cn";
 
 const PREVIEW_PARAGRAPH_COUNT = 2;
 
@@ -81,29 +82,47 @@ export function GallerySection() {
         <div className="relative max-w-7xl mx-auto">
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex -ml-4">
-              {inviteData.familyGallery.slides.map((photo, index) => (
-                <div key={photo.asset} className="flex-[0_0_85%] md:flex-[0_0_50%] lg:flex-[0_0_34%] min-w-0 pl-4">
-                  <motion.div
-                    className="relative aspect-[3/4] rounded-2xl overflow-hidden group cursor-pointer bg-[var(--invite-sage-soft)]/10 border border-[var(--invite-line)] shadow-md"
-                    whileHover={{ scale: 0.98 }}
-                    transition={{ duration: 0.4 }}
-                    onClick={() => openLightbox(index)}
+              {inviteData.familyGallery.slides.map((photo, index) => {
+                const isLandscape = photo.aspect === "landscape";
+                return (
+                  <div
+                    key={photo.asset}
+                    className={cn(
+                      "min-w-0 pl-4 transition-all duration-300",
+                      isLandscape
+                        ? "flex-[0_0_95%] sm:flex-[0_0_90%] md:flex-[0_0_70%] lg:flex-[0_0_56%]"
+                        : "flex-[0_0_75%] sm:flex-[0_0_45%] md:flex-[0_0_35%] lg:flex-[0_0_28%]"
+                    )}
                   >
-                    <ResponsiveImage
-                      asset={photo.asset}
-                      alt={photo.alt}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-between">
-                      <span className="text-white font-heading text-sm italic">
-                        {photo.alt}
-                      </span>
-                      <ZoomIn className="w-5 h-5 text-white/80" />
-                    </div>
-                  </motion.div>
-                </div>
-              ))}
+                    <motion.div
+                      className="group relative cursor-pointer overflow-hidden rounded-[24px] bg-white shadow-lg border border-[var(--invite-line)]/35"
+                      whileHover={{ scale: 0.98 }}
+                      transition={{ duration: 0.4 }}
+                      onClick={() => openLightbox(index)}
+                    >
+                      <div className={cn("overflow-hidden", isLandscape ? "aspect-[3/2]" : "aspect-[3/4]")}>
+                        <ResponsiveImage
+                          asset={photo.asset}
+                          alt={photo.alt}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
+                      
+                      {/* Gradient Hover Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                        <span className="text-white text-xs uppercase tracking-widest bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                          Ampliar Foto 🔍
+                        </span>
+                      </div>
+                    </motion.div>
+                    {photo.caption && (
+                      <p className="mt-3 px-2 text-center font-body text-sm text-[var(--invite-brown-soft)]/80 italic">
+                        {photo.caption}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 

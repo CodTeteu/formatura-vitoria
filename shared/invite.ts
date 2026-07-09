@@ -77,6 +77,7 @@ export interface InviteConfig {
       alt: string;
       caption: string;
       positionClass?: string;
+      aspect?: "portrait" | "landscape";
     }>;
   };
   celebration: {
@@ -172,7 +173,7 @@ export const inviteConfig: InviteConfig = {
       mapsUrl: "https://maps.app.goo.gl/tr7ZrTtBLH1GKSSy7",
       wazeUrl: "https://waze.com/ul?q=Paróquia%20Universitária%20São%20João%20Evangelista%20Goiânia&navigate=yes",
       dressCode: "Esporte fino (Evitar roupas curtas ou decotadas)",
-      imageAsset: "vitoria-portrait-1"
+      imageAsset: "venue-missa.jpg"
     },
     {
       id: "colacao",
@@ -186,7 +187,7 @@ export const inviteConfig: InviteConfig = {
       mapsUrl: "https://maps.app.goo.gl/Vbw6ozyoiZQnDY1QA",
       wazeUrl: "https://waze.com/ul?q=Centro%20de%20Convenções%20da%20PUC%20Goiás&navigate=yes",
       dressCode: "Esporte fino",
-      imageAsset: "vitoria-portrait-2"
+      imageAsset: "venue-puc.jpg"
     },
     {
       id: "festa",
@@ -221,8 +222,17 @@ export const inviteConfig: InviteConfig = {
   story: {
     label: "Minha jornada",
     title: "Minha História",
-    images: [],
-    paragraphs: [],
+    images: [
+      { asset: "vitoria-portrait-2", alt: "Vitória Cézar" },
+      { asset: "vitoria-portrait-1", alt: "Vitória em sessão fotográfica" },
+      { asset: "vitoria-family-1", alt: "Vitória com sua família" }
+    ],
+    paragraphs: [
+      "Após anos de dedicação, desafios superados e constante aprendizado, tenho a imensa alegria de celebrar minha graduação em Direito pela PUC Goiás. Esta conquista é o fruto de muito esforço, fé inabalável e o apoio inestimável daqueles que estiveram ao meu lado.",
+      "A jornada acadêmica me ensinou que o Direito vai muito além dos códigos e tribunais; trata-se de buscar a justiça, defender a dignidade humana e lutar por um mundo mais equitativo. Cada desafio superado foi um degrau para o crescimento profissional e pessoal.",
+      "Agradeço profundamente a Deus por iluminar meu caminho, aos meus professores pelo conhecimento compartilhado, e de modo muito especial à minha família e amigos, que foram meu porto seguro, torcida e base incondicional em todos os momentos.",
+      "É com o coração cheio de gratidão e alegria que convido você para celebrar comigo este encerramento de ciclo e o início de uma nova e promissora etapa!"
+    ],
     quote: "Consagre ao Senhor tudo o que você faz, e os seus planos serão bem-sucedidos.",
     quoteAuthor: "Provérbios 16:3",
   },
@@ -234,8 +244,10 @@ export const inviteConfig: InviteConfig = {
       "Agradeço a Deus por me sustentar em cada passo, e à minha família e amigos que foram meu apoio e base incondicional ao longo de toda essa caminhada."
     ],
     slides: [
-      { asset: "vitoria-family-1", alt: "Vitória com família", caption: "Minha família, minha base." },
-      { asset: "vitoria-portrait-2", alt: "Vitória Cézar", caption: "A realização de um grande sonho." }
+      { asset: "vitoria-hero", alt: "Vitória Cézar", caption: "A comemoração de uma grande vitória.", aspect: "landscape" },
+      { asset: "vitoria-portrait-1", alt: "Vitória Cézar", caption: "A conquista de um sonho.", aspect: "portrait" },
+      { asset: "vitoria-portrait-2", alt: "Vitória Cézar", caption: "A realização de um grande sonho.", aspect: "portrait" },
+      { asset: "vitoria-family-1", alt: "Vitória com família", caption: "Minha família, minha base.", aspect: "landscape" }
     ],
   },
   celebration: {
