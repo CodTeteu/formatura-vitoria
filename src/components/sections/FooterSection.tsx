@@ -7,13 +7,13 @@ export function FooterSection() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="pt-4 pb-2 bg-gradient-to-b from-[#3b060d] to-[#1a0205] text-white/80 relative overflow-hidden font-body text-center">
+    <footer className="pt-8 pb-4 bg-gradient-to-b from-[#3b060d] to-[#1a0205] text-white/80 relative overflow-hidden font-body text-center">
       {/* Subtle overlay for depth */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-black/10 pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center">
         {/* Graduate name */}
-        <h2 className="font-script text-4xl md:text-5xl text-white mb-1 leading-none">
+        <h2 className="font-script text-4xl md:text-5xl text-white mb-1 leading-none whitespace-nowrap">
           {inviteData.graduate.fullName}
         </h2>
 

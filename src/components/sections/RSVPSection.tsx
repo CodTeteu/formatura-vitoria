@@ -234,36 +234,36 @@ export function RSVPSection() {
                   </ul>
                 </div>
 
-                <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
+                <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                   {/* SEUS DADOS */}
                   <div>
-                    <div className="mb-5">
-                      <h3 className="font-heading text-xl text-[var(--invite-brown)] sm:text-2xl font-bold">Seus Dados</h3>
-                      <hr className="mt-2.5 border-[var(--invite-line)]" />
+                    <div className="mb-3">
+                      <h3 className="font-heading text-lg text-[var(--invite-brown)] font-bold">Seus Dados</h3>
+                      <hr className="mt-1.5 border-[var(--invite-line)]" />
                     </div>
-                    <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="grid gap-4 sm:grid-cols-2">
                       <div className="sm:col-span-2">
-                        <label className="mb-2 flex items-center gap-2 font-body text-sm text-[var(--invite-brown-soft)] font-medium">
-                          <User className="size-4 text-[var(--invite-gold)]" />
+                        <label className="mb-1 flex items-center gap-2 font-sans text-xs text-[var(--invite-brown-soft)] font-bold uppercase tracking-wider">
+                          <User className="size-3.5 text-[var(--invite-gold)]" />
                           Nome Completo <span className="text-rose-400">*</span>
                         </label>
                         <input
-                          className="w-full rounded-[16px] border border-[var(--invite-line)] bg-transparent px-5 py-3.5 text-base text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)] focus:bg-[var(--invite-cream)]"
+                          className="w-full rounded-[12px] border border-[var(--invite-line)] bg-transparent px-4 py-2.5 text-sm text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)] focus:bg-[var(--invite-cream)]"
                           placeholder="Seu nome completo"
                           {...register("guest_name")}
                         />
                         {errors.guest_name ? (
-                          <p className="mt-2 text-xs text-rose-600">{errors.guest_name.message}</p>
+                          <p className="mt-1.5 text-xs text-rose-600">{errors.guest_name.message}</p>
                         ) : null}
                       </div>
 
                       <div className="sm:col-span-2">
-                        <label className="mb-2 flex items-center gap-2 font-body text-sm text-[var(--invite-brown-soft)] font-medium">
-                          <Phone className="size-4 text-[var(--invite-gold)]" />
+                        <label className="mb-1 flex items-center gap-2 font-sans text-xs text-[var(--invite-brown-soft)] font-bold uppercase tracking-wider">
+                          <Phone className="size-3.5 text-[var(--invite-gold)]" />
                           Celular / WhatsApp <span className="text-rose-400">*</span>
                         </label>
                         <input
-                          className="w-full rounded-[16px] border border-[var(--invite-line)] bg-transparent px-5 py-3.5 text-base text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)] focus:bg-[var(--invite-cream)]"
+                          className="w-full rounded-[12px] border border-[var(--invite-line)] bg-transparent px-4 py-2.5 text-sm text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)] focus:bg-[var(--invite-cream)]"
                           placeholder="(00) 00000-0000"
                           {...register("phone")}
                           onChange={(event) => {
@@ -272,7 +272,7 @@ export function RSVPSection() {
                           value={phoneValue}
                         />
                         {errors.phone ? (
-                          <p className="mt-2 text-xs text-rose-600">{errors.phone.message}</p>
+                          <p className="mt-1.5 text-xs text-rose-600">{errors.phone.message}</p>
                         ) : null}
                       </div>
                     </div>
@@ -280,24 +280,24 @@ export function RSVPSection() {
 
                   {/* PARTICIPAÇÃO */}
                   <div>
-                    <div className="mb-5">
-                      <h3 className="font-heading text-xl text-[var(--invite-brown)] sm:text-2xl font-bold">Participação</h3>
-                      <hr className="mt-2.5 border-[var(--invite-line)]" />
+                    <div className="mb-3">
+                      <h3 className="font-heading text-lg text-[var(--invite-brown)] font-bold">Participação</h3>
+                      <hr className="mt-1.5 border-[var(--invite-line)]" />
                     </div>
-                    <div className="rounded-[20px] bg-[var(--invite-sage-soft)]/10 border border-[var(--invite-line)] p-5">
-                      <p className="mb-4 font-body text-sm font-medium text-[var(--invite-brown-soft)]">
+                    <div className="rounded-[16px] bg-[var(--invite-sage-soft)]/10 border border-[var(--invite-line)] p-4">
+                      <p className="mb-3 font-sans text-xs font-semibold text-[var(--invite-brown-soft)]/90 uppercase tracking-wider">
                         Você poderá comparecer aos eventos de formatura?
                       </p>
-                      <div className="flex flex-wrap gap-4">
+                      <div className="flex flex-wrap gap-3">
                         <label className="cursor-pointer">
                           <input className="peer sr-only" type="radio" value="attending" {...register("attendance_status")} />
-                          <span className="flex min-w-[120px] items-center justify-center rounded-full border border-[var(--invite-line)] bg-white px-6 py-2.5 font-heading text-base text-[var(--invite-brown)] transition hover:bg-[var(--invite-sage-soft)]/20 peer-checked:border-[var(--invite-gold)] peer-checked:bg-[var(--invite-sage-soft)]/30 peer-checked:shadow-sm">
+                          <span className="flex min-w-[110px] items-center justify-center rounded-full border border-[var(--invite-line)] bg-white px-5 py-2 font-heading text-sm text-[var(--invite-brown)] transition hover:bg-[var(--invite-sage-soft)]/20 peer-checked:border-[var(--invite-gold)] peer-checked:bg-[var(--invite-sage-soft)]/30 peer-checked:shadow-sm">
                             Sim, com certeza!
                           </span>
                         </label>
                         <label className="cursor-pointer">
                           <input className="peer sr-only" type="radio" value="not-attending" {...register("attendance_status")} />
-                          <span className="flex min-w-[120px] items-center justify-center rounded-full border border-[var(--invite-line)] bg-white px-6 py-2.5 font-heading text-base text-[var(--invite-brown)] transition hover:bg-[var(--invite-sage-soft)]/20 peer-checked:border-slate-500 peer-checked:bg-slate-100 peer-checked:shadow-sm">
+                          <span className="flex min-w-[110px] items-center justify-center rounded-full border border-[var(--invite-line)] bg-white px-5 py-2 font-heading text-sm text-[var(--invite-brown)] transition hover:bg-[var(--invite-sage-soft)]/20 peer-checked:border-slate-500 peer-checked:bg-slate-100 peer-checked:shadow-sm">
                             Não poderei ir
                           </span>
                         </label>
@@ -313,15 +313,15 @@ export function RSVPSection() {
                       exit={{ opacity: 0, height: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="mb-5">
-                        <h3 className="font-heading text-xl text-[var(--invite-brown)] sm:text-2xl font-bold flex items-center gap-2">
-                          <Calendar className="size-5 text-[var(--invite-gold)]" />
+                      <div className="mb-3">
+                        <h3 className="font-heading text-lg text-[var(--invite-brown)] font-bold flex items-center gap-2">
+                          <Calendar className="size-4.5 text-[var(--invite-gold)]" />
                           Selecione os Eventos
                         </h3>
-                        <hr className="mt-2.5 border-[var(--invite-line)]" />
+                        <hr className="mt-1.5 border-[var(--invite-line)]" />
                       </div>
                       
-                      <p className="mb-4 font-body text-xs text-[var(--invite-brown-soft)] italic">
+                      <p className="mb-3 font-body text-xs text-[var(--invite-brown-soft)] italic">
                         Selecione os eventos que você e seus acompanhantes comparecerão.
                       </p>
 
@@ -329,7 +329,7 @@ export function RSVPSection() {
                         <select
                           value={selectedOption}
                           onChange={(e) => handleDropdownChange(e.target.value)}
-                          className="w-full rounded-2xl border border-[var(--invite-line)] bg-[var(--invite-cream)]/50 px-5 py-3.5 font-sans text-base text-[var(--invite-brown)] outline-none transition-all duration-300 focus:border-[var(--invite-gold)] focus:bg-white focus:ring-2 focus:ring-[var(--invite-gold)]/20"
+                          className="w-full rounded-[12px] border border-[var(--invite-line)] bg-[var(--invite-cream)]/50 px-4 py-2.5 font-sans text-sm text-[var(--invite-brown)] outline-none transition-all duration-300 focus:border-[var(--invite-gold)] focus:bg-white focus:ring-2 focus:ring-[var(--invite-gold)]/20"
                         >
                           <option value="">Selecione uma opção...</option>
                           <option value="all">Todos os Eventos (Missa, Colação e Festa)</option>
@@ -352,21 +352,21 @@ export function RSVPSection() {
                       exit={{ opacity: 0, height: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className="mb-5">
-                        <h3 className="font-heading text-xl text-[var(--invite-brown)] sm:text-2xl font-bold flex items-center gap-2">
-                          <Users className="size-5 text-[var(--invite-gold)]" />
+                      <div className="mb-3">
+                        <h3 className="font-heading text-lg text-[var(--invite-brown)] font-bold flex items-center gap-2">
+                          <Users className="size-4.5 text-[var(--invite-gold)]" />
                           Acompanhantes
                         </h3>
-                        <hr className="mt-2.5 border-[var(--invite-line)]" />
+                        <hr className="mt-1.5 border-[var(--invite-line)]" />
                       </div>
 
-                      <div className="space-y-6">
+                      <div className="space-y-4">
                         <div>
-                          <label className="mb-2 flex items-center gap-2 font-body text-sm font-medium text-[var(--invite-brown-soft)]">
+                          <label className="mb-1 flex items-center gap-2 font-sans text-xs font-bold uppercase tracking-wider text-[var(--invite-brown-soft)]">
                             Número de acompanhantes
                           </label>
                           <select
-                            className="w-full rounded-[16px] border border-[var(--invite-line)] bg-white px-5 py-3 text-base text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)]"
+                            className="w-full rounded-[12px] border border-[var(--invite-line)] bg-white px-4 py-2.5 text-sm text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)]"
                             {...register("companions_count")}
                           >
                             {Array.from({ length: maxCompanions + 1 }, (_, number) => (
@@ -378,14 +378,14 @@ export function RSVPSection() {
                         </div>
 
                         {companionsCount > 0 && (
-                          <div className="grid gap-4 sm:grid-cols-2 animate-in fade-in duration-300">
+                          <div className="grid gap-3 sm:grid-cols-2 animate-in fade-in duration-300">
                             {Array.from({ length: companionsCount }, (_, index) => (
                               <div key={`companion-${index}`}>
-                                <label className="mb-2 flex items-center gap-2 font-body text-xs text-[var(--invite-brown-soft)]">
+                                <label className="mb-1 flex items-center gap-2 font-sans text-[10px] font-bold uppercase tracking-wider text-[var(--invite-brown-soft)]">
                                   Acompanhante {index + 1}
                                 </label>
                                 <input
-                                  className="w-full rounded-[16px] border border-[var(--invite-line)] bg-transparent px-5 py-3 text-base text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)] focus:bg-[var(--invite-cream)]"
+                                  className="w-full rounded-[12px] border border-[var(--invite-line)] bg-transparent px-4 py-2.5 text-sm text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)] focus:bg-[var(--invite-cream)]"
                                   placeholder="Nome completo do acompanhante"
                                   {...register(`companions_names.${index}` as const)}
                                 />
@@ -399,16 +399,16 @@ export function RSVPSection() {
 
                   {/* RECADO */}
                   <div>
-                    <div className="mb-5">
-                      <h3 className="font-heading text-xl text-[var(--invite-brown)] sm:text-2xl font-bold flex items-center gap-2">
-                        <MessageSquare className="size-5 text-[var(--invite-gold)]" />
+                    <div className="mb-3">
+                      <h3 className="font-heading text-lg text-[var(--invite-brown)] font-bold flex items-center gap-2">
+                        <MessageSquare className="size-4.5 text-[var(--invite-gold)]" />
                         Deixe um Recado
                       </h3>
-                      <hr className="mt-2.5 border-[var(--invite-line)]" />
+                      <hr className="mt-1.5 border-[var(--invite-line)]" />
                     </div>
                     <div>
                       <textarea
-                        className="min-h-28 w-full rounded-[16px] border border-[var(--invite-line)] bg-transparent px-5 py-3 text-base text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)] focus:bg-[var(--invite-cream)]"
+                        className="min-h-20 w-full rounded-[12px] border border-[var(--invite-line)] bg-transparent px-4 py-2.5 text-sm text-[var(--invite-brown)] outline-none transition focus:border-[var(--invite-gold)] focus:bg-[var(--invite-cream)]"
                         placeholder={inviteData.rsvp.messagePlaceholder}
                         {...register("notes")}
                       />
@@ -416,13 +416,13 @@ export function RSVPSection() {
                   </div>
 
                   <button
-                    className="w-full font-heading font-bold uppercase tracking-[0.2em] rounded-full text-white bg-[var(--invite-brown)] hover:bg-[var(--invite-brown-soft)] py-4 transition-all duration-300 flex items-center justify-center cursor-pointer shadow-lg disabled:opacity-50"
+                    className="w-full font-heading font-bold uppercase tracking-[0.2em] rounded-full text-white bg-[var(--invite-brown)] hover:bg-[var(--invite-brown-soft)] py-3 text-sm transition-all duration-300 flex items-center justify-center cursor-pointer shadow-lg disabled:opacity-50"
                     disabled={loading}
                     type="submit"
                   >
                     {loading ? (
                       <>
-                        <Loader2 className="mr-2 size-5 animate-spin" />
+                        <Loader2 className="mr-2 size-4 animate-spin" />
                         Enviando confirmação...
                       </>
                     ) : (
