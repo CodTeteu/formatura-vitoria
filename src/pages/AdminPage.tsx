@@ -15,6 +15,7 @@ import {
   RefreshCw,
   Search,
   ShieldCheck,
+  Ticket,
   Trash2,
   UserPlus,
   Users,
@@ -26,8 +27,9 @@ import { attendanceLabels, type AttendanceStatus } from "@shared/constants";
 import { inviteData } from "@/config/invite";
 import { AdminTabs, type AdminTab } from "@/features/admin/AdminTabs";
 import { GiftSelectionsPanel } from "@/features/admin/GiftSelectionsPanel";
-import { ApiError, adminLogin, adminLogout, deleteAdminRsvp, fetchAdminRsvps, withBasePath } from "@/lib/api";
+import { ApiError, adminLogin, adminLogout, deleteAdminRsvp, fetchAdminRsvps, withBasePath, updateAdminRsvp } from "@/lib/api";
 import { formatDisplayDateTime } from "@/lib/format";
+import { cn } from "@/lib/cn";
 
 // ===========================================
 // CONSTANTS
@@ -245,9 +247,11 @@ function DeleteConfirmDialog({
 function SubmissionCard({
   item,
   onDelete,
+  onUpdateBingoStatus,
 }: {
   item: AdminRsvpItem;
   onDelete: (item: AdminRsvpItem) => void;
+  onUpdateBingoStatus: (id: string, currentStatus: "pending" | "paid" | "unpaid") => void;
 }) {
   return (
     <motion.article
@@ -269,6 +273,16 @@ function SubmissionCard({
               <Phone className="size-3" />
               {item.phone}
             </div>
+            {(() => {
+              const events = getEventsInfo(item);
+              if (!events) return null;
+              return (
+                <div className="mt-2 flex items-center gap-1 w-fit rounded bg-[var(--invite-gold)]/10 border border-[var(--invite-gold)]/20 px-2 py-0.5 text-[9px] font-semibold text-[var(--invite-gold-deep)] uppercase tracking-wider font-sans">
+                  <Calendar className="size-2.5 shrink-0" />
+                  <span>{events}</span>
+                </div>
+              );
+            })()}
           </div>
         </div>
         <span className={`${badgeClassMap[item.attendance_status]} flex items-center gap-1.5`}>
@@ -290,14 +304,49 @@ function SubmissionCard({
         </div>
 
         {/* Notes */}
-        {item.notes && (
-          <div className="flex items-start gap-2.5 text-sm">
-            <MessageSquare className="mt-0.5 size-3.5 flex-shrink-0 text-[var(--invite-sage)]" />
-            <span className="italic leading-relaxed text-[var(--invite-brown-soft)]">
-              "{item.notes}"
-            </span>
-          </div>
-        )}
+        {(() => {
+          const cleaned = cleanNotes(item.notes);
+          if (!cleaned) return null;
+          return (
+            <div className="flex items-start gap-2.5 text-sm">
+              <MessageSquare className="mt-0.5 size-3.5 flex-shrink-0 text-[var(--invite-sage)]" />
+              <span className="italic leading-relaxed text-[var(--invite-brown-soft)]">
+                "{cleaned}"
+              </span>
+            </div>
+          );
+        })()}
+
+        {/* Bingo Status */}
+        {(() => {
+          const info = getBingoInfo(item);
+          if (!info) return null;
+          
+          return (
+            <div className="flex items-center justify-between gap-2.5 text-sm pt-2.5 border-t border-[var(--invite-line)]/30 mt-2.5">
+              <div className="flex items-center gap-2.5">
+                <Ticket className="size-3.5 text-[var(--invite-gold)] shrink-0" />
+                <span className="font-heading text-xs font-semibold text-[var(--invite-brown)] font-sans">
+                  Bingo: {info.count} cartela{info.count > 1 ? "s" : ""} (R$ {info.value},00)
+                </span>
+              </div>
+              <select
+                value={info.status}
+                onChange={(e) => onUpdateBingoStatus(item.id, e.target.value as "pending" | "paid" | "unpaid")}
+                className={cn(
+                  "rounded-full border px-3 py-1 text-[10px] font-semibold outline-none cursor-pointer transition-all duration-200 shrink-0",
+                  info.status === "paid" && "bg-green-50 border-green-200 text-green-700 hover:bg-green-100",
+                  info.status === "unpaid" && "bg-red-50 border-red-200 text-red-700 hover:bg-red-100",
+                  info.status === "pending" && "bg-yellow-50 border-yellow-200 text-yellow-700 hover:bg-yellow-100"
+                )}
+              >
+                <option value="pending" className="bg-white text-yellow-700 font-semibold">Pendente</option>
+                <option value="paid" className="bg-white text-green-700 font-semibold">Pago</option>
+                <option value="unpaid" className="bg-white text-red-700 font-semibold">Não Pago</option>
+              </select>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Footer: date + delete */}
@@ -318,6 +367,38 @@ function SubmissionCard({
   );
 }
 
+// Helper to parse Bingo info from guest notes and payment status from admin notes
+function getBingoInfo(item: AdminRsvpItem) {
+  const match = (item.notes || "").match(/\[Bingo:\s*(\d+)\s*cartela\(s\)/);
+  if (!match) return null;
+  const count = parseInt(match[1], 10);
+  
+  let status: "pending" | "paid" | "unpaid" = "pending";
+  if ((item.admin_notes || "").includes("[Bingo: PAGO]")) {
+    status = "paid";
+  } else if ((item.admin_notes || "").includes("[Bingo: NAO_PAGO]")) {
+    status = "unpaid";
+  }
+  
+  return { count, status, value: count * 10 };
+}
+
+// Helper to parse selected events from notes
+function getEventsInfo(item: AdminRsvpItem) {
+  const match = (item.notes || "").match(/\[Eventos:\s*([^\]]+)\]/);
+  if (!match) return null;
+  return match[1];
+}
+
+// Helper to clean up technical metadata from guest notes
+function cleanNotes(notes: string | null) {
+  if (!notes) return "";
+  return notes
+    .replace(/\[Eventos:\s*[^\]]+\]/g, "")
+    .replace(/\[Bingo:\s*[^\]]+\]/g, "")
+    .trim();
+}
+
 // ===========================================
 // READ-ONLY TABLE (DESKTOP)
 // ===========================================
@@ -325,9 +406,11 @@ function SubmissionCard({
 function SubmissionsTable({
   items,
   onDelete,
+  onUpdateBingoStatus,
 }: {
   items: AdminRsvpItem[];
   onDelete: (item: AdminRsvpItem) => void;
+  onUpdateBingoStatus: (id: string, currentStatus: "pending" | "paid" | "unpaid") => void;
 }) {
   return (
     <div className="invite-card mt-8 hidden overflow-hidden lg:block">
@@ -340,6 +423,7 @@ function SubmissionsTable({
               <th className="px-5 py-4 font-medium text-center">Pessoas</th>
               <th className="px-5 py-4 font-medium">Acompanhantes</th>
               <th className="px-5 py-4 font-medium">Observações</th>
+              <th className="px-5 py-4 font-medium text-center">Bingo / Pix</th>
               <th className="px-5 py-4 font-medium">Envio</th>
               <th className="px-5 py-4 font-medium w-[80px]"></th>
             </tr>
@@ -370,6 +454,16 @@ function SubmissionsTable({
                           <Phone className="size-3" />
                           {item.phone}
                         </p>
+                        {(() => {
+                          const events = getEventsInfo(item);
+                          if (!events) return null;
+                          return (
+                            <div className="mt-1.5 flex items-center gap-1 w-fit rounded bg-[var(--invite-gold)]/10 border border-[var(--invite-gold)]/20 px-2 py-0.5 text-[9px] font-semibold text-[var(--invite-gold-deep)] uppercase tracking-wider font-sans">
+                              <Calendar className="size-2.5 shrink-0" />
+                              <span>{events}</span>
+                            </div>
+                          );
+                        })()}
                       </div>
                     </div>
                   </td>
@@ -398,13 +492,45 @@ function SubmissionsTable({
 
                   {/* Notes */}
                   <td className="max-w-[260px] px-5 py-4">
-                    {item.notes ? (
-                      <div className="admin-message-box whitespace-pre-wrap break-words">
-                        "{item.notes}"
-                      </div>
-                    ) : (
-                      <span className="text-xs text-[var(--invite-sage)]">—</span>
-                    )}
+                    {(() => {
+                      const cleaned = cleanNotes(item.notes);
+                      if (!cleaned) return <span className="text-xs text-[var(--invite-sage)]">—</span>;
+                      return (
+                        <div className="admin-message-box whitespace-pre-wrap break-words">
+                          "{cleaned}"
+                        </div>
+                      );
+                    })()}
+                  </td>
+
+                  {/* Bingo / Pix status */}
+                  <td className="px-5 py-4 text-center">
+                    {(() => {
+                      const info = getBingoInfo(item);
+                      if (!info) return <span className="text-[var(--invite-sage)]">—</span>;
+                      
+                      return (
+                        <div className="flex flex-col items-center justify-center">
+                          <span className="text-[10px] uppercase tracking-wider text-black/60 font-sans block mb-1">
+                            {info.count} cartela{info.count > 1 ? "s" : ""}
+                          </span>
+                          <select
+                            value={info.status}
+                            onChange={(e) => onUpdateBingoStatus(item.id, e.target.value as "pending" | "paid" | "unpaid")}
+                            className={cn(
+                              "rounded-2xl border px-3 py-1.5 transition duration-200 text-xs font-semibold outline-none cursor-pointer text-center w-full max-w-[125px] mx-auto block",
+                              info.status === "paid" && "bg-green-50 border-green-200 text-green-700 hover:bg-green-100",
+                              info.status === "unpaid" && "bg-red-50 border-red-200 text-red-700 hover:bg-red-100",
+                              info.status === "pending" && "bg-yellow-50 border-yellow-200 text-yellow-700 hover:bg-yellow-100"
+                            )}
+                          >
+                            <option value="pending" className="bg-white text-yellow-700 font-semibold">Pendente</option>
+                            <option value="paid" className="bg-white text-green-700 font-semibold">Pago</option>
+                            <option value="unpaid" className="bg-white text-red-700 font-semibold">Não Pago</option>
+                          </select>
+                        </div>
+                      );
+                    })()}
                   </td>
 
                   {/* Date */}
@@ -452,6 +578,7 @@ export default function AdminPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const deferredSearch = useDeferredValue(searchTerm);
   const [statusFilter, setStatusFilter] = useState<AttendanceStatus | "all">("all");
+  const [eventFilter, setEventFilter] = useState<"all" | "colacao" | "jantar" | "both">("all");
   const [activeTab, setActiveTab] = useState<AdminTab>("rsvps");
 
   // Delete state
@@ -490,13 +617,25 @@ export default function AdminPage() {
     return (data.items ?? []).filter((item) => {
       const matchesStatus =
         statusFilter === "all" ? true : item.attendance_status === statusFilter;
+
+      const eventsInfo = getEventsInfo(item);
+      const matchesEvent =
+        eventFilter === "all"
+          ? true
+          : eventFilter === "colacao"
+          ? eventsInfo === "Apenas Colação de Grau"
+          : eventFilter === "jantar"
+          ? eventsInfo === "Apenas Jantar de Celebração"
+          : eventsInfo === "Ambos os Eventos";
+
       const matchesSearch =
         term.length === 0
           ? true
           : item.guest_name.toLowerCase().includes(term) || item.phone.includes(term);
-      return matchesStatus && matchesSearch;
+
+      return matchesStatus && matchesEvent && matchesSearch;
     });
-  }, [data, deferredSearch, statusFilter]);
+  }, [data, deferredSearch, statusFilter, eventFilter]);
 
   async function handleLogin(password: string) {
     try {
@@ -533,6 +672,27 @@ export default function AdminPage() {
       );
     } finally {
       setDeleting(false);
+    }
+  }
+
+  async function handleUpdateBingoStatus(id: string, nextStatus: "pending" | "paid" | "unpaid") {
+    let newAdminNotes = "";
+    if (nextStatus === "paid") {
+      newAdminNotes = "[Bingo: PAGO]";
+    } else if (nextStatus === "unpaid") {
+      newAdminNotes = "[Bingo: NAO_PAGO]";
+    } else {
+      newAdminNotes = "[Bingo: PENDENTE]";
+    }
+
+    try {
+      await updateAdminRsvp(id, { admin_notes: newAdminNotes });
+      toast.success("Status do pagamento do Bingo atualizado.");
+      await loadData();
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Não foi possível atualizar o status de pagamento.",
+      );
     }
   }
 
@@ -687,8 +847,9 @@ export default function AdminPage() {
           transition={{ delay: 0.45 }}
           className="invite-card mt-8 px-5 py-5"
         >
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-            <div className="relative flex-1">
+          <div className="flex flex-col gap-5">
+            {/* Search Input (Full Width) */}
+            <div className="relative">
               <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[var(--invite-brown-soft)]/40" />
               <input
                 className="w-full rounded-[16px] border border-[var(--invite-line)] bg-transparent py-3.5 pl-11 pr-5 text-base text-[var(--invite-brown)] outline-none transition placeholder:text-[var(--invite-brown-soft)]/40 focus:border-[var(--invite-gold)] focus:bg-[var(--invite-paper)]"
@@ -697,19 +858,51 @@ export default function AdminPage() {
                 value={searchTerm}
               />
             </div>
-            <div className="flex flex-wrap gap-2">
-              {(["all", ...statusOptions] as const).map((status) => (
-                <button
-                  key={status}
-                  className={`admin-filter-btn ${
-                    statusFilter === status ? "admin-filter-active" : "admin-filter-inactive"
-                  }`}
-                  onClick={() => setStatusFilter(status)}
-                  type="button"
-                >
-                  {status === "all" ? "Todos" : attendanceLabels[status]}
-                </button>
-              ))}
+
+            {/* Filters (Side-by-side on desktop) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[var(--invite-line)]/30">
+              {/* Status Filter Block */}
+              <div className="flex flex-col gap-2">
+                <span className="text-[10px] uppercase tracking-wider text-[var(--invite-brown-soft)]/85 font-heading">Filtrar por Presença:</span>
+                <div className="flex flex-wrap gap-2">
+                  {(["all", ...statusOptions] as const).map((status) => (
+                    <button
+                      key={status}
+                      className={`admin-filter-btn ${
+                        statusFilter === status ? "admin-filter-active" : "admin-filter-inactive"
+                      }`}
+                      onClick={() => setStatusFilter(status)}
+                      type="button"
+                    >
+                      {status === "all" ? "Todos" : attendanceLabels[status]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Event Filter Block */}
+              <div className="flex flex-col gap-2">
+                <span className="text-[10px] uppercase tracking-wider text-[var(--invite-brown-soft)]/85 font-heading">Filtrar por Evento:</span>
+                <div className="flex flex-wrap gap-2">
+                  {([
+                    { value: "all", label: "Todos os Eventos" },
+                    { value: "colacao", label: "Apenas Colação" },
+                    { value: "jantar", label: "Apenas Jantar" },
+                    { value: "both", label: "Colação e Jantar" }
+                  ] as const).map((option) => (
+                    <button
+                      key={option.value}
+                      className={`admin-filter-btn ${
+                        eventFilter === option.value ? "admin-filter-active" : "admin-filter-inactive"
+                      }`}
+                      onClick={() => setEventFilter(option.value)}
+                      type="button"
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -744,7 +937,11 @@ export default function AdminPage() {
 
         {/* Desktop Table (read-only) */}
         {!loading && filteredItems.length > 0 && (
-          <SubmissionsTable items={filteredItems} onDelete={setDeleteTarget} />
+          <SubmissionsTable
+            items={filteredItems}
+            onDelete={setDeleteTarget}
+            onUpdateBingoStatus={handleUpdateBingoStatus}
+          />
         )}
 
         {/* Mobile Cards (read-only) */}
@@ -752,7 +949,12 @@ export default function AdminPage() {
           <div className="mt-8 space-y-4 lg:hidden">
             <AnimatePresence>
               {filteredItems.map((item) => (
-                <SubmissionCard key={item.id} item={item} onDelete={setDeleteTarget} />
+                <SubmissionCard
+                  key={item.id}
+                  item={item}
+                  onDelete={setDeleteTarget}
+                  onUpdateBingoStatus={handleUpdateBingoStatus}
+                />
               ))}
             </AnimatePresence>
           </div>
