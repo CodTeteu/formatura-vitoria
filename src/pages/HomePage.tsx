@@ -3,7 +3,6 @@ import { useScroll, useSpring, motion } from "framer-motion";
 import { Navigation } from "@/components/layout/Navigation";
 import { CelebrationSection } from "@/components/sections/CelebrationSection";
 import { GallerySection } from "@/components/sections/GallerySection";
-import { StorySection } from "@/components/sections/StorySection";
 import { DinnerSection } from "@/components/sections/DinnerSection";
 import { FooterSection } from "@/components/sections/FooterSection";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -51,8 +50,6 @@ export default function HomePage() {
         <HeroSection />
         <div className="invite-texture-surface">
           <QuickActionsSection />
-          
-          <StorySection />
           
           <GallerySection />
           

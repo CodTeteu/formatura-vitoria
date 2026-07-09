@@ -205,7 +205,6 @@ export const inviteConfig: InviteConfig = {
     }
   ],
   navigation: [
-    { label: "Mensagem", href: "#jornada" },
     { label: "Galeria", href: "#familia" },
     { label: "Eventos", href: "#celebracao" },
     { label: "RSVP", href: "#rsvp" },

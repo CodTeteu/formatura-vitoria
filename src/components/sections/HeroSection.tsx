@@ -84,7 +84,7 @@ export function HeroSection() {
 
       {/* Mobile timer + CTA — pinned to bottom */}
       <div
-        className="absolute bottom-[18%] left-1/2 -translate-x-1/2 z-10 flex w-full max-w-[420px] flex-col items-center px-5 text-center md:hidden"
+        className="absolute bottom-[13%] left-1/2 -translate-x-1/2 z-10 flex w-full max-w-[420px] flex-col items-center px-5 text-center md:hidden"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -145,7 +145,7 @@ export function HeroSection() {
 
       {/* Desktop countdown and button (Bottom aligned) */}
       <div
-        className="hidden md:flex absolute bottom-[18%] left-1/2 -translate-x-1/2 z-10 text-center px-4 flex-col items-center w-full max-w-4xl"
+        className="hidden md:flex absolute bottom-[13%] left-1/2 -translate-x-1/2 z-10 text-center px-4 flex-col items-center w-full max-w-4xl"
       >
         {/* Countdown */}
         <motion.div
