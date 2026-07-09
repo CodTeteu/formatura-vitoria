@@ -6,7 +6,6 @@ import { inviteData } from "@/config/invite";
 import { buildGoogleCalendarUrl } from "@/lib/calendar";
 import { copyToClipboard } from "@/lib/format";
 import { ResponsiveImage } from "@/components/ui/ResponsiveImage";
-import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import useEmblaCarousel from "embla-carousel-react";
 import { cn } from "@/lib/cn";
@@ -25,7 +24,7 @@ export function CelebrationSection() {
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
-    align: "center",
+    align: "start",
     skipSnaps: false,
   });
 
@@ -78,14 +77,13 @@ export function CelebrationSection() {
         <div className="relative max-w-7xl mx-auto mt-12 sm:mt-16 -mx-4 sm:mx-0 md:px-0">
           <div className="overflow-hidden px-4 py-4" ref={emblaRef}>
             <div className="flex -ml-4 md:-ml-6 lg:-ml-8">
-              {inviteData.events.map((event, index) => (
+              {inviteData.events.map((event) => (
                 <div
                   key={event.id}
-                  className="min-w-0 pl-4 md:pl-6 lg:pl-8 flex-[0_0_88%] sm:flex-[0_0_55%] md:flex-[0_0_33.333%] flex"
+                  className="min-w-0 pl-4 md:pl-6 lg:pl-8 flex-[0_0_75%] sm:flex-[0_0_55%] md:flex-[0_0_33.333%] flex"
                 >
-                  <Reveal
+                  <div
                     className="invite-card flex flex-col justify-between w-full p-3.5 relative group overflow-hidden h-full"
-                    delay={index * 0.1}
                   >
                     {/* Inner Gold Frame decoration */}
                     <div className="absolute inset-1.5 border border-[var(--invite-gold)]/10 rounded-[24px] pointer-events-none" />
@@ -180,7 +178,7 @@ export function CelebrationSection() {
                         </a>
                       </div>
                     </div>
-                  </Reveal>
+                  </div>
                 </div>
               ))}
             </div>

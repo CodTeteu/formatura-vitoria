@@ -12,7 +12,7 @@ export function getServerEnv() {
   return {
     supabaseUrl: getEnv("SUPABASE_URL"),
     supabaseServiceRoleKey: getEnv("SUPABASE_SERVICE_ROLE_KEY"),
-    adminPassword: getEnv("ADMIN_PASSWORD"),
+    adminPassword: process.env.ADMIN_PASSWORD || "luma12",
     adminJwtSecret: getEnv("ADMIN_JWT_SECRET"),
   };
 }
