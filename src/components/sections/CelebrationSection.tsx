@@ -80,7 +80,7 @@ export function CelebrationSection() {
               {inviteData.events.map((event) => (
                 <div
                   key={event.id}
-                  className="min-w-0 pl-4 md:pl-6 lg:pl-8 flex-[0_0_75%] sm:flex-[0_0_55%] md:flex-[0_0_33.333%] flex"
+                  className="min-w-0 pl-4 md:pl-6 lg:pl-8 flex-[0_0_84%] sm:flex-[0_0_55%] md:flex-[0_0_33.333%] flex"
                 >
                   <div
                     className="invite-card flex flex-col justify-between w-full p-3.5 relative group overflow-hidden h-full"
