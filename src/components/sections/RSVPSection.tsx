@@ -222,75 +222,75 @@ export function RSVPSection() {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="rounded-[26px] border border-[var(--invite-line)] bg-[#fbf9f6] p-5 mb-8 max-w-md mx-auto shadow-sm">
-                  <p className="font-heading text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#6b7280] text-center mb-4">
+                <div className="rounded-[24px] border border-[var(--invite-line)] bg-[var(--invite-sage-soft)]/10 p-5 mb-8 max-w-md mx-auto">
+                  <p className="font-heading text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[var(--invite-brown)] text-center mb-4">
                     Datas dos Eventos
                   </p>
                   
                   <div className="space-y-2.5">
                     {/* MISSA */}
-                    <div className="flex items-center justify-between bg-white rounded-[18px] border border-[var(--invite-line)]/50 px-4 py-2.5 shadow-[0_2px_8px_rgba(44,5,11,0.02)]">
+                    <div className="flex items-center justify-between bg-[var(--invite-paper)] rounded-[16px] border border-[var(--invite-line)]/60 px-4 py-2.5 shadow-sm">
                       <div className="flex items-center">
-                        <div className="flex size-8 items-center justify-center rounded-full bg-[#f3f4f6] mr-3 shrink-0 text-[#4b5563]">
+                        <div className="flex size-8 items-center justify-center rounded-full bg-[var(--invite-sage-soft)]/50 mr-3 shrink-0 text-[var(--invite-brown)]">
                           <Calendar className="size-4" />
                         </div>
-                        <span className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#374151]">
+                        <span className="font-heading text-xs sm:text-sm font-bold uppercase tracking-wider text-[var(--invite-brown)]">
                           Missa
                         </span>
                       </div>
                       <div className="text-right flex flex-col items-end">
-                        <span className="font-sans text-sm sm:text-base font-extrabold text-[#111827] leading-none mb-0.5">
+                        <span className="font-heading text-sm sm:text-base font-bold text-[var(--invite-brown)] leading-none mb-0.5">
                           10/08
                         </span>
-                        <span className="font-sans text-[10px] sm:text-xs text-[#6b7280] font-medium">
-                          19:00
+                        <span className="font-body text-xs text-[var(--invite-brown-soft)]/80 font-medium">
+                          19h00
                         </span>
                       </div>
                     </div>
 
                     {/* COLAÇÃO */}
-                    <div className="flex items-center justify-between bg-white rounded-[18px] border border-[var(--invite-line)]/50 px-4 py-2.5 shadow-[0_2px_8px_rgba(44,5,11,0.02)]">
+                    <div className="flex items-center justify-between bg-[var(--invite-paper)] rounded-[16px] border border-[var(--invite-line)]/60 px-4 py-2.5 shadow-sm">
                       <div className="flex items-center">
-                        <div className="flex size-8 items-center justify-center rounded-full bg-[#f3f4f6] mr-3 shrink-0 text-[#4b5563]">
+                        <div className="flex size-8 items-center justify-center rounded-full bg-[var(--invite-sage-soft)]/50 mr-3 shrink-0 text-[var(--invite-brown)]">
                           <GraduationCap className="size-4" />
                         </div>
-                        <span className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#374151]">
+                        <span className="font-heading text-xs sm:text-sm font-bold uppercase tracking-wider text-[var(--invite-brown)]">
                           Colação
                         </span>
                       </div>
                       <div className="text-right flex flex-col items-end">
-                        <span className="font-sans text-sm sm:text-base font-extrabold text-[#111827] leading-none mb-0.5">
+                        <span className="font-heading text-sm sm:text-base font-bold text-[var(--invite-brown)] leading-none mb-0.5">
                           11/08
                         </span>
-                        <span className="font-sans text-[10px] sm:text-xs text-[#6b7280] font-medium">
-                          19:30
+                        <span className="font-body text-xs text-[var(--invite-brown-soft)]/80 font-medium">
+                          19h30
                         </span>
                       </div>
                     </div>
 
                     {/* FESTA */}
-                    <div className="flex items-center justify-between bg-white rounded-[18px] border border-[var(--invite-line)]/50 px-4 py-2.5 shadow-[0_2px_8px_rgba(44,5,11,0.02)]">
+                    <div className="flex items-center justify-between bg-[var(--invite-paper)] rounded-[16px] border border-[var(--invite-line)]/60 px-4 py-2.5 shadow-sm">
                       <div className="flex items-center">
-                        <div className="flex size-8 items-center justify-center rounded-full bg-[#f3f4f6] mr-3 shrink-0 text-[#4b5563]">
+                        <div className="flex size-8 items-center justify-center rounded-full bg-[var(--invite-sage-soft)]/50 mr-3 shrink-0 text-[var(--invite-brown)]">
                           <Calendar className="size-4" />
                         </div>
-                        <span className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#374151]">
+                        <span className="font-heading text-xs sm:text-sm font-bold uppercase tracking-wider text-[var(--invite-brown)]">
                           Festa
                         </span>
                       </div>
                       <div className="text-right flex flex-col items-end">
-                        <span className="font-sans text-sm sm:text-base font-extrabold text-[#111827] leading-none mb-0.5">
+                        <span className="font-heading text-sm sm:text-base font-bold text-[var(--invite-brown)] leading-none mb-0.5">
                           22/08
                         </span>
-                        <span className="font-sans text-[10px] sm:text-xs text-[#6b7280] font-medium">
-                          12:00
+                        <span className="font-body text-xs text-[var(--invite-brown-soft)]/80 font-medium">
+                          12h00
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-center gap-1.5 font-sans text-xs font-semibold text-[#6b7280] mt-4">
-                    <Calendar className="size-4" />
+                  <div className="flex items-center justify-center gap-1.5 font-body text-xs font-semibold text-[var(--invite-brown-soft)] mt-4">
+                    <Calendar className="size-3.5 text-[var(--invite-gold)]" />
                     <span>Confirme até 10/08/2026</span>
                   </div>
                 </div>
