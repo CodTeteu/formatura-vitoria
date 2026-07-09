@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { ChevronDown } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { inviteData } from "@/config/invite";
 import { useCountdown } from "@/hooks/useCountdown";
 import { ResponsiveImage } from "@/components/ui/ResponsiveImage";
@@ -15,14 +15,6 @@ const countdownItems = [
 export function HeroSection() {
   const containerRef = useRef(null);
   const countdown = useCountdown(inviteData.event.startsAt);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   const timerComponents = countdownItems.map((item) => (
     <div
@@ -44,11 +36,8 @@ export function HeroSection() {
       ref={containerRef}
       className="relative h-screen min-h-[600px] md:min-h-[850px] flex items-center justify-center overflow-hidden w-full bg-[#150306]"
     >
-      {/* Background with Parallax */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        style={{ y: backgroundY }}
-      >
+      {/* Background with Parallax (Removed) */}
+      <div className="absolute inset-0 z-0">
         {/* Mobile Hero */}
         <div className="block md:hidden w-full h-full">
           <ResponsiveImage
@@ -71,12 +60,11 @@ export function HeroSection() {
         </div>
         <div className="absolute inset-0 bg-black/38 mix-blend-multiply" />
         <div className="absolute bottom-0 left-0 w-full h-[30%] bg-gradient-to-t from-transparent from-10% to-transparent z-0 pointer-events-none" />
-      </motion.div>
+      </div>
 
       {/* Mobile content: stacked flow to avoid overlap */}
-      <motion.div
+      <div
         className="absolute top-[13%] left-1/2 -translate-x-1/2 z-10 flex w-full max-w-[420px] flex-col items-center px-5 text-center md:hidden"
-        style={{ opacity }}
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -92,12 +80,11 @@ export function HeroSection() {
             {inviteData.hero.courseLine}
           </p>
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Mobile timer + CTA — pinned to bottom */}
-      <motion.div
+      <div
         className="absolute bottom-[8%] left-1/2 -translate-x-1/2 z-10 flex w-full max-w-[420px] flex-col items-center px-5 text-center md:hidden"
-        style={{ opacity }}
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -122,12 +109,11 @@ export function HeroSection() {
             →
           </span>
         </motion.button>
-      </motion.div>
+      </div>
 
       {/* Desktop name and course (Top aligned) */}
-      <motion.div
+      <div
         className="hidden md:block absolute top-[20%] left-1/2 -translate-x-1/2 z-10 text-center px-4 w-full max-w-4xl"
-        style={{ opacity }}
       >
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -155,12 +141,11 @@ export function HeroSection() {
         >
           {inviteData.hero.courseLine}
         </motion.p>
-      </motion.div>
+      </div>
 
       {/* Desktop countdown and button (Bottom aligned) */}
-      <motion.div
+      <div
         className="hidden md:flex absolute bottom-[18%] left-1/2 -translate-x-1/2 z-10 text-center px-4 flex-col items-center w-full max-w-4xl"
-        style={{ opacity }}
       >
         {/* Countdown */}
         <motion.div
@@ -186,7 +171,7 @@ export function HeroSection() {
             →
           </span>
         </motion.button>
-      </motion.div>
+      </div>
 
       {/* Scroll Indicator */}
       <motion.div
