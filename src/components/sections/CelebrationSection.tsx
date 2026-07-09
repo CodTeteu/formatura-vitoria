@@ -75,9 +75,8 @@ export function CelebrationSection() {
           title={inviteData.celebration.title}
         />
 
-        {/* Swipable Carousel */}
-        <div className="relative max-w-7xl mx-auto mt-12 sm:mt-16 px-4 md:px-0">
-          <div className="overflow-hidden" ref={emblaRef}>
+        <div className="relative max-w-7xl mx-auto mt-12 sm:mt-16 -mx-4 sm:mx-0 md:px-0">
+          <div className="overflow-hidden px-4 py-4" ref={emblaRef}>
             <div className="flex -ml-4 md:-ml-6 lg:-ml-8">
               {inviteData.events.map((event, index) => (
                 <div
