@@ -4,7 +4,6 @@ import { GraduationCap, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { inviteData } from "@/config/invite";
 import { cn } from "@/lib/cn";
-import { AudioPlayer } from "./AudioPlayer";
 
 function scrollToHash(hash: string) {
   const element = document.querySelector(hash);
@@ -107,8 +106,6 @@ export function Navigation() {
                 Confirmar
               </button>
             </nav>
-
-            <AudioPlayer isScrolled={scrolled} />
 
             <div className="flex items-center md:hidden">
               <button

@@ -84,7 +84,7 @@ export function HeroSection() {
 
       {/* Mobile timer + CTA — pinned to bottom */}
       <div
-        className="absolute bottom-[8%] left-1/2 -translate-x-1/2 z-10 flex w-full max-w-[420px] flex-col items-center px-5 text-center md:hidden"
+        className="absolute bottom-[18%] left-1/2 -translate-x-1/2 z-10 flex w-full max-w-[420px] flex-col items-center px-5 text-center md:hidden"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
