@@ -39,12 +39,13 @@ export function LoadingIntro() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            {/* Elegant Monogram Frame */}
-            <div className="relative w-28 h-28 md:w-32 md:h-32 flex items-center justify-center border border-[var(--invite-gold)]/30 rounded-full bg-white shadow-lg overflow-hidden">
+            {/* Elegant Monogram Frame (Removed circle) */}
+            <div className="relative w-28 h-28 md:w-32 md:h-32 flex items-center justify-center">
               <img
                 src={`${import.meta.env.BASE_URL}vitoria-monogram.png`}
                 alt="VC Monogram"
-                className="w-[85%] h-[85%] object-contain rounded-full"
+                className="w-full h-full object-contain"
+                style={{ filter: "brightness(0) invert(1)" }}
               />
             </div>
 
