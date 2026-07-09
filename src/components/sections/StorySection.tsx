@@ -59,20 +59,24 @@ export function StorySection() {
                   ))}
                 </div>
               </div>
-              <button
-                className="absolute left-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/80 text-[var(--invite-brown)] shadow-lg cursor-pointer"
-                onClick={() => emblaApi?.scrollPrev()}
-                type="button"
-              >
-                <ChevronLeft className="size-5" />
-              </button>
-              <button
-                className="absolute right-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/80 text-[var(--invite-brown)] shadow-lg cursor-pointer"
-                onClick={() => emblaApi?.scrollNext()}
-                type="button"
-              >
-                <ChevronRight className="size-5" />
-              </button>
+              {inviteData.journey.images.length > 1 && (
+                <>
+                  <button
+                    className="absolute left-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/80 text-[var(--invite-brown)] shadow-lg cursor-pointer"
+                    onClick={() => emblaApi?.scrollPrev()}
+                    type="button"
+                  >
+                    <ChevronLeft className="size-5" />
+                  </button>
+                  <button
+                    className="absolute right-4 top-1/2 inline-flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/80 text-[var(--invite-brown)] shadow-lg cursor-pointer"
+                    onClick={() => emblaApi?.scrollNext()}
+                    type="button"
+                  >
+                    <ChevronRight className="size-5" />
+                  </button>
+                </>
+              )}
             </div>
             {/* Decorative offset frame */}
             <div className="absolute -top-4 -left-4 w-full h-full border-2 border-[var(--invite-gold)]/15 rounded-3xl pointer-events-none" />
