@@ -9,7 +9,8 @@ import {
   Users,
   CheckCircle2,
   Calendar,
-  MessageSquare
+  MessageSquare,
+  GraduationCap
 } from "lucide-react";
 import { toast } from "sonner";
 import { rsvpSchema, type RSVPInput } from "@shared/schemas";
@@ -221,17 +222,77 @@ export function RSVPSection() {
                 exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="rounded-[26px] border border-[var(--invite-line)] bg-[var(--invite-sage-soft)]/20 px-5 py-5 mb-8">
-                  <p className="font-heading text-[0.72rem] uppercase tracking-[0.3em] text-[var(--invite-gold)]">
-                    Informações importantes
+                <div className="rounded-[26px] border border-[var(--invite-line)] bg-[#fbf9f6] p-5 mb-8 max-w-md mx-auto shadow-sm">
+                  <p className="font-heading text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#6b7280] text-center mb-4">
+                    Datas dos Eventos
                   </p>
-                  <ul className="mt-4 space-y-2 text-[var(--invite-brown-soft)]">
-                    {inviteData.rsvp.infoItems.map((item) => (
-                      <li className="font-body text-base leading-relaxed sm:text-lg" key={item}>
-                        • {item}
-                      </li>
-                    ))}
-                  </ul>
+                  
+                  <div className="space-y-2.5">
+                    {/* MISSA */}
+                    <div className="flex items-center justify-between bg-white rounded-[18px] border border-[var(--invite-line)]/50 px-4 py-2.5 shadow-[0_2px_8px_rgba(44,5,11,0.02)]">
+                      <div className="flex items-center">
+                        <div className="flex size-8 items-center justify-center rounded-full bg-[#f3f4f6] mr-3 shrink-0 text-[#4b5563]">
+                          <Calendar className="size-4" />
+                        </div>
+                        <span className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#374151]">
+                          Missa
+                        </span>
+                      </div>
+                      <div className="text-right flex flex-col items-end">
+                        <span className="font-sans text-sm sm:text-base font-extrabold text-[#111827] leading-none mb-0.5">
+                          10/08
+                        </span>
+                        <span className="font-sans text-[10px] sm:text-xs text-[#6b7280] font-medium">
+                          19:00
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* COLAÇÃO */}
+                    <div className="flex items-center justify-between bg-white rounded-[18px] border border-[var(--invite-line)]/50 px-4 py-2.5 shadow-[0_2px_8px_rgba(44,5,11,0.02)]">
+                      <div className="flex items-center">
+                        <div className="flex size-8 items-center justify-center rounded-full bg-[#f3f4f6] mr-3 shrink-0 text-[#4b5563]">
+                          <GraduationCap className="size-4" />
+                        </div>
+                        <span className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#374151]">
+                          Colação
+                        </span>
+                      </div>
+                      <div className="text-right flex flex-col items-end">
+                        <span className="font-sans text-sm sm:text-base font-extrabold text-[#111827] leading-none mb-0.5">
+                          11/08
+                        </span>
+                        <span className="font-sans text-[10px] sm:text-xs text-[#6b7280] font-medium">
+                          19:30
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* FESTA */}
+                    <div className="flex items-center justify-between bg-white rounded-[18px] border border-[var(--invite-line)]/50 px-4 py-2.5 shadow-[0_2px_8px_rgba(44,5,11,0.02)]">
+                      <div className="flex items-center">
+                        <div className="flex size-8 items-center justify-center rounded-full bg-[#f3f4f6] mr-3 shrink-0 text-[#4b5563]">
+                          <Calendar className="size-4" />
+                        </div>
+                        <span className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#374151]">
+                          Festa
+                        </span>
+                      </div>
+                      <div className="text-right flex flex-col items-end">
+                        <span className="font-sans text-sm sm:text-base font-extrabold text-[#111827] leading-none mb-0.5">
+                          22/08
+                        </span>
+                        <span className="font-sans text-[10px] sm:text-xs text-[#6b7280] font-medium">
+                          12:00
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-center gap-1.5 font-sans text-xs font-semibold text-[#6b7280] mt-4">
+                    <Calendar className="size-4" />
+                    <span>Confirme até 10/08/2026</span>
+                  </div>
                 </div>
 
                 <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
