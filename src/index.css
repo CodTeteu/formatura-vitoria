@@ -61,6 +61,7 @@
 html {
   scroll-behavior: smooth;
   background: var(--color-background);
+  overscroll-behavior: none;
 }
 
 body {
@@ -69,6 +70,7 @@ body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  overscroll-behavior: none;
 }
 
 body::before {
@@ -238,6 +240,23 @@ a {
     @apply rounded-[30px] border shadow-[var(--invite-shadow)] backdrop-blur-md;
     border-color: var(--invite-line);
     background: rgba(255, 255, 255, 0.55);
+  }
+
+  .event-card {
+    @apply rounded-[36px] border-2 transition-all duration-500;
+    border-color: #bda073;
+    background: linear-gradient(180deg, #ffffff 0%, #fffdfa 100%);
+    box-shadow: 
+      0 30px 70px rgba(44, 5, 11, 0.12), 
+      inset 0 0 0 2px #ffffff;
+  }
+
+  .event-card:hover {
+    border-color: #a38141;
+    transform: translateY(-4px);
+    box-shadow: 
+      0 35px 80px rgba(44, 5, 11, 0.18), 
+      inset 0 0 0 2px #ffffff;
   }
 
   .invite-card-strong {
