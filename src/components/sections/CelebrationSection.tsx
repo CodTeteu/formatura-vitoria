@@ -83,7 +83,7 @@ export function CelebrationSection() {
           title={inviteData.celebration.title}
         />
 
-        <div className="relative max-w-3xl mx-auto mt-12 sm:mt-16 -mx-4 sm:mx-0 md:px-0">
+        <div className="relative max-w-5xl mx-auto mt-12 sm:mt-16 -mx-4 sm:mx-0 md:px-0">
           {/* Previous Button */}
           <button
             onClick={() => emblaApi && emblaApi.scrollPrev()}
@@ -104,14 +104,14 @@ export function CelebrationSection() {
             <ChevronRight className="size-5" />
           </button>
 
-          <div className="overflow-hidden px-4 py-4" ref={emblaRef}>
+          <div className="overflow-hidden px-1 sm:px-4 py-4" ref={emblaRef}>
             <div className="flex -ml-4 md:-ml-6 lg:-ml-8">
               {inviteData.events.map((event) => (
                 <div
                   key={event.id}
                   className="min-w-0 pl-4 md:pl-6 lg:pl-8 flex-[0_0_100%] flex"
                 >
-                  <div className="event-card flex flex-col justify-between w-full p-7 xs:p-8 sm:p-9 relative group overflow-hidden h-full min-h-[580px] xs:min-h-[620px] sm:min-h-[660px] md:min-h-[700px]">
+                  <div className="event-card flex flex-col justify-between w-full p-4 xs:p-6 sm:p-9 relative group overflow-hidden h-full min-h-[580px] xs:min-h-[620px] sm:min-h-[660px] md:min-h-[700px]">
                     <div className="absolute inset-2 border border-[rgba(189,160,115,0.22)] rounded-[28px] pointer-events-none" />
 
                     <div className="relative z-10 flex-1 flex flex-col">
