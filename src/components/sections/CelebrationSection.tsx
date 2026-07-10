@@ -26,7 +26,7 @@ export function CelebrationSection() {
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
-    align: "center",
+    align: "start",
     skipSnaps: false,
   });
 
@@ -109,7 +109,7 @@ export function CelebrationSection() {
               {inviteData.events.map((event) => (
                 <div
                   key={event.id}
-                  className="min-w-0 pl-4 md:pl-6 lg:pl-8 flex-[0_0_100%] flex"
+                  className="min-w-0 pl-4 md:pl-6 lg:pl-8 flex-[0_0_85%] sm:flex-[0_0_100%] flex"
                 >
                   <div className="event-card flex flex-col justify-between w-full p-4 xs:p-6 sm:p-9 relative group overflow-hidden h-full min-h-[580px] xs:min-h-[620px] sm:min-h-[660px] md:min-h-[700px]">
                     <div className="absolute inset-2 border border-[rgba(189,160,115,0.22)] rounded-[28px] pointer-events-none" />

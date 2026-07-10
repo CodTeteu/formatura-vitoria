@@ -3,7 +3,6 @@ import { useScroll, useSpring, motion } from "framer-motion";
 import { Navigation } from "@/components/layout/Navigation";
 import { CelebrationSection } from "@/components/sections/CelebrationSection";
 import { GallerySection } from "@/components/sections/GallerySection";
-import { DinnerSection } from "@/components/sections/DinnerSection";
 import { FooterSection } from "@/components/sections/FooterSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { RSVPSection } from "@/components/sections/RSVPSection";
@@ -54,8 +53,6 @@ export default function HomePage() {
           <GallerySection />
           
           <CelebrationSection />
-          
-          <DinnerSection />
           
           <GiftListCalloutSection />
           
