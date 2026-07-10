@@ -243,20 +243,20 @@ a {
   }
 
   .event-card {
-    @apply rounded-[36px] border-2 transition-all duration-500;
-    border-color: #bda073;
+    @apply rounded-[36px] border transition-all duration-500;
+    border-color: rgba(189, 160, 115, 0.5);
     background: linear-gradient(180deg, #ffffff 0%, #fffdfa 100%);
-    box-shadow: 
-      0 30px 70px rgba(44, 5, 11, 0.12), 
-      inset 0 0 0 2px #ffffff;
+    box-shadow:
+      0 20px 50px rgba(44, 5, 11, 0.08),
+      inset 0 0 0 1px #ffffff;
   }
 
   .event-card:hover {
     border-color: #a38141;
-    transform: translateY(-4px);
-    box-shadow: 
-      0 35px 80px rgba(44, 5, 11, 0.18), 
-      inset 0 0 0 2px #ffffff;
+    transform: translateY(-2px);
+    box-shadow:
+      0 26px 60px rgba(44, 5, 11, 0.12),
+      inset 0 0 0 1px #ffffff;
   }
 
   .invite-card-strong {
