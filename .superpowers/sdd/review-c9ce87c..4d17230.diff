@@ -1,0 +1,165 @@
+# Review package: c9ce87c..4d17230
+
+## Commits
+4d17230 feat(celebration): redesign event cards ÔÇö editorial ticket style
+
+## Files changed
+ src/components/sections/CelebrationSection.tsx | 49 ++++++++++++--------------
+ 1 file changed, 23 insertions(+), 26 deletions(-)
+
+## Diff
+diff --git a/src/components/sections/CelebrationSection.tsx b/src/components/sections/CelebrationSection.tsx
+index 1c76176..d64af34 100644
+--- a/src/components/sections/CelebrationSection.tsx
++++ b/src/components/sections/CelebrationSection.tsx
+@@ -1,19 +1,21 @@
+ import { useState, useCallback, useEffect } from "react";
+ import { motion, AnimatePresence } from "framer-motion";
+ import { Calendar, Check, Copy, MapPin, Navigation, Shirt, Clock, ChevronDown, Users, Camera, ChevronLeft, ChevronRight } from "lucide-react";
+ import { toast } from "sonner";
+ import { inviteData } from "@/config/invite";
+ import { buildGoogleCalendarUrl } from "@/lib/calendar";
+ import { copyToClipboard } from "@/lib/format";
+ import { ResponsiveImage } from "@/components/ui/ResponsiveImage";
+ import { SectionHeading } from "@/components/ui/SectionHeading";
++import { CornerBrackets } from "@/components/ui/CornerBrackets";
++import { OrnamentalDivider } from "@/components/ui/OrnamentalDivider";
+ import useEmblaCarousel from "embla-carousel-react";
+ import { cn } from "@/lib/cn";
+ 
+ const ROMAN_NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"];
+ 
+ const quickNoteIcons: Record<string, any> = {
+   "Traje": Shirt,
+   "Confirma├º├úo": Users,
+   "Fotos": Camera,
+ };
+@@ -102,107 +104,102 @@ export function CelebrationSection() {
+             <ChevronRight className="size-5" />
+           </button>
+ 
+           <div className="overflow-hidden px-4 py-4" ref={emblaRef}>
+             <div className="flex -ml-4 md:-ml-6 lg:-ml-8">
+               {inviteData.events.map((event) => (
+                 <div
+                   key={event.id}
+                   className="min-w-0 pl-4 md:pl-6 lg:pl-8 flex-[0_0_100%] flex"
+                 >
+-                  <div
+-                    className="event-card flex flex-col justify-between w-full p-6 xs:p-8 sm:p-10 relative group overflow-hidden h-full min-h-[580px] xs:min-h-[620px] sm:min-h-[660px] md:min-h-[700px]"
+-                  >
+-                    {/* Inner Gold Frame decoration */}
+-                    <div className="absolute inset-3.5 border-2 border-[#bda073]/40 rounded-[28px] pointer-events-none" />
++                  <div className="event-card flex flex-col justify-between w-full p-7 xs:p-8 sm:p-9 relative group overflow-hidden h-full min-h-[580px] xs:min-h-[620px] sm:min-h-[660px] md:min-h-[700px]">
++                    <div className="absolute inset-2 border border-[rgba(189,160,115,0.22)] rounded-[28px] pointer-events-none" />
+ 
+                     <div className="relative z-10 flex-1 flex flex-col">
+-                      {/* Framed Image */}
+-                      <div className="aspect-[16/10] overflow-hidden rounded-2xl shadow-md border-2 border-[#bda073]/30 relative">
++                      <div className="relative aspect-[16/10] overflow-hidden rounded-[24px]">
+                         <ResponsiveImage
+                           asset={event.imageAsset}
+                           alt={event.name}
+                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                           sizes="(min-width: 768px) 50vw, 100vw"
+                           style={{ objectPosition: event.id === "festa" ? "center top" : "center center" }}
+                         />
++                        <CornerBrackets inset={6} size={22} />
+                       </div>
+ 
+-                      {/* Event Info Header */}
+-                      <div className="pt-5 pb-3 px-1 text-center flex flex-col items-center">
+-                        <div className="inline-flex items-center gap-2 justify-center mb-3.5 px-4.5 py-2 bg-gradient-to-r from-[#2c050b] to-[#5e101a] text-[#fffdfa] rounded-full border-2 border-[#bda073]/70 shadow-[0_3px_10px_rgba(44,5,11,0.15)]">
+-                          <Clock className="w-4 h-4 text-[#fffdfa]" strokeWidth={2.5} />
+-                          <span className="font-sans text-[10px] xs:text-xs font-bold uppercase tracking-[0.25em]">{event.name}</span>
++                      <div className="pt-10 pb-3 px-1 text-center flex flex-col items-center relative">
++                        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 inline-flex items-center gap-2 justify-center px-4 py-2 bg-[#fffdfb] rounded-full border border-[rgba(189,160,115,0.6)] shadow-[0_4px_14px_rgba(44,5,11,0.08)]">
++                          <Clock className="w-3.5 h-3.5 text-[#9b7a42]" strokeWidth={2.5} />
++                          <span className="font-sans text-[10px] xs:text-xs font-bold uppercase tracking-[0.25em] text-[#2c050b]">{event.name}</span>
+                         </div>
++
+                         <p className="font-serif text-xl xs:text-2xl sm:text-3xl font-extrabold text-[#2c050b] tracking-wide mt-2">
+                           {event.dateLong}
+                         </p>
+                         <p className="font-script text-4xl xs:text-5xl sm:text-6xl text-[#9b7a42] mt-2 drop-shadow-[0_1.5px_1px_rgba(255,255,255,0.9)]">
+                           ├ás {event.timeText}
+                         </p>
+-                      </div>
+ 
+-                      {/* Details box */}
+-                      <div className="px-1 pb-3 flex-1 flex flex-col justify-between">
+-                        <div className="text-center mb-4">
++                        <OrnamentalDivider className="mt-5 mb-5" />
++
++                        <div className="mb-4">
+                           <p className="font-sans text-[10px] xs:text-xs uppercase tracking-[0.35em] text-[#9b7a42] font-extrabold mb-1.5">Local</p>
+                           <p className="font-serif text-lg xs:text-xl sm:text-2xl text-[#2c050b] font-extrabold tracking-wide leading-snug">{event.venueName}</p>
+                         </div>
+ 
+-                        {/* Address box with copy action */}
+-                        <div className="group/copy flex items-center justify-between gap-3 rounded-2xl border-2 border-[#bda073]/20 bg-[#fffbf7]/80 hover:bg-white px-4 py-3 transition-all duration-300 mb-3.5 shadow-sm hover:shadow-md cursor-pointer">
+-                          <p className="flex-1 font-sans text-xs xs:text-sm leading-relaxed text-[#5e101a]/90 text-center pl-3">
++                        <div className="group/copy flex flex-col items-center gap-2 w-full">
++                          <span className="block w-full max-w-[280px] h-px bg-gradient-to-r from-transparent via-[rgba(155,122,66,0.45)] to-transparent" />
++                          <p className="font-sans text-xs xs:text-sm leading-relaxed text-[#5e101a]/90 text-center max-w-[320px]">
+                             {event.venue}
+                           </p>
+                           <button
+                             onClick={() => void handleCopyAddress(event.venue)}
+-                            className="text-[#9b7a42] transition-colors hover:text-[#2c050b] p-1.5 shrink-0 cursor-pointer"
++                            className="inline-flex items-center gap-1.5 text-[#9b7a42] hover:text-[#2c050b] transition-colors text-[10px] font-bold uppercase tracking-[0.2em] cursor-pointer"
+                             title="Copiar endere├ºo"
+                           >
+                             {copyingText === event.venue ? (
+-                              <Check className="size-4 text-[var(--invite-sage)]" strokeWidth={2.5} />
++                              <><Check className="size-3.5 text-[var(--invite-sage)]" strokeWidth={2.5} /> Copiado</>
+                             ) : (
+-                              <Copy className="size-4" strokeWidth={2} />
++                              <><Copy className="size-3.5" strokeWidth={2} /> Copiar</>
+                             )}
+                           </button>
+                         </div>
+                       </div>
+                     </div>
+ 
+-                    {/* Action Buttons */}
+                     <div className="relative z-10 pt-1 flex flex-col gap-3 px-1 pb-1">
+                       <a
+-                        className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#3b0911] via-[#2c050b] to-[#420a13] text-white px-5 py-4 rounded-full font-sans tracking-[0.2em] text-xs xs:text-sm font-bold transition-all duration-300 shadow-[0_6px_20px_rgba(44,5,11,0.25)] hover:shadow-[0_8px_30px_rgba(44,5,11,0.35)] active:scale-[0.98] border-2 border-[#bda073] hover:brightness-110"
++                        className="w-full inline-flex items-center justify-center gap-2 bg-[#2c050b] text-[#fffdfa] px-5 py-4 rounded-full font-sans tracking-[0.2em] text-xs xs:text-sm font-bold transition-all duration-300 shadow-[0_8px_22px_rgba(44,5,11,0.18)] hover:shadow-[0_12px_30px_rgba(44,5,11,0.22)] active:scale-[0.98] border border-[#bda073] hover:brightness-110"
+                         href={buildGoogleCalendarUrl({
+                           title: `${event.name} ÔÇö Vit├│ria C├®zar`,
+                           details: `Comemora├º├úo da formatura em Direito de Vit├│ria C├®zar. Evento: ${event.name}.`,
+                           location: `${event.venueName}, ${event.venue}`,
+                           startsAt: event.startsAt,
+                         })}
+                         rel="noreferrer"
+                         target="_blank"
+                       >
+                         <Calendar className="w-4 h-4 text-[#fffdfa]" strokeWidth={2.5} />
+                         SALVAR NA AGENDA
+                       </a>
+                       <div className="grid grid-cols-2 gap-3">
+                         <a
+-                          className="inline-flex items-center justify-center gap-1.5 bg-[#fffdfa] hover:bg-[#fffcf7] text-[#2c050b] border-2 border-[#bda073] px-3 py-3.5 rounded-full font-sans text-[11px] xs:text-xs font-bold uppercase tracking-[0.15em] transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98]"
++                          className="inline-flex items-center justify-center gap-1.5 bg-[#fffdfa] hover:bg-[#fffcf7] text-[#2c050b] border border-[#bda073] px-3 py-3.5 rounded-full font-sans text-[11px] xs:text-xs font-bold uppercase tracking-[0.15em] transition-all duration-300 shadow-sm hover:shadow-md active:scale-[0.98]"
+                           href={event.mapsUrl}
+                           rel="noreferrer"
+                           target="_blank"
+                         >
+                           <MapPin className="w-4 h-4 text-[#9b7a42]" strokeWidth={2} />
+                           Google Maps
+                         </a>
+                         <a
+-                          className="inline-flex items-center justify-center gap-1.5 bg-[#fffdfa] hover:bg-[#fffcf7] text-[#2c050b] border-2 border-[#bda073] px-3 py-3.5 rounded-full font-sans text-[11px] xs:text-xs font-bold uppercase tracking-[0.15em] transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98]"
++                          className="inline-flex items-center justify-center gap-1.5 bg-[#fffdfa] hover:bg-[#fffcf7] text-[#2c050b] border border-[#bda073] px-3 py-3.5 rounded-full font-sans text-[11px] xs:text-xs font-bold uppercase tracking-[0.15em] transition-all duration-300 shadow-sm hover:shadow-md active:scale-[0.98]"
+                           href={event.wazeUrl}
+                           rel="noreferrer"
+                           target="_blank"
+                         >
+                           <Navigation className="w-4 h-4 text-[#9b7a42]" strokeWidth={2} />
+                           Waze
+                         </a>
+                       </div>
+                     </div>
+                   </div>
