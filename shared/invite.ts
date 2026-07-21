@@ -269,8 +269,8 @@ export const inviteConfig: InviteConfig = {
       "Traje sugerido: Esporte fino."
     ],
     maxCompanions: 4,
-    whatsappNumber: "62995257351",
-    whatsappIntl: "5562995257351",
+    whatsappNumber: "51985665393",
+    whatsappIntl: "5551985665393",
     openWhatsAppAfterSubmit: true,
     successMessage: "Sua confirmação foi recebida com sucesso! Obrigado!",
     messagePlaceholder: "Se desejar, escreva uma mensagem especial para a Vitória.",
