@@ -10,29 +10,29 @@ const manifest = [
   {
     input: "WhatsApp Image 2026-07-06 at 08.15.03.jpeg",
     output: "vitoria-hero",
-    width: 1200,
-    height: 1800,
+    width: 1080,
+    height: 1620,
     position: "centre",
   },
   {
     input: "WhatsApp Image 2026-07-06 at 08.15.02.jpeg",
     output: "vitoria-portrait-1",
-    width: 1200,
-    height: 1800,
+    width: 1047,
+    height: 1570,
     position: "centre",
   },
   {
     input: "WhatsApp Image 2026-07-06 at 08.15.02 (1).jpeg",
     output: "vitoria-portrait-2",
-    width: 1200,
-    height: 1800,
+    width: 1047,
+    height: 1570,
     position: "centre",
   },
   {
     input: "WhatsApp Image 2026-07-06 at 08.15.01.jpeg",
     output: "vitoria-family-1",
-    width: 1600,
-    height: 1200,
+    width: 1105,
+    height: 736,
     position: "centre",
   }
 ];
@@ -81,13 +81,13 @@ async function createImageVariants(asset) {
     ? source.extract(asset.extract).resize(asset.width, asset.height)
     : source.resize(asset.width, asset.height, {
         fit: "cover",
-        position: asset.position
-      });
+        position: asset.position,
+      }).sharpen({ sigma: 0.6, m1: 0.5, m2: 1.5 });
 
   await Promise.all([
-    pipeline.clone().avif({ quality: 54 }).toFile(path.join(outputDir, `${asset.output}.avif`)),
-    pipeline.clone().webp({ quality: 82 }).toFile(path.join(outputDir, `${asset.output}.webp`)),
-    pipeline.clone().jpeg({ quality: 86, mozjpeg: true }).toFile(path.join(outputDir, `${asset.output}.jpg`))
+    pipeline.clone().avif({ quality: 80 }).toFile(path.join(outputDir, `${asset.output}.avif`)),
+    pipeline.clone().webp({ quality: 92 }).toFile(path.join(outputDir, `${asset.output}.webp`)),
+    pipeline.clone().jpeg({ quality: 95, mozjpeg: true }).toFile(path.join(outputDir, `${asset.output}.jpg`))
   ]);
 }
 
@@ -100,9 +100,9 @@ async function createOgImage() {
     .composite([{ input: overlay }]);
 
   await Promise.all([
-    ogBase.clone().jpeg({ quality: 88, mozjpeg: true }).toFile(path.join(rootDir, "public", "og-template.jpg")),
-    ogBase.clone().webp({ quality: 82 }).toFile(path.join(rootDir, "public", "og-template.webp")),
-    ogBase.clone().avif({ quality: 54 }).toFile(path.join(rootDir, "public", "og-template.avif"))
+    ogBase.clone().jpeg({ quality: 95, mozjpeg: true }).toFile(path.join(rootDir, "public", "og-template.jpg")),
+    ogBase.clone().webp({ quality: 92 }).toFile(path.join(rootDir, "public", "og-template.webp")),
+    ogBase.clone().avif({ quality: 80 }).toFile(path.join(rootDir, "public", "og-template.avif"))
   ]);
 }
 
