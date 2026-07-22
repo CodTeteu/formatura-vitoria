@@ -29,19 +29,15 @@ export function StorySection() {
           <p className="font-heading text-[var(--invite-gold)] uppercase tracking-[0.35em] text-[0.6rem] font-semibold mb-4">
             {inviteData.journey.label}
           </p>
-              <h2 className="font-script text-4xl md:text-6xl text-[var(--invite-brown)] mb-4">
-                {inviteData.journey.title}
-              </h2>
-              <p className="font-display text-2xl md:text-3xl text-[var(--invite-gold)] leading-tight mb-6">
-                O sonho agora<br />
-                <span className="text-[var(--invite-brown)]">tem data</span>
-              </p>
-              <div className="relative py-4 px-6 border-l border-[var(--invite-gold)] bg-[var(--invite-sage-soft)]/10 rounded-r-2xl my-6 max-w-xl mx-auto text-left shadow-[inset_0_0_12px_rgba(207,201,194,0.06)]">
-                <span className="absolute -top-3 left-4 text-4xl font-serif text-[var(--invite-gold)]/40 font-bold select-none">“</span>
-                <p className="font-serif italic text-xl leading-relaxed text-[var(--invite-brown-soft)] sm:text-2xl pl-2">
-                  {inviteData.graduate.signatureQuote}
-                </p>
-              </div>
+          <h2 className="font-script text-4xl md:text-6xl text-[var(--invite-brown)] mb-4">
+            {inviteData.journey.title}
+          </h2>
+          <div className="relative py-4 px-6 border-l border-[var(--invite-gold)] bg-[var(--invite-sage-soft)]/10 rounded-r-2xl my-6 max-w-xl mx-auto text-left shadow-[inset_0_0_12px_rgba(207,201,194,0.06)]">
+            <span className="absolute -top-3 left-4 text-4xl font-serif text-[var(--invite-gold)]/40 font-bold select-none">“</span>
+            <p className="font-serif italic text-xl leading-relaxed text-[var(--invite-brown-soft)] sm:text-2xl pl-2">
+              {inviteData.graduate.signatureQuote}
+            </p>
+          </div>
         </div>
 
         <div className="mt-10 grid items-center gap-14 lg:mt-0 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20">
@@ -96,10 +92,6 @@ export function StorySection() {
               <h2 className="font-script text-5xl md:text-7xl text-[var(--invite-brown)] mb-4">
                 {inviteData.journey.title}
               </h2>
-              <p className="font-display text-2xl md:text-3xl text-[var(--invite-gold)] leading-tight mb-6">
-                O sonho agora<br />
-                <span className="text-[var(--invite-brown)]">tem data</span>
-              </p>
               <div className="relative py-4 px-6 border-l border-[var(--invite-gold)] bg-[var(--invite-sage-soft)]/10 rounded-r-2xl my-6 text-left shadow-[inset_0_0_12px_rgba(207,201,194,0.06)]">
                 <span className="absolute -top-3 left-4 text-4xl font-serif text-[var(--invite-gold)]/40 font-bold select-none">“</span>
                 <p className="font-serif italic text-xl leading-relaxed text-[var(--invite-brown-soft)] sm:text-2xl pl-2">
