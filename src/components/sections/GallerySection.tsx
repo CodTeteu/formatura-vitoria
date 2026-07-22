@@ -26,31 +26,34 @@ export function GallerySection() {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
-  const openLightbox = (index: number) => {
+  const openLightbox = useCallback((index: number) => {
     setSelectedPhoto(index);
-    document.body.style.overflow = "hidden";
-  };
+  }, []);
 
-  const closeLightbox = () => {
+  const closeLightbox = useCallback(() => {
     setSelectedPhoto(null);
-    document.body.style.overflow = "";
-  };
+  }, []);
 
-  const goToPrev = () => {
-    if (selectedPhoto !== null) {
-      setSelectedPhoto(
-        selectedPhoto === 0 ? inviteData.familyGallery.slides.length - 1 : selectedPhoto - 1
-      );
-    }
-  };
+  const goToPrev = useCallback(() => {
+    setSelectedPhoto((current) => current === null
+      ? null
+      : current === 0 ? inviteData.familyGallery.slides.length - 1 : current - 1);
+  }, []);
 
-  const goToNext = () => {
-    if (selectedPhoto !== null) {
-      setSelectedPhoto(
-        selectedPhoto === inviteData.familyGallery.slides.length - 1 ? 0 : selectedPhoto + 1
-      );
-    }
-  };
+  const goToNext = useCallback(() => {
+    setSelectedPhoto((current) => current === null
+      ? null
+      : current === inviteData.familyGallery.slides.length - 1 ? 0 : current + 1);
+  }, []);
+
+  useEffect(() => {
+    if (selectedPhoto === null) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [selectedPhoto]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -64,7 +67,7 @@ export function GallerySection() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedPhoto]);
+  }, [selectedPhoto, closeLightbox, goToNext, goToPrev]);
 
   return (
     <section id="galeria" className="pt-12 pb-10 md:py-24 relative overflow-hidden">

@@ -44,51 +44,22 @@ const getSharedAudio = () => {
   return sharedAudio;
 };
 
-export const getSharedAudioState = () => {
-  const audio = getSharedAudio();
-  return audio ? !audio.paused : false;
-};
-
-export const playSharedAudio = () => {
-  const audio = getSharedAudio();
-  if (audio) {
-    audio.play().catch((err) => {
-      console.log("Audio play blocked by browser:", err);
-    });
-  }
-};
-
-export const pauseSharedAudio = () => {
-  const audio = getSharedAudio();
-  if (audio) {
-    audio.pause();
-  }
-};
-
-export const subscribeToAudioState = (listener: (isPlaying: boolean) => void) => {
-  listeners.add(listener);
-  return () => {
-    listeners.delete(listener);
-  };
-};
-
 /**
  * AudioPlayer Component
  * Compact background music player for the top navbar
  */
 export function AudioPlayer({ isScrolled = false }: AudioPlayerProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(() => {
+    const audio = getSharedAudio();
+    return audio ? !audio.paused : false;
+  });
   const [showBubble, setShowBubble] = useState(false);
   const [hasDismissed, setHasDismissed] = useState(false);
 
   useEffect(() => {
-    const audio = getSharedAudio();
-    if (audio) {
-      setIsPlaying(!audio.paused);
-    }
-
     const listener = (playing: boolean) => {
       setIsPlaying(playing);
+      if (playing) setShowBubble(false);
     };
     listeners.add(listener);
 
@@ -103,10 +74,7 @@ export function AudioPlayer({ isScrolled = false }: AudioPlayerProps) {
 
   // Control the tooltip/bubble entry delay
   useEffect(() => {
-    if (isPlaying) {
-      setShowBubble(false);
-      return;
-    }
+    if (isPlaying) return;
 
     const timer = setTimeout(() => {
       if (!isPlaying && !hasDismissed) {

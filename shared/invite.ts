@@ -158,7 +158,7 @@ export const inviteConfig: InviteConfig = {
     mapsUrl: "https://maps.app.goo.gl/tr7ZrTtBLH1GKSSy7",
     wazeUrl: "https://waze.com/ul?q=Paróquia%20Universitária%20São%20João%20Evangelista%20Goiânia&navigate=yes",
     dressCode: "Esporte fino (Evitar roupas curtas ou decotadas)",
-    confirmationDeadline: "10/08/2026",
+    confirmationDeadline: "05/08/2026",
   },
   events: [
     {
@@ -201,7 +201,7 @@ export const inviteConfig: InviteConfig = {
       mapsUrl: "https://maps.app.goo.gl/mjBQPy8hGmS7prto9",
       wazeUrl: "https://waze.com/ul?q=Casa%20Leal%20Festas%20Santa%20Genoveva%20Goiânia&navigate=yes",
       dressCode: "Esporte fino (Evitar roupas quentes)",
-      imageAsset: "vitoria-family-1"
+      imageAsset: "vitoria-portrait-2"
     }
   ],
   navigation: [
@@ -243,8 +243,8 @@ export const inviteConfig: InviteConfig = {
     slides: [
       { asset: "vitoria-hero", alt: "Vitória Cézar", caption: "A comemoração de uma grande vitória.", aspect: "portrait" },
       { asset: "vitoria-portrait-1", alt: "Vitória Cézar", caption: "A conquista de um sonho.", aspect: "portrait" },
-      { asset: "vitoria-portrait-2", alt: "Vitória Cézar", caption: "A realização de um grande sonho.", aspect: "portrait" },
-      { asset: "vitoria-family-1", alt: "Vitória com família", caption: "Minha família, minha base.", aspect: "landscape" }
+      { asset: "vitoria-family-1", alt: "Vitória reunida com sua família", caption: "Minha família, minha base.", aspect: "landscape" },
+      { asset: "vitoria-portrait-2", alt: "Vitória ao lado de familiares", caption: "Amor e apoio em cada etapa.", aspect: "portrait" }
     ],
   },
   celebration: {
@@ -256,7 +256,7 @@ export const inviteConfig: InviteConfig = {
     locationNarrative: "Veja abaixo as informações completas de cada um dos eventos.",
     quickNotes: [
       { title: "Traje", description: "Esporte Fino para todos os eventos. Para a Missa, evitar roupas curtas ou decotadas. Para a Festa, evitar roupas muito quentes." },
-      { title: "Confirmação", description: "Por favor, confirme sua presença pelo RSVP até dia 10/08/2026." },
+      { title: "Confirmação", description: "Por favor, confirme sua presença pelo RSVP até dia 05/08/2026." },
       { title: "Fotos", description: "Amamos fotos! Registre cada momento e compartilhe conosco!" },
     ],
   },
@@ -265,7 +265,7 @@ export const inviteConfig: InviteConfig = {
     title: "Confirme sua Presença",
     description: "Sua confirmação é essencial para que possamos organizar este momento com todo carinho.",
     infoItems: [
-      "Confirme sua presença até o dia 10/08/2026.",
+      "Confirme sua presença até o dia 05/08/2026.",
       "Traje sugerido: Esporte fino."
     ],
     maxCompanions: 4,

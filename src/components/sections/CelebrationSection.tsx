@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Check, Copy, MapPin, Navigation, Shirt, Clock, ChevronDown, Users, Camera, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, Check, Copy, MapPin, Navigation, Shirt, Clock, ChevronDown, Users, Camera, ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react";
 import { toast } from "sonner";
 import { inviteData } from "@/config/invite";
 import { buildGoogleCalendarUrl } from "@/lib/calendar";
@@ -14,7 +14,7 @@ import { cn } from "@/lib/cn";
 
 const ROMAN_NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII"];
 
-const quickNoteIcons: Record<string, any> = {
+const quickNoteIcons: Record<string, LucideIcon> = {
   "Traje": Shirt,
   "Confirmação": Users,
   "Fotos": Camera,
@@ -31,7 +31,7 @@ export function CelebrationSection() {
   });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const scrollSnaps = inviteData.events;
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
 
@@ -44,12 +44,14 @@ export function CelebrationSection() {
 
   useEffect(() => {
     if (!emblaApi) return;
-    setScrollSnaps(emblaApi.scrollSnapList());
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", onSelect);
-    // Initial check
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
+    const frame = window.requestAnimationFrame(onSelect);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
   }, [emblaApi, onSelect]);
 
   const scrollTo = useCallback((index: number) => {
@@ -121,7 +123,7 @@ export function CelebrationSection() {
                           alt={event.name}
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                           sizes="(min-width: 768px) 50vw, 100vw"
-                          style={{ objectPosition: event.id === "festa" ? "center top" : "center center" }}
+                          style={{ objectPosition: event.id === "festa" ? "center 43%" : "center center" }}
                         />
                         <CornerBrackets inset={6} size={22} />
                       </div>

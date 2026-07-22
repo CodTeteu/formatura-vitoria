@@ -10,30 +10,34 @@ const manifest = [
   {
     input: "WhatsApp Image 2026-07-06 at 08.15.03.jpeg",
     output: "vitoria-hero",
-    width: 1200,
-    height: 1800,
+    width: 1080,
+    height: 1620,
     position: "centre",
+    brightness: 1.05,
   },
   {
     input: "WhatsApp Image 2026-07-06 at 08.15.02.jpeg",
     output: "vitoria-portrait-1",
-    width: 1200,
-    height: 1800,
+    width: 1047,
+    height: 1570,
     position: "centre",
+    brightness: 1.06,
   },
   {
     input: "WhatsApp Image 2026-07-06 at 08.15.02 (1).jpeg",
     output: "vitoria-portrait-2",
-    width: 1200,
-    height: 1800,
+    width: 1047,
+    height: 1570,
     position: "centre",
+    brightness: 1.12,
   },
   {
     input: "WhatsApp Image 2026-07-06 at 08.15.01.jpeg",
     output: "vitoria-family-1",
-    width: 1600,
-    height: 1200,
+    width: 1105,
+    height: 736,
     position: "centre",
+    brightness: 1.14,
   }
 ];
 
@@ -77,17 +81,21 @@ async function createImageVariants(asset) {
   }
 
   const source = sharp(inputPath).rotate();
-  const pipeline = asset.extract
+  const resized = asset.extract
     ? source.extract(asset.extract).resize(asset.width, asset.height)
     : source.resize(asset.width, asset.height, {
         fit: "cover",
-        position: asset.position
+        position: asset.position,
+        withoutEnlargement: true,
       });
+  const pipeline = resized
+    .modulate({ brightness: asset.brightness ?? 1, saturation: 1.025 })
+    .sharpen({ sigma: 0.35, m1: 0.35, m2: 0.8 });
 
   await Promise.all([
-    pipeline.clone().avif({ quality: 54 }).toFile(path.join(outputDir, `${asset.output}.avif`)),
-    pipeline.clone().webp({ quality: 82 }).toFile(path.join(outputDir, `${asset.output}.webp`)),
-    pipeline.clone().jpeg({ quality: 86, mozjpeg: true }).toFile(path.join(outputDir, `${asset.output}.jpg`))
+    pipeline.clone().avif({ quality: 64 }).toFile(path.join(outputDir, `${asset.output}.avif`)),
+    pipeline.clone().webp({ quality: 88 }).toFile(path.join(outputDir, `${asset.output}.webp`)),
+    pipeline.clone().jpeg({ quality: 91, mozjpeg: true }).toFile(path.join(outputDir, `${asset.output}.jpg`))
   ]);
 }
 

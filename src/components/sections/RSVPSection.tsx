@@ -291,7 +291,7 @@ export function RSVPSection() {
 
                   <div className="flex items-center justify-center gap-1.5 font-body text-xs font-semibold text-[var(--invite-brown-soft)] mt-4">
                     <Calendar className="size-3.5 text-[var(--invite-gold)]" />
-                    <span>Confirme até 10/08/2026</span>
+                    <span>Confirme até {inviteData.event.confirmationDeadline}</span>
                   </div>
                 </div>
 
