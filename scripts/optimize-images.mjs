@@ -29,7 +29,11 @@ const manifest = [
     width: 1047,
     height: 1570,
     position: "centre",
-    brightness: 1.12,
+    brightness: 1,
+    gain: 1.06,
+    offset: 10,
+    saturation: 1.12,
+    warmth: true,
   },
   {
     input: "WhatsApp Image 2026-07-06 at 08.15.01.jpeg",
@@ -37,7 +41,11 @@ const manifest = [
     width: 1105,
     height: 736,
     position: "centre",
-    brightness: 1.14,
+    brightness: 1,
+    gain: 1.12,
+    offset: 18,
+    saturation: 1.15,
+    warmth: true,
   }
 ];
 
@@ -88,8 +96,20 @@ async function createImageVariants(asset) {
         position: asset.position,
         withoutEnlargement: true,
       });
-  const pipeline = resized
-    .modulate({ brightness: asset.brightness ?? 1, saturation: 1.025 })
+  const colorCorrected = resized
+    .linear(asset.gain ?? 1, asset.offset ?? 0)
+    .modulate({
+      brightness: asset.brightness ?? 1,
+      saturation: asset.saturation ?? 1.025,
+    });
+  const pipeline = (asset.warmth
+    ? colorCorrected.recomb([
+        [1.035, 0, 0],
+        [0, 1.005, 0],
+        [0, 0, 0.97],
+      ])
+    : colorCorrected
+  )
     .sharpen({ sigma: 0.35, m1: 0.35, m2: 0.8 });
 
   await Promise.all([
